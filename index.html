@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp React Channel Tool (Debug Mode)</title>
+    <title>WhatsApp React Tool (Pro Version)</title>
     <style>
-        /* --- CSS TETAP SAMA (HACKER THEME) --- */
+        /* --- TEMA MATRIX / HACKER --- */
         body {
             background-color: #000000;
             color: #39ff14;
@@ -23,31 +23,39 @@
             border: 2px solid #39ff14;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
             width: 100%;
             max-width: 450px;
             text-align: center;
+            background: rgba(10, 10, 10, 0.8);
             backdrop-filter: blur(5px);
             margin-bottom: 20px;
         }
 
         h1 { margin-bottom: 20px; text-shadow: 0 0 10px #39ff14; }
+        
         .input-group { margin-bottom: 20px; text-align: left; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        label { font-weight: bold; display: block; margin-bottom: 8px; color: #fff; }
         
         input {
             width: 100%;
-            padding: 10px;
-            background-color: #111;
-            border: 1px solid #39ff14;
+            padding: 12px;
+            background-color: #0f0f0f;
+            border: 1px solid #333;
+            border-bottom: 2px solid #39ff14;
             color: #fff;
             border-radius: 5px;
             box-sizing: border-box;
             outline: none;
             transition: 0.3s;
+            font-family: monospace;
         }
-        input:focus { box-shadow: 0 0 15px rgba(57, 255, 20, 0.5); }
+        input:focus { 
+            background-color: #1a1a1a;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); 
+        }
 
+        /* --- TOMBOL GLOWING UPDATE --- */
         .glow-button {
             background-color: transparent;
             color: #39ff14;
@@ -57,84 +65,80 @@
             font-weight: bold;
             cursor: pointer;
             border-radius: 50px;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
             letter-spacing: 2px;
             width: 100%;
+            position: relative;
+            overflow: hidden;
         }
-        .glow-button:hover, .glow-button:active {
+        
+        .glow-button:hover {
             background-color: #39ff14;
             color: #000;
-            box-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14;
-            transform: scale(1.05);
+            box-shadow: 0 0 20px #39ff14, 0 0 50px #39ff14;
+            transform: scale(1.02);
         }
 
-        /* --- LOG BOX BARU --- */
+        .glow-button:active { transform: scale(0.98); }
+
+        /* --- LOG BOX --- */
         .debug-box {
             width: 100%;
             max-width: 450px;
-            background-color: #0a0a0a;
-            border: 1px dashed #39ff14;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 12px;
+            background-color: #050505;
+            border: 1px dashed #222;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 11px;
             text-align: left;
-            height: 200px;
+            height: 150px;
             overflow-y: auto;
-            color: #ccc;
+            color: #888;
         }
         
-        .log-entry { margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 2px; }
-        .log-time { color: #888; font-size: 10px; }
+        .log-entry { margin-bottom: 4px; border-bottom: 1px solid #111; padding-bottom: 2px; }
+        .log-time { color: #555; margin-right: 5px; }
         .log-info { color: #39ff14; }
-        .log-error { color: #ff3333; font-weight: bold; }
-        .log-warn { color: #ffff33; }
-
-        /* Scrollbar custom biar matching */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #39ff14; border-radius: 4px; }
+        .log-error { color: #ff4444; font-weight: bold; }
+        .log-warn { color: #ffdd44; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>⚡ WA REACT TOOL ⚡</h1>
+        <h1>⚡ WA REACT PRO ⚡</h1>
         
         <div class="input-group">
-            <label>Link Target:</label>
+            <label>Link Target (Channel/Chat)</label>
             <input type="text" id="linkInput" placeholder="https://whatsapp.com/channel/..." value="https://whatsapp.com/channel/0029VagAd3L4CrqiS4t2n008">
         </div>
 
         <div class="input-group">
-            <label>Emoji (Pisahkan spasi):</label>
-            <input type="text" id="emojiInput" placeholder="👍 ❤️ 😂" value="👍">
+            <label>Emoji (Pisah pakai spasi)</label>
+            <input type="text" id="emojiInput" placeholder="👍 ❤️ 😂 🔥" value="👍">
         </div>
 
         <button class="glow-button" onclick="kirimReact()">GAS KIRIM!</button>
     </div>
 
     <div class="debug-box" id="debugConsole">
-        <div class="log-entry"><span class="log-time">[SYSTEM]</span> Siap memproses data...</div>
+        <div class="log-entry"><span class="log-time">SYSTEM</span> Siap! API Key sudah terpasang.</div>
     </div>
 
     <script>
-        // Fungsi buat nulis log ke layar
         function log(message, type = 'info') {
             const consoleBox = document.getElementById('debugConsole');
-            const time = new Date().toLocaleTimeString();
+            const time = new Date().toLocaleTimeString('id-ID', {hour12: false});
             let colorClass = 'log-info';
-            
             if (type === 'error') colorClass = 'log-error';
             if (type === 'warn') colorClass = 'log-warn';
 
             consoleBox.innerHTML += `
                 <div class="log-entry">
-                    <span class="log-time">[${time}]</span> 
+                    <span class="log-time">${time}</span> 
                     <span class="${colorClass}">${message}</span>
                 </div>`;
-            
-            // Auto scroll ke bawah
             consoleBox.scrollTop = consoleBox.scrollHeight;
         }
 
@@ -143,67 +147,64 @@
             const emojiRaw = document.getElementById('emojiInput').value;
             const btn = document.querySelector('.glow-button');
 
-            log("--- MEMULAI REQUEST BARU ---", 'warn');
+            // --- API KEY KAMU ---
+            const apiKey = "51b72a219771751d3377b6d0972ee9665bffce30cf159e8e3a3ceca54fe3e84f"; 
 
             if (!link || !emojiRaw) {
-                log("❌ Input masih kosong, gagal memproses.", 'error');
-                alert("Isi dulu woi! 🗿");
+                alert("Isi formnya dulu bang! 🗿");
                 return;
             }
 
-            btn.innerHTML = "LOADING...";
+            btn.innerHTML = "⏳ MENGIRIM...";
             btn.style.opacity = "0.7";
+            log("--- MEMULAI REQUEST ---", 'warn');
 
+            // Format emoji
             const emojiList = emojiRaw.replace(/,/g, " ").split(/\s+/).filter(e => e.trim());
             const emojiFinal = emojiList.join(",");
-            const apiKey = ""; // Isi jika ada
 
-            // Log parameter yang dikirim
-            log(`📝 Link: ${link}`);
-            log(`📝 Emoji: ${emojiFinal}`);
-
+            // URL Endpoint
+            // Kita coba direct dulu pake key. Kalau masih error CORS, baru nanti kita akali.
             const url = `https://react.whyux-xec.my.id/api/rch?link=${encodeURIComponent(link)}&emoji=${encodeURIComponent(emojiFinal)}`;
-            log(`🌐 Hit URL: ${url}`);
+            
+            log(`🔑 Menggunakan API Key: ...${apiKey.slice(-6)}`); // Hide sebagian key di log biar aman
 
             try {
                 const response = await fetch(url, {
                     method: "GET",
-                    headers: { "x-api-key": apiKey }
+                    headers: {
+                        "x-api-key": apiKey, // Key dikirim lewat header
+                        "User-Agent": "Mozilla/5.0" // Pura-pura jadi browser normal
+                    }
                 });
 
-                log(`📡 Status Server: ${response.status} ${response.statusText}`);
+                log(`📡 Status: ${response.status}`);
 
-                // Cek kalau server error (bukan 200)
                 if (!response.ok) {
-                    throw new Error(`Server Error: ${response.status}`);
+                    // Kalau masih 403, berarti API Key salah ATAU Origin diblokir
+                    if(response.status === 403) throw new Error("403 Forbidden: Key salah atau Akses ditolak.");
+                    if(response.status === 404) throw new Error("404 Not Found: Link API salah.");
+                    if(response.status >= 500) throw new Error("Server API lagi down.");
+                    throw new Error(`Error ${response.status}`);
                 }
 
-                // Coba parsing JSON
-                const textData = await response.text(); // Ambil teks mentah dulu
-                log(`📦 Respon Mentah: ${textData.substring(0, 100)}...`); // Tampilkan dikit aja biar ga penuh
-
-                let json;
-                try {
-                    json = JSON.parse(textData);
-                } catch (err) {
-                    log("❌ Gagal parsing JSON. Server mungkin kirim HTML error.", 'error');
-                    throw new Error("Respon bukan JSON yang valid");
-                }
-
+                const json = await response.json();
+                
                 if (json.success) {
-                    log("✅ SUKSES! React terkirim.", 'info');
-                    log(`👉 Result: ${JSON.stringify(json)}`);
-                    alert("Berhasil Wir! Cek WA coba.");
+                    log("✅ SUKSES! Target hancur (canda) 🤣", 'info');
+                    log(`📝 Detail: ${JSON.stringify(json)}`);
+                    alert("BERHASIL WIR! 🎉\nCek channel WA sekarang.");
                 } else {
-                    log(`⚠️ GAGAL dari API: ${json.message || "Tanpa pesan error"}`, 'error');
+                    log(`❌ GAGAL dari API: ${json.message}`, 'error');
                 }
 
             } catch (error) {
-                log(`❌ TERJADI ERROR: ${error.message}`, 'error');
+                log(`❌ ERROR: ${error.message}`, 'error');
                 
-                // Analisa Error Vira
+                // Deteksi CORS (Penyakit umum GitHub Pages)
                 if (error.message.includes("Failed to fetch")) {
-                    log("💡 ANALISA: Kemungkinan besar kena **CORS**. Browser ngeblok request ke API ini. Solusi: Gunakan Proxy atau jalankan script ini di sisi Server (NodeJS), bukan di Browser langsung.", 'warn');
+                    log("💡 INFO: Sepertinya kena blokir CORS Browser.", 'warn');
+                    log("💡 SARAN: Coba install ekstensi Chrome 'Allow CORS' kalau mau jalanin di browser laptop.", 'warn');
                 }
             } finally {
                 btn.innerHTML = "GAS KIRIM!";
