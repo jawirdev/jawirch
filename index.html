@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp React Channel Tool</title>
+    <style>
+        /* --- CSS KEREN ALA HACKER --- */
+        body {
+            background-color: #000000; /* Hitam pekat */
+            color: #39ff14; /* Hijau neon */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .container {
+            border: 2px solid #39ff14;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #39ff14;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            background-color: #111;
+            border: 1px solid #39ff14;
+            color: #fff;
+            border-radius: 5px;
+            box-sizing: border-box; /* Agar padding gak ngerusak width */
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+        }
+
+        /* --- TOMBOL GLOWING YANG KAMU MINTA --- */
+        .glow-button {
+            background-color: transparent;
+            color: #39ff14;
+            border: 2px solid #39ff14;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px; /* Biar bulat keren */
+            transition: all 0.3s ease-in-out;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 100%;
+        }
+
+        /* Efek Hover & Active (Pas dipencet) */
+        .glow-button:hover, .glow-button:active {
+            background-color: #39ff14;
+            color: #000;
+            box-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14, 0 0 80px #39ff14; /* GLOWING PARAH */
+            transform: scale(1.05);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 14px;
+            white-space: pre-wrap; /* Biar baris baru kebaca */
+            color: #fff;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>⚡ WA REACT TOOL ⚡</h1>
+        
+        <div class="input-group">
+            <label>Link Target (Channel/Chat):</label>
+            <input type="text" id="linkInput" placeholder="https://whatsapp.com/channel/..." required>
+        </div>
+
+        <div class="input-group">
+            <label>Emoji (Pisahkan spasi):</label>
+            <input type="text" id="emojiInput" placeholder="👍 ❤️ 😂" required>
+        </div>
+
+        <button class="glow-button" onclick="kirimReact()">GAS KIRIM!</button>
+
+        <div id="result" class="hidden"></div>
+    </div>
+
+    <script>
+        async function kirimReact() {
+            const link = document.getElementById('linkInput').value;
+            const emojiRaw = document.getElementById('emojiInput').value;
+            const resultDiv = document.getElementById('result');
+            const btn = document.querySelector('.glow-button');
+
+            // Validasi Input
+            if (!link || !emojiRaw) {
+                alert("Woi Wir, isi dulu link sama emojinya! 🗿");
+                return;
+            }
+
+            // Animasi Loading
+            btn.innerHTML = "PROSES...";
+            btn.style.opacity = "0.7";
+            resultDiv.classList.add('hidden');
+
+            // Format Emoji (sesuai script kamu: spasi/koma jadi koma)
+            const emojiList = emojiRaw.replace(/,/g, " ").split(/\s+/).filter(e => e.trim());
+            const emojiFinal = emojiList.join(",");
+
+            // API Configuration
+            // CATATAN: Masukkan API Key kamu di bawah ini jika punya
+            const apiKey = ""; 
+            const url = `https://react.whyux-xec.my.id/api/rch?link=${encodeURIComponent(link)}&emoji=${encodeURIComponent(emojiFinal)}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "x-api-key": apiKey
+                    }
+                });
+
+                const json = await response.json();
+
+                resultDiv.classList.remove('hidden');
+                
+                if (json.success) {
+                    resultDiv.innerHTML = `
+                    <div style="border: 1px solid lime; padding: 10px; border-radius: 5px;">
+                        ✅ <b>SUKSES!</b><br>
+                        Link: ${json.link || "-"}<br>
+                        Emojis: ${json.emojis || "-"}
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `❌ <b>GAGAL:</b> ${json.message || "Unknown Error"}`;
+                }
+
+            } catch (error) {
+                console.error(error);
+                resultDiv.classList.remove('hidden');
+                resultDiv.innerHTML = `❌ <b>ERROR:</b> Gagal menghubungi API.<br>Cek koneksi atau API mungkin down.`;
+            } finally {
+                // Balikin tombol
+                btn.innerHTML = "GAS KIRIM!";
+                btn.style.opacity = "1";
+            }
+        }
+    </script>
+</body>
+</html>
