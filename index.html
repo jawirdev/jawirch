@@ -54,22 +54,6 @@
         @keyframes breathing { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0.5); } 50% { transform: scale(1.1); box-shadow: 0 0 20px 10px rgba(255,0,0,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
         @keyframes fadeText { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- PAGE TRANSITION OVERLAY (WIPE EFFECT) --- */
-        .transition-overlay {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 0%;
-            background: var(--primary);
-            z-index: 9990;
-            border-top-left-radius: 50% 20%; /* Shape effect */
-            border-top-right-radius: 50% 20%;
-            transition: height 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            pointer-events: none;
-        }
-        .transition-overlay.active { height: 150%; border-radius: 0; } /* Go beyond 100% to cover fully */
-
         /* --- Header --- */
         header {
             padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
@@ -85,9 +69,9 @@
 
         .container { max-width: 850px; margin: 0 auto; padding: 25px 20px; z-index: 10; position: relative; min-height: 80vh;}
         
-        .section { display: none; opacity: 0; }
-        .section.active { display: block; opacity: 1; animation: fadeIn 0.6s ease 0.4s forwards; } /* Delay content until wipe finishes */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- Simple Visibility Transition (No Wipe) --- */
+        .section { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .section.active { display: block; opacity: 1; }
 
         /* --- Buttons (Shiny & Pop Effect) --- */
         .btn-animated { position: relative; overflow: hidden; transition: all 0.2s; cursor: pointer; user-select: none; }
@@ -107,7 +91,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-transform: uppercase;
         }
         
-        /* --- Testimonial Fix (Horizontal Layout) --- */
+        /* --- Testimonials --- */
         .testi-section { margin-top: 40px; margin-bottom: 30px; overflow: hidden; position: relative; }
         .testi-header { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; border-left: 5px solid var(--primary); padding-left: 15px; }
         .testi-track-container { width: 100%; overflow: hidden; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
@@ -115,14 +99,11 @@
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         
         .testi-card { width: 300px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; flex-shrink: 0; position: relative; }
-        
-        /* Layout Fix: Row for User Info */
         .testi-user-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
         .user-avatar { width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; flex-shrink: 0;}
         .user-info { display: flex; flex-direction: row; align-items: baseline; gap: 8px; flex: 1; overflow: hidden;}
         .user-info h4 { font-size: 0.9rem; margin: 0; white-space: nowrap; }
         .user-info span { font-size: 0.7rem; color: var(--text-sec); white-space: nowrap; }
-        
         .stars { color: #ffd700; font-size: 0.8rem; margin-bottom: 8px; }
         .testi-text { font-size: 0.9rem; color: var(--text-sec); font-style: italic; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .testi-link-btn { display: inline-block; margin-top: 10px; font-size: 0.75rem; color: var(--primary); text-decoration: none; border: 1px solid var(--primary); padding: 4px 10px; border-radius: 15px; transition:0.3s; }
@@ -133,48 +114,49 @@
         .app-card { background: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); position: relative; }
         .app-card img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; }
         .featured-app { border: 2px solid var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); animation: borderPulse 3s infinite; }
-        /* Fix Badge Cutoff */
-        .featured-badge { position: absolute; top: -10px; right: -5px; background: var(--primary); color: white; font-size: 0.65rem; padding: 4px 8px; border-radius: 20px; font-weight: bold; border: 1px solid white; z-index:2; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        
+        /* Fix Badge Position */
+        .featured-badge { 
+            position: absolute; top: -12px; right: -8px; 
+            background: var(--primary); color: white; font-size: 0.6rem; 
+            padding: 4px 8px; border-radius: 20px; font-weight: bold; 
+            border: 1px solid white; z-index: 5; white-space: nowrap; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5); 
+        }
         @keyframes borderPulse { 0% { border-color: var(--accent-gold); } 50% { border-color: var(--primary); } 100% { border-color: var(--accent-gold); } }
 
-        /* --- Product Details (Icons) --- */
+        /* --- Product Details --- */
         .product-card { background: var(--card-bg); margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; }
         .product-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1rem; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
         .product-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-color); }
         .details-content { padding: 20px; color: var(--text-sec); font-size: 0.9rem; line-height: 1.6; }
         .price-tag { color: var(--primary); font-size: 1.3rem; font-weight: 900; display: block; margin-bottom: 5px; }
-        
-        /* Custom List Icons */
         .detail-list { list-style: none; padding: 0; margin: 10px 0; }
         .detail-list li { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
-        .detail-list li i { color: var(--accent-green); margin-top: 4px; font-size: 0.9rem; width: 20px; text-align: center;} /* Fixed width for alignment */
+        .detail-list li i { color: var(--accent-green); margin-top: 4px; font-size: 0.9rem; width: 20px; text-align: center;}
         .save-info { display: block; font-size: 0.85rem; color: var(--accent-green); margin-bottom: 5px; font-weight: bold; background: rgba(0,255,127,0.1); padding: 5px 10px; border-radius: 5px; border-left: 3px solid var(--accent-green); }
 
-        /* --- TOGGLE FILTER & SORT --- */
+        /* --- CONTROLS --- */
         .controls-row { display: flex; gap: 10px; margin-bottom: 15px; position: relative; z-index: 20;}
         .control-btn { flex: 1; padding: 15px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
         
-        /* Dropdown & Drawer */
         .filter-drawer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 10px; }
         .filter-drawer.open { border: 1px solid var(--border-color); padding: 15px; }
         
-        /* Sort Dropdown Fixed */
         .sort-dropdown { display: none; width: 100%; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 8px; margin-top: 5px; position: absolute; top: 100%; left: 0; z-index: 50; padding: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); }
         .sort-option { padding: 15px; cursor: pointer; border-bottom: 1px solid var(--border-color); font-weight: bold; }
         .sort-option:last-child { border-bottom: none; }
         .sort-option:hover { background: var(--primary); color: white; }
 
-        /* Filter Chips */
         .filter-group-title { font-size: 0.85rem; color: var(--text-sec); margin-bottom: 8px; margin-top: 10px; text-transform: uppercase; font-weight: bold; }
         .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
         .filter-chip { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); font-size: 0.85rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
         .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Search */
         .search-bar { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); background: black; color: white; font-size: 1rem; margin-bottom: 15px; transition:0.3s; }
         .search-bar:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(255,0,0,0.3); }
 
-        /* All Products List Item (Restore V5 Layout) */
+        /* All Products List Item */
         .all-prod-item { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
         .all-prod-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
         .all-prod-info { flex: 1; }
@@ -182,7 +164,7 @@
         .all-prod-price { color: var(--primary); font-weight: 900; font-size: 1rem; }
         .all-prod-btn { padding: 8px 15px; background: var(--primary); color: white; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; z-index: 2; }
         
-        /* Shiny Tags Restored */
+        /* Shiny Tags */
         .tag-shiny-container { display: inline-block; margin-left: 5px; }
         .tag-base { font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 900; color: #000; display: inline-block; vertical-align: middle; position: relative; overflow: hidden; }
         .tag-base::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent); animation: glassSweep 2.5s infinite linear; }
@@ -206,15 +188,13 @@
 <body>
 
     <div id="introOverlay">
-        <img src="https://drive.google.com/uc?export=view&id=1hO8qPVa9naCnVPgyNodyJLZ2Pv2Kf2ui" class="intro-logo" alt="Logo">
+        <img src="https://h.uguu.se/HLNbivrv.jpg" class="intro-logo" alt="Logo">
         <div class="intro-text">JAWIR STORE</div>
     </div>
 
-    <div id="wipeOverlay" class="transition-overlay"></div>
-
     <header>
         <div class="logo-container" onclick="openLink('https://instagram.com/jawir.store')">
-            <img src="https://files.catbox.moe/t4gguw.jpg" alt="Jawir Logo" class="logo-img">
+            <img src="https://h.uguu.se/HLNbivrv.jpg" alt="Jawir Logo" class="logo-img">
             <div class="logo-text">JAWIR <span>STORE</span></div>
         </div>
         <button class="mode-toggle btn-animated" onclick="toggleMode()"><i class="fas fa-adjust"></i></button>
@@ -362,27 +342,12 @@
             renderAppGrid();
         };
 
-        // --- TRANSITION SYSTEM (WIPE) ---
+        // --- NAVIGATION ---
         function showPage(pageId) {
             playClick();
-            const overlay = document.getElementById('wipeOverlay');
-            const activeSection = document.querySelector('.section.active');
-            const targetSection = document.getElementById(pageId);
-            
-            // 1. Wipe Up
-            overlay.classList.add('active');
-            
-            // 2. Change Content Behind Curtain
-            setTimeout(() => {
-                if(activeSection) activeSection.classList.remove('active');
-                targetSection.classList.add('active');
-                window.scrollTo(0,0);
-                
-                // 3. Wipe Down (Reveal)
-                setTimeout(() => {
-                    overlay.classList.remove('active');
-                }, 100);
-            }, 500); // Wait for wipe up to finish
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0,0);
         }
 
         function openLink(url) {
@@ -402,10 +367,10 @@
             if (text.includes("cepat") || text.includes("fast") || text.includes("kilat")) return "fa-bolt";
             if (text.includes("update") || text.includes("terbaru")) return "fa-sync-alt";
             if (text.includes("fitur") || text.includes("akses")) return "fa-star";
-            return "fa-check"; // Default
+            return "fa-check"; 
         }
 
-        // --- DATA PRODUK LENGKAP (V7 Images Updated) ---
+        // --- DATA PRODUK LENGKAP (UPDATED LINKS) ---
         const appsData = [
             {
                 id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', type: 'app',
@@ -418,7 +383,7 @@
                 ]
             },
             {
-                id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://files.catbox.moe/qblbkz.jpg', type: 'app',
+                id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://d.uguu.se/cXibLTLa.jpg', type: 'app',
                 packages: [
                     { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, desc: ["No garansi", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
                     { name: "Capcut Private 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, tag: "rec", tagName: "RECOMMENDED", warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] },
@@ -436,7 +401,7 @@
                 ]
             },
             {
-                id: 'gpt', name: 'ChatGPT', image: 'https://drive.google.com/uc?export=view&id=1hO8qPVa9naCnVPgyNodyJLZ2Pv2Kf2ui', type: 'app',
+                id: 'gpt', name: 'ChatGPT', image: 'https://o.uguu.se/iDhRZgsa.jpg', type: 'app',
                 packages: [
                     { name: "ChatGPT GO 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Garansi 1x login", "Private Account", "Akses GPT-5 (Limited)", "Limit 10x lebih banyak dr gratis"] },
                     { name: "ChatGPT+ 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, tag: "rec", tagName: "POPULAR", warranty: true, desc: ["Garansi 1x login", "Private Account", "Respon Cepat & Prioritas", "Akses GPT-5 & GPT-4o", "Fitur Eksperimental"] },
@@ -444,21 +409,21 @@
                 ]
             },
             {
-                id: 'zoom', name: 'Zoom', image: 'https://drive.google.com/uc?export=view&id=1VTc7mY6Kdh6362Ae8g9XKxQKmu_7V7XN', type: 'app',
+                id: 'zoom', name: 'Zoom', image: 'https://h.uguu.se/yWGPqWPF.jpg', type: 'app',
                 packages: [
                     { name: "Zoom 100 Peserta 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, warranty: true, desc: ["Support all device", "Garansi 3 Hari"] },
                     { name: "Zoom 100 Peserta 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, warranty: true, desc: ["Support all device", "Garansi 7 Hari"] }
                 ]
             },
             {
-                id: 'lr', name: 'Lightroom', image: 'https://drive.google.com/uc?export=view&id=1mS3Z3TLoohCpkDMauIOHkXEvwIMnZPVo', type: 'app',
+                id: 'lr', name: 'Lightroom', image: 'https://d.uguu.se/CJYBSBqn.jpg', type: 'app',
                 packages: [
                     { name: "Lightroom Sharing 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Sharing Account", "Garansi 15 Hari (Backfree)", "Support All Device", "Paham resiko sharing"] },
                     { name: "Lightroom Sharing 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Sharing Account", "Garansi 6 Bulan (Backfree)", "Support All Device", "Paham resiko sharing"] }
                 ]
             },
             {
-                id: 'viu', name: 'VIU', image: 'https://drive.google.com/uc?export=view&id=10boSjCeTcLApb3oXL7yFROTquTT9zplu', type: 'app',
+                id: 'viu', name: 'VIU', image: 'https://o.uguu.se/kRkdRorG.jpg', type: 'app',
                 packages: [
                     { name: "VIU Lifetime", price: "Rp 5.000", priceVal: 5000, durationVal: 999, warranty: true, desc: ["Garansi 6 Bulan", "Private Account"] },
                     { name: "5x VIU Lifetime", price: "Rp 15.000", priceVal: 15000, durationVal: 999, tag: "bulk", tagName: "HEMAT 40%", saveText: "Hemat Rp 10.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 Bulan", "Private Account", "Cocok untuk reseller"] },
@@ -584,13 +549,13 @@
                 }
                 
                 const html = `
-                    <div class="all-prod-item">
+                    <div class="all-prod-item btn-animated" onclick="orderNow('${item.name}')">
                         <img src="${item.appImage}" alt="${item.appName}" class="all-prod-img">
                         <div class="all-prod-info">
                             <div class="all-prod-name">${item.name} ${tagLabel}</div>
                             <div class="all-prod-price">${item.price}</div>
                         </div>
-                        <button class="all-prod-btn btn-animated" onclick="orderNow('${item.name}')">ORDER</button>
+                        <button class="all-prod-btn btn-animated">ORDER</button>
                     </div>
                 `;
                 listContainer.innerHTML += html;
@@ -668,7 +633,7 @@
             showPage('appDetailsPage');
         }
 
-        // Testimonial Data (Data from prev version)
+        // Testimonial Data
         const rawTestimonials = [
             { u: "@kokoroaja", c: "aman wak", d: "26 Mei 2025", r: 5 }, { u: "@arry_sat", c: "atmin nya sabar, aman kali wir🔥", d: "19 Mei 2025", r: 5 }, { u: "@ethaniy", c: "aman bet🙌🙌", d: "6 Okt 2025", r: 5 }, { u: "@m_wildann1809", c: "AMAN+amanah👏", d: "4 Des 2025", r: 5 }, { u: "@zzakyd_", c: "Amaan👏", d: "23 Jun 2025", r: 5 }, { u: "@v1nnn_ib", c: "Aman", d: "3 Nov 2025", r: 5 }, { u: "@ricditzz_design", c: "Aman", d: "8 Sep 2025", r: 5 }, { u: "@mhmmdfamii", c: "BUY PANEL MURAH AMAN CUMAN DSINI GILA DAPET BONUS 1Gb ❤️❤️😍", d: "10 Nov 2025", r: 5 }, { u: "@mr.barr_", c: "Amanyoooo😂", d: "30 Jun 2025", r: 5 }, { u: "@vqmakk", c: "AMAN", d: "15 Sep 2025", r: 5 }, { u: "@adhipele", c: "aman X", d: "7 Jul 2025", r: 5 }, { u: "@azelonyth", c: "Aman", d: "17 Nov 2025", r: 5 }, { u: "@szenorthlenz", c: "aman min", d: "23 Jun 2025", r: 5 }, { u: "@kinggmielz", c: "amann🔥", d: "26 Mei 2025", r: 5 }, { u: "@availa6le_", c: "aman cuy🔥", d: "6 Okt 2025", r: 5 }, { u: "@gyuutaro_", c: "AMAN MIN", d: "16 Jun 2025", r: 5 }, { u: "@jusz.ordinary", c: "aman🔥", d: "6 Okt 2025", r: 5 }, { u: "@raka_budi_s", c: "❤️", d: "12 Mei 2025", r: 5 }, { u: "@mraiseffendy59", c: "Aman bgt 🔥🔥", d: "27 Okt 2025", r: 5 }, { u: "@fahri26429", c: "hm", d: "10 Nov 2025", r: 3 }, { u: "@ptra.valenn", c: "aman pol josjis🔥", d: "29 Sep 2025", r: 5 }, { u: "@vigsjsns", c: "Aman", d: "29 Sep 2025", r: 5 }, { u: "@cylla12025", c: "Amanah", d: "17 Nov 2025", r: 5 }, { u: "@madz.std", c: "aman dan aman🗿 real aman ya guys 👍", d: "11 Ags 2025", r: 5 }, { u: "@ardiizxx", c: "Aman👍", d: "6 Okt 2025", r: 5 }, { u: "@zenn_non", c: "AMAN WAK", d: "26 Mei 2025", r: 5 }, { u: "@by4ann_", c: "AMAN WOK", d: "22 Sep 2025", r: 5 }, { u: "@venerable_fanzx", c: "aman si jawir", d: "3 Nov 2025", r: 5 }, { u: "@febgt_1yt", c: "Aman wir", d: "6 Des 2025", r: 5 }, { u: "@aboyypeacefully", c: "Saya baru beli Akun sharing Capcut Aman Bgt Wakk", d: "13 Okt 2025", r: 5 }, { u: "@rivaldyaj", c: "AMAN", d: "28 Jul 2025", r: 5 }, { u: "@aldocukurukuk", c: "Aman", d: "9 Jun 2025", r: 5 }, { u: "@mpawsukayepink", c: "amann bangett suntiknya", d: "25 Ags 2025", r: 5 }, { u: "@azrilervandr", c: "aman cik", d: "28 Jul 2025", r: 5 }, { u: "@vall9.18", c: "AMAN", d: "29 Sep 2025", r: 5 }, { u: "@vicky.mra", c: "Aman ges", d: "9 Jun 2025", r: 5 }, { u: "@mad.armanda", c: "aman", d: "7 Jul 2025", r: 5 }, { u: "@alviskhairullah", c: "aman, apalagi kalo ada diskon😹", d: "5 Des 2025", r: 5 }, { u: "@conutx4_", c: "bagi kalian yang mauuu beli suntik all sosmed ataupun design² yang lain bisa langsung kesini aja yaa dijamin amanah + fast respon", d: "12 Mei 2025", r: 5 }, { u: "@mirfanpann", c: "Aman", d: "12 Mei 2025", r: 5 }, { u: "@tarow_design", c: "aman kali ini wak😍", d: "12 Mei 2025", r: 5 }, { u: "@peqwougt", c: "AMAN", d: "12 Mei 2025", r: 5 }
         ];
@@ -700,4 +665,4 @@
         }
     </script>
 </body>
-            </html>
+</html>
