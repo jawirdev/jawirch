@@ -28,7 +28,7 @@
             --glow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: all 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--dark);
@@ -38,24 +38,21 @@
             padding-bottom: 100px;
         }
 
-        /* --- INTRO OVERLAY --- */
+        /* --- INTRO ANIMATION (AUTO) --- */
         #introOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease;
+            transition: opacity 1s ease, visibility 1s;
         }
         .intro-logo {
-            width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary);
-            margin-bottom: 20px; animation: pulseLogo 2s infinite; object-fit: cover;
+            width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--primary);
+            margin-bottom: 20px; animation: breathing 2s infinite ease-in-out; object-fit: cover;
         }
-        .enter-btn {
-            background: transparent; border: 2px solid var(--primary); color: var(--primary);
-            padding: 10px 30px; font-size: 1.2rem; font-weight: bold; letter-spacing: 2px;
-            cursor: pointer; position: relative; overflow: hidden;
-        }
-        .enter-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); }
-        @keyframes pulseLogo { 0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.7); transform: scale(1); } 70% { box-shadow: 0 0 0 20px rgba(255,0,0,0); transform: scale(1.1); } 100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); transform: scale(1); } }
+        .intro-text { font-size: 1.5rem; font-weight: 900; letter-spacing: 4px; opacity: 0; animation: fadeText 2s forwards 0.5s; }
+        
+        @keyframes breathing { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0.5); } 50% { transform: scale(1.1); box-shadow: 0 0 20px 10px rgba(255,0,0,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
+        @keyframes fadeText { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- Header --- */
         header {
@@ -63,139 +60,155 @@
             border-bottom: 3px solid var(--primary); box-shadow: var(--glow);
             position: sticky; top: 0; background: var(--card-bg); z-index: 100;
         }
-        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .logo-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
         .logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
         .logo-text span { color: var(--primary); }
-        .mode-toggle { background: transparent; border: 2px solid var(--primary); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .mode-toggle { background: transparent; border: 2px solid var(--primary); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .mode-toggle:active { transform: scale(0.9); background: var(--primary); color: white; }
 
-        /* --- Container & Animations --- */
-        .container { max-width: 850px; margin: 0 auto; padding: 25px 20px; z-index: 10; position: relative; }
+        /* --- Container & Page Transitions --- */
+        .container { max-width: 850px; margin: 0 auto; padding: 25px 20px; z-index: 10; position: relative; overflow: hidden; min-height: 80vh;}
         
-        /* Page Transition */
-        .section { display: none; opacity: 0; transform: scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease; }
-        .section.active { display: block; opacity: 1; transform: scale(1); animation: pageEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        
-        @keyframes pageEnter { 
-            0% { opacity: 0; transform: translateY(20px) scale(0.95); } 
-            100% { opacity: 1; transform: translateY(0) scale(1); } 
+        /* Smooth Slide Transition */
+        .section { 
+            display: none; 
+            opacity: 0; 
+            transform: translateX(50px); 
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
         }
+        .section.active { 
+            display: block; 
+            opacity: 1; 
+            transform: translateX(0); 
+        }
+        .section.exiting {
+            display: block;
+            opacity: 0;
+            transform: translateX(-50px);
+            position: absolute; width: 100%; top: 25px; left: 20px; /* Keep layout stable during exit */
+        }
+
+        /* --- Buttons (Shiny & Pop Effect) --- */
+        .btn-animated {
+            position: relative; overflow: hidden; transition: all 0.2s; cursor: pointer;
+            user-select: none;
+        }
+        .btn-animated:active { transform: scale(0.95); box-shadow: 0 0 15px var(--primary); border-color: var(--primary) !important; }
+        /* Glass Sweep Effect on Click */
+        .btn-animated::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: none;
+        }
+        .btn-animated:active::after { animation: glassSweep 0.4s linear; }
 
         /* --- Main Menu --- */
         .menu-btn {
             width: 100%; background: linear-gradient(145deg, var(--card-bg), #1a1a1a); border: 1px solid var(--border-color);
             padding: 20px; font-size: 1.1rem; color: var(--text-main); border-radius: 15px;
-            cursor: pointer; text-transform: uppercase; font-weight: 900;
-            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; overflow: hidden;
+            font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-transform: uppercase;
         }
-        .menu-btn:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 0 20px rgba(255,0,0,0.2); }
-        .menu-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: 0.5s; }
-        .menu-btn:hover::after { left: 100%; }
-
-        /* --- Testimonial Infinite Scroll --- */
+        
+        /* --- Testimonial (Yellow Stars & Slower) --- */
         .testi-section { margin-top: 40px; margin-bottom: 30px; overflow: hidden; position: relative; }
         .testi-header { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; border-left: 5px solid var(--primary); padding-left: 15px; }
         .testi-track-container { width: 100%; overflow: hidden; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
-        .testi-track { display: flex; gap: 15px; width: max-content; animation: scroll 60s linear infinite; }
+        .testi-track { display: flex; gap: 15px; width: max-content; animation: scroll 80s linear infinite; /* Slower speed */ }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
         .testi-card { width: 280px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; flex-shrink: 0; position: relative; }
-        .testi-user { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .user-avatar { width: 40px; height: 40px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; }
-        .user-info h4 { font-size: 0.9rem; margin: 0; }
-        .user-info span { font-size: 0.7rem; color: var(--text-sec); }
-        .testi-source { position: absolute; top: 15px; right: 15px; font-size: 1.2rem; color: #E1306C; }
+        .stars { color: #ffd700; font-size: 0.9rem; margin-bottom: 8px; /* YELLOW STARS FIX */ }
         .testi-text { font-size: 0.9rem; color: var(--text-sec); font-style: italic; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .testi-link-btn { display: inline-block; margin-top: 10px; font-size: 0.75rem; color: var(--primary); text-decoration: none; border: 1px solid var(--primary); padding: 4px 10px; border-radius: 15px; transition:0.3s; }
+        .testi-link-btn:hover { background: var(--primary); color: white; }
 
         /* --- App Grid --- */
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; margin-top: 20px; }
-        .app-card { background: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; border: 1px solid var(--border-color); position: relative; }
-        .app-card:hover { border-color: var(--primary); box-shadow: var(--glow); transform: translateY(-5px); }
-        .app-card img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; }
-        .featured-app { border: 2px solid var(--accent-gold); background: linear-gradient(160deg, var(--card-bg), #2a2200); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); animation: borderPulse 3s infinite; }
-        .featured-badge { position: absolute; top: -10px; right: -10px; background: var(--primary); color: white; font-size: 0.7rem; padding: 5px 10px; border-radius: 20px; font-weight: bold; border: 2px solid white; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
-        @keyframes borderPulse { 0% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: var(--accent-gold); } 50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.5); border-color: var(--primary); } 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: var(--accent-gold); } }
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+        .app-card { background: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); position: relative; }
+        .app-card img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; }
+        .featured-app { border: 2px solid var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); animation: borderPulse 3s infinite; }
+        .featured-badge { position: absolute; top: -8px; right: -8px; background: var(--primary); color: white; font-size: 0.65rem; padding: 4px 8px; border-radius: 20px; font-weight: bold; border: 1px solid white; z-index:2; }
+        @keyframes borderPulse { 0% { border-color: var(--accent-gold); } 50% { border-color: var(--primary); } 100% { border-color: var(--accent-gold); } }
 
-        /* --- Shiny Tags --- */
-        .tag-shiny-container { display: inline-block; vertical-align: middle; margin-left: 8px; }
-        .tag-base { position: relative; overflow: hidden; font-size: 0.7rem; padding: 3px 10px; border-radius: 4px; text-transform: uppercase; font-weight: 900; color: #000; box-shadow: 0 0 5px rgba(0,0,0,0.5); display: inline-block; }
-        .tag-gold { background: linear-gradient(135deg, #d4af37, #f7ef8a, #d4af37); }
-        .tag-blue { background: linear-gradient(135deg, #00bcd4, #8affff, #00bcd4); }
-        .tag-green { background: linear-gradient(135deg, #00ff7f, #adffc9, #00ff7f); }
-        .tag-base::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent); animation: glassSweep 2.5s infinite linear; }
-        @keyframes glassSweep { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
-
-        /* --- Product Details --- */
+        /* --- Product Details (Icons) --- */
         .product-card { background: var(--card-bg); margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; }
-        .product-header { padding: 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1rem; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
+        .product-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1rem; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
         .product-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-color); }
         .details-content { padding: 20px; color: var(--text-sec); font-size: 0.9rem; line-height: 1.6; }
         .price-tag { color: var(--primary); font-size: 1.3rem; font-weight: 900; display: block; margin-bottom: 5px; }
-        .order-btn { display: block; width: 100%; padding: 12px; background: linear-gradient(45deg, var(--primary), #b30000); color: white; text-align: center; text-decoration: none; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; box-shadow: var(--glow); margin-top: 15px; }
-
-        /* --- ADVANCED FILTER & SORT STYLES --- */
-        .filter-section-wrapper { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-        .filter-group { margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .filter-group:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .filter-title { font-weight: bold; margin-bottom: 10px; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; }
         
+        /* Custom List Icons */
+        .detail-list { list-style: none; padding: 0; margin: 10px 0; }
+        .detail-list li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px; }
+        .detail-list li i { color: var(--accent-green); margin-top: 4px; font-size: 0.8rem; }
+        .save-info { display: block; font-size: 0.85rem; color: var(--accent-green); margin-bottom: 5px; font-weight: bold; background: rgba(0,255,127,0.1); padding: 5px 10px; border-radius: 5px; border-left: 3px solid var(--accent-green); }
+
+        /* --- TOGGLE FILTER & SORT --- */
+        .controls-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .control-btn { flex: 1; padding: 12px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        
+        /* Dropdown & Drawer */
+        .filter-drawer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 10px; }
+        .filter-drawer.open { border: 1px solid var(--border-color); padding: 15px; }
+        
+        .sort-dropdown { display: none; width: 100%; background: var(--card-bg); border: 1px solid var(--primary); border-radius: 8px; margin-top: 5px; position: absolute; z-index: 50; padding: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .sort-option { padding: 10px; cursor: pointer; border-bottom: 1px solid var(--border-color); }
+        .sort-option:last-child { border-bottom: none; }
+        .sort-option:hover { background: var(--primary); color: white; }
+
+        /* Filter Chips */
+        .filter-group-title { font-size: 0.85rem; color: var(--text-sec); margin-bottom: 8px; margin-top: 10px; text-transform: uppercase; font-weight: bold; }
         .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
-        .filter-chip { 
-            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-sec); 
-            cursor: pointer; font-size: 0.8rem; user-select: none; transition: 0.2s;
-        }
-        .filter-chip input { display: none; }
-        .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 10px rgba(255,0,0,0.4); }
-        
-        /* Sort Radio Style */
-        .sort-chip { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-sec); cursor: pointer; font-size: 0.8rem; text-align: center; flex: 1; }
-        .sort-chip.active { background: var(--accent-blue); color: black; border-color: var(--accent-blue); font-weight: bold; }
+        .filter-chip { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); font-size: 0.8rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+        .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .search-bar { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--border-color); background: black; color: white; margin-bottom: 10px; }
-        .search-bar:focus { border-color: var(--primary); outline: none; }
+        /* Search */
+        .search-bar { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); background: black; color: white; font-size: 1rem; margin-bottom: 15px; transition:0.3s; }
+        .search-bar:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(255,0,0,0.3); }
 
+        /* All Products List Item */
         .all-prod-item { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
         .all-prod-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
         .all-prod-info { flex: 1; }
-        .all-prod-name { font-weight: bold; font-size: 0.95rem; margin-bottom: 3px; }
-        .all-prod-price { color: var(--primary); font-weight: 900; font-size: 1rem; }
-        .all-prod-meta { font-size: 0.7rem; color: var(--text-sec); margin-top: 2px; }
-
-        /* --- FIRE EFFECT --- */
-        .fire-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 120px; z-index: 0; pointer-events: none; overflow: hidden; }
-        .fire-particle { position: absolute; bottom: -30px; background: radial-gradient(circle, rgba(255,100,0,1) 0%, rgba(255,0,0,0.5) 40%, rgba(255,0,0,0) 70%); border-radius: 50% 50% 30% 30%; opacity: 0.7; animation: rise 3s infinite ease-in; filter: blur(5px); mix-blend-mode: screen; }
-        @keyframes rise { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; } 50% { opacity: 0.6; transform: translateY(-60px) scale(1.2) rotate(20deg); } 100% { transform: translateY(-150px) scale(0.5) rotate(-20deg); opacity: 0; } }
         
-        /* Audio Control Hidden */
-        audio { display: none; }
-        .back-btn { margin-bottom: 20px; padding: 10px 25px; background: transparent; border: 2px solid var(--primary); color: var(--text-main); cursor: pointer; border-radius: 30px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        /* Shiny Tags */
+        .tag-base { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-weight: 900; color: #000; display: inline-block; vertical-align: middle; margin-left: 5px; position: relative; overflow: hidden; }
+        .tag-base::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent); animation: glassSweep 2.5s infinite linear; }
+        .tag-gold { background: linear-gradient(135deg, #d4af37, #f7ef8a); }
+        .tag-blue { background: linear-gradient(135deg, #00bcd4, #8affff); }
+        .tag-green { background: linear-gradient(135deg, #00ff7f, #adffc9); }
+
+        /* --- Footer Fire & Socials --- */
+        .socials-footer { display: flex; justify-content: center; gap: 15px; margin-top: 40px; flex-wrap: wrap; z-index: 5; position: relative; }
+        .social-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 1.2rem; text-decoration: none; transition: 0.3s; }
+        .social-btn:hover { background: var(--primary); color: white; transform: translateY(-5px); box-shadow: 0 0 15px var(--primary); }
+
+        .fire-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 100px; z-index: 0; pointer-events: none; }
+        .fire-particle { position: absolute; bottom: -20px; background: radial-gradient(circle, rgba(255,80,0,1) 0%, rgba(255,0,0,0) 70%); border-radius: 50%; animation: rise 2s infinite ease-in; filter: blur(5px); opacity: 0.6; }
+        @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-100px) scale(0.2); opacity: 0; } }
+
+        .back-btn { margin-bottom: 20px; padding: 10px 25px; background: transparent; border: 2px solid var(--primary); color: var(--text-main); border-radius: 30px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
-        <source src="https://files.catbox.moe/hgp3m6.mpeg" type="audio/mpeg">
-    </audio>
-    <audio id="sfxClick">
-        <source src="data:audio/wav;base64,UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav"> </audio>
-
     <div id="introOverlay">
         <img src="https://files.catbox.moe/t4gguw.jpg" class="intro-logo" alt="Logo">
-        <h2 style="margin-bottom: 20px; font-weight: 900; letter-spacing: 3px;">JAWIR STORE</h2>
-        <button class="enter-btn" onclick="enterSite()">ENTER STORE</button>
-        <p style="margin-top: 15px; font-size: 0.8rem; color: gray;">Tap to experience</p>
+        <div class="intro-text">JAWIR STORE</div>
     </div>
 
     <header>
-        <div class="logo-container">
+        <div class="logo-container" onclick="openLink('https://instagram.com/jawir.store')">
             <img src="https://files.catbox.moe/t4gguw.jpg" alt="Jawir Logo" class="logo-img">
             <div class="logo-text">JAWIR <span>STORE</span></div>
         </div>
-        <button class="mode-toggle" onclick="toggleMode(); playClick()"><i class="fas fa-adjust"></i></button>
+        <button class="mode-toggle btn-animated" onclick="toggleMode()"><i class="fas fa-adjust"></i></button>
     </header>
 
     <div class="container">
-
+        
         <div id="home" class="section active">
             <div style="text-align: center; margin-bottom: 30px;">
                 <h2 style="font-size: 2rem; margin-bottom: 10px;">Welcome Partner! 🔥</h2>
@@ -203,14 +216,14 @@
             </div>
 
             <div class="main-menu">
-                <button class="menu-btn" onclick="showAppGrid()">
-                    <i class="fas fa-crown fa-lg" style="color: var(--accent-gold);"></i> Pricelist App Premium
+                <button class="menu-btn btn-animated" onclick="showAppGrid()">
+                    <i class="fas fa-crown" style="color: var(--accent-gold);"></i> Pricelist App Premium
                 </button>
-                <button class="menu-btn" onclick="showPage('sosmed')">
-                    <i class="fas fa-rocket fa-lg" style="color: var(--primary);"></i> Pricelist Suntik Sosmed
+                <button class="menu-btn btn-animated" onclick="showPage('sosmed')">
+                    <i class="fas fa-rocket" style="color: var(--primary);"></i> Pricelist Suntik Sosmed
                 </button>
-                <button class="menu-btn" onclick="showAllProducts()">
-                    <i class="fas fa-search fa-lg" style="color: var(--accent-blue);"></i> Cari & Filter Produk (Lengkap)
+                <button class="menu-btn btn-animated" onclick="showAllProducts()">
+                    <i class="fas fa-search" style="color: var(--accent-blue);"></i> Cari & Filter Produk
                 </button>
             </div>
 
@@ -219,80 +232,79 @@
                 <div class="testi-track-container">
                     <div class="testi-track" id="testiTrack"></div>
                 </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="https://www.instagram.com/p/DJgmx4oRlNR/?igsh=MTk2eXFheTh6cXc3Nw==" target="_blank" class="testi-link-btn btn-animated">Lihat Bukti di Instagram <i class="fas fa-external-link-alt"></i></a>
+                </div>
             </div>
 
-            <div class="socials" style="display:flex; justify-content:center; gap:10px; margin-top:40px; flex-wrap:wrap;">
-                 <a href="https://wa.me/6282131032770" target="_blank" onclick="playClick()" class="social-link" style="padding:10px; border:1px solid #333; border-radius:8px; text-decoration:none; color:inherit;"><i class="fab fa-whatsapp"></i> Order WA</a>
-                 <a href="#" class="social-link" style="padding:10px; border:1px solid #333; border-radius:8px; text-decoration:none; color:inherit;">@jawirdesign</a>
+            <div class="socials-footer">
+                <a href="https://wa.me/6282131032770" target="_blank" class="social-btn btn-animated"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://tiktok.com/@jawirdesign" target="_blank" class="social-btn btn-animated"><i class="fab fa-tiktok"></i></a>
+                <a href="https://instagram.com/jawirdesigner" target="_blank" class="social-btn btn-animated"><i class="fab fa-instagram"></i></a>
+                <a href="https://instagram.com/jawir.store" target="_blank" class="social-btn btn-animated"><i class="fas fa-store"></i></a>
             </div>
         </div>
 
         <div id="appGridPage" class="section">
-             <button class="back-btn" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
+             <button class="back-btn btn-animated" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
              <h2 style="text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; display: inline-block; margin-bottom: 20px;">Pilih Aplikasi</h2>
              <div id="appList" class="app-grid"></div>
         </div>
 
         <div id="appDetailsPage" class="section">
-            <button class="back-btn" onclick="showAppGrid()"><i class="fas fa-arrow-left"></i> Pilih App Lain</button>
+            <button class="back-btn btn-animated" onclick="showAppGrid()"><i class="fas fa-arrow-left"></i> Pilih App Lain</button>
             <div id="selectedAppHeader" style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;"></div>
             <div id="packageList"></div>
         </div>
 
         <div id="allProductsPage" class="section">
-            <button class="back-btn" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <h2 style="margin-bottom: 15px;">Cari & Filter</h2>
+            <button class="back-btn btn-animated" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <h2 style="margin-bottom: 15px;">Cari Produk</h2>
             
-            <input type="text" id="searchInput" class="search-bar" placeholder="Cari nama paket..." onkeyup="filterAndSortProducts()">
-
-            <div class="filter-section-wrapper">
-                
-                <div class="filter-group">
-                    <div class="filter-title"><i class="fas fa-sort"></i> Urutkan Berdasarkan</div>
-                    <div class="chip-container">
-                        <div class="sort-chip active" onclick="setSort('abjad', this)">Abjad</div>
-                        <div class="sort-chip" onclick="setSort('murah', this)">Termurah</div>
-                        <div class="sort-chip" onclick="setSort('mahal', this)">Termahal</div>
-                        <div class="sort-chip" onclick="setSort('layanan', this)">Aplikasi</div>
-                        <div class="sort-chip" onclick="setSort('durasi', this)">Durasi</div>
+            <div class="controls-row">
+                <button class="control-btn btn-animated" onclick="toggleSortMenu()">
+                    <i class="fas fa-sort-amount-down"></i> Urutkan
+                    <div id="sortMenu" class="sort-dropdown">
+                        <div class="sort-option" onclick="setSort('abjad')">Abjad (A-Z)</div>
+                        <div class="sort-option" onclick="setSort('murah')">Termurah</div>
+                        <div class="sort-option" onclick="setSort('mahal')">Termahal</div>
+                        <div class="sort-option" onclick="setSort('durasi')">Durasi Panjang</div>
                     </div>
-                </div>
-
-                <div class="filter-group">
-                    <div class="filter-title">Kategori</div>
-                    <div class="chip-container">
-                        <label class="filter-chip active" onclick="toggleFilter(this, 'cat', 'all')">Semua</label>
-                        <label class="filter-chip" onclick="toggleFilter(this, 'cat', 'app')">App Premium</label>
-                        <label class="filter-chip" onclick="toggleFilter(this, 'cat', 'sosmed')">Suntik Sosmed</label>
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <div class="filter-title">Range Harga</div>
-                    <div class="chip-container">
-                        <label class="filter-chip" onclick="toggleFilter(this, 'price', 'low')">< 10k</label>
-                        <label class="filter-chip" onclick="toggleFilter(this, 'price', 'mid')">10k - 25k</label>
-                        <label class="filter-chip" onclick="toggleFilter(this, 'price', 'high')">> 25k</label>
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <div class="filter-title">Filter Spesial</div>
-                    <div class="chip-container">
-                        <label class="filter-chip" onclick="toggleFilter(this, 'tag', 'best')">Best Seller 🔥</label>
-                        <label class="filter-chip" onclick="toggleFilter(this, 'tag', 'bulk')">Hemat/Bulk 💰</label>
-                        <label class="filter-chip" onclick="toggleFilter(this, 'warranty', 'yes')">Bergaransi</label>
-                        <label class="filter-chip" onclick="toggleFilter(this, 'warranty', 'no')">No Garansi</label>
-                    </div>
-                </div>
-
+                </button>
+                <button class="control-btn btn-animated" onclick="toggleFilterDrawer()">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
             </div>
 
+            <div id="filterDrawer" class="filter-drawer">
+                <div class="filter-group-title"><i class="fas fa-layer-group"></i> Kategori</div>
+                <div class="chip-container">
+                    <div class="filter-chip active" onclick="toggleFilter(this, 'cat', 'all')">Semua</div>
+                    <div class="filter-chip" onclick="toggleFilter(this, 'cat', 'app')">App Premium</div>
+                    <div class="filter-chip" onclick="toggleFilter(this, 'cat', 'sosmed')">Suntik Sosmed</div>
+                </div>
+
+                <div class="filter-group-title"><i class="fas fa-money-bill-wave"></i> Harga</div>
+                <div class="chip-container">
+                    <div class="filter-chip" onclick="toggleFilter(this, 'price', 'low')">< 10k</div>
+                    <div class="filter-chip" onclick="toggleFilter(this, 'price', 'mid')">10k - 25k</div>
+                    <div class="filter-chip" onclick="toggleFilter(this, 'price', 'high')">> 25k</div>
+                </div>
+
+                <div class="filter-group-title"><i class="fas fa-star"></i> Spesial</div>
+                <div class="chip-container">
+                    <div class="filter-chip" onclick="toggleFilter(this, 'tag', 'best')">Best Seller</div>
+                    <div class="filter-chip" onclick="toggleFilter(this, 'tag', 'bulk')">Hemat/Bulk</div>
+                    <div class="filter-chip" onclick="toggleFilter(this, 'warranty', 'yes')">Garansi</div>
+                </div>
+            </div>
+
+            <input type="text" id="searchInput" class="search-bar" placeholder="Ketik nama paket..." onkeyup="filterAndSortProducts()">
             <div id="allProductsList"></div>
         </div>
 
         <div id="sosmed" class="section">
-            <button class="back-btn" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <button class="back-btn btn-animated" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
             <div style="margin-top: 50px; padding: 40px; border: 3px dashed var(--primary); border-radius: 20px; text-align: center; background: rgba(255,0,0,0.05);">
                 <i class="fas fa-tools fa-4x" style="color: var(--primary); margin-bottom: 20px;"></i>
                 <h2 style="font-size: 2.5rem;">COMING SOON</h2>
@@ -302,103 +314,163 @@
 
     </div>
 
+    <audio id="sfxClick" src="data:audio/wav;base64,UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA="></audio>
+
     <div class="fire-container" id="fireContainer"></div>
 
     <script>
-        // --- AUDIO & SFX LOGIC ---
-        function enterSite() {
-            // Hide intro
-            document.getElementById('introOverlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('introOverlay').style.display = 'none';
-            }, 800);
-            
-            // Play Audio
-            const bgm = document.getElementById('bgMusic');
-            bgm.volume = 0.5;
-            bgm.play().catch(e => console.log("Audio play blocked need interaction"));
-            playClick(); // Play SFX once
-        }
-
+        // --- SOUND SYSTEM ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClick() {
-            // Simple synthesized beep/click to avoid external dependencies lagging
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
+            // Synthesized crisp click sound to avoid loading delay
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
             osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.frequency.value = 800;
+            gain.connect(audioCtx.destination);
+            
+            osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
             osc.type = 'sine';
-            gain.gain.setValueAtTime(0.1, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            
             osc.start();
-            osc.stop(ctx.currentTime + 0.1);
+            osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // --- DATA PRODUK UPDATED ---
+        // --- INTRO & NAVIGATION ---
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('introOverlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('introOverlay').style.visibility = 'hidden';
+                }, 1000);
+            }, 2500); // 2.5s Intro
+            createFire();
+            renderTestimonials();
+            renderAppGrid();
+        };
+
+        function showPage(pageId) {
+            playClick();
+            const activeSection = document.querySelector('.section.active');
+            const targetSection = document.getElementById(pageId);
+            
+            if(activeSection) {
+                activeSection.classList.remove('active');
+                activeSection.classList.add('exiting');
+                setTimeout(() => {
+                    activeSection.classList.remove('exiting');
+                }, 400);
+            }
+            
+            targetSection.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function openLink(url) {
+            playClick();
+            window.open(url, '_blank');
+        }
+
+        // --- DATA PRODUK LENGKAP (V6) ---
         const appsData = [
             {
                 id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', type: 'app',
                 packages: [
-                    { name: "Canva Member 1 Bulan", price: "Rp 3.000", priceVal: 3000, durationVal: 30, warranty: true, desc: ["Full garansi", "Canva pro via invite", "Support All Device", "Membuka semua fitur pro, kecuali brand kit"] },
-                    { name: "Canva Member 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "bulk", tagName: "HEMAT 30%", warranty: true, desc: ["Full garansi", "Renew/ganti team tiap bulan", "Canva pro via invite"] },
-                    { name: "Canva Designer 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Full garansi", "Canva pro via invite", "Bisa brandkit & upload font"] },
-                    { name: "Canva Designer 1 Tahun", price: "Rp 27.000", priceVal: 27000, durationVal: 365, tag: "bulk", tagName: "HEMAT 55%", warranty: true, desc: ["Full garansi", "Renew/ganti team tiap bulan", "Bisa brandkit & upload font"] },
-                    { name: "Canva Owner 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 25 Hari", "Akun dari seller / admin", "Invite ±100 Member"] }
+                    { name: "Canva Member 1 Bulan", price: "Rp 3.000", priceVal: 3000, durationVal: 30, warranty: true, icon: "palette", desc: ["Full garansi", "Canva pro via invite", "Support All Device", "Fitur pro open (kecuali brand kit)", "Tidak bisa upload font"] },
+                    { name: "Canva Member 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "bulk", tagName: "HEMAT 30%", saveText: "Hemat Rp 11.000 (Rate: Rp 2.080/bln)", warranty: true, icon: "palette", desc: ["Full garansi", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur pro open (kecuali brand kit)"] },
+                    { name: "Canva Designer 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, icon: "pen-nib", desc: ["Full garansi", "Canva pro via invite", "Support All Device", "Fitur brandkit & upload font ON"] },
+                    { name: "Canva Designer 1 Tahun", price: "Rp 27.000", priceVal: 27000, durationVal: 365, tag: "bulk", tagName: "HEMAT 55%", saveText: "Hemat Rp 33.000 (Rate: Rp 2.250/bln)", warranty: true, icon: "pen-nib", desc: ["Full garansi", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur brandkit & upload font ON"] },
+                    { name: "Canva Owner 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, icon: "user-tie", desc: ["Garansi 25 Hari", "Akun dari seller / admin", "Bisa invite ±100 Member"] }
                 ]
             },
             {
                 id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://files.catbox.moe/qblbkz.jpg', type: 'app',
                 packages: [
-                    { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, desc: ["No garansi", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] },
-                    { name: "Capcut Private 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, tag: "rec", tagName: "RECOMMENDED", warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] },
-                    { name: "Capcut Private 21 Hari", price: "Rp 12.000", priceVal: 12000, durationVal: 21, warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] },
-                    { name: "Capcut Private 28 Hari", price: "Rp 15.000", priceVal: 15000, durationVal: 28, warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] },
-                    { name: "Capcut Private 35 Hari", price: "Rp 20.000", priceVal: 20000, durationVal: 35, warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] }
+                    { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, icon: "cut", desc: ["No garansi", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
+                    { name: "Capcut Private 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, tag: "rec", tagName: "RECOMMENDED", warranty: true, icon: "cut", desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] },
+                    { name: "Capcut Private 21 Hari", price: "Rp 12.000", priceVal: 12000, durationVal: 21, warranty: true, icon: "cut", desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] },
+                    { name: "Capcut Private 35 Hari", price: "Rp 20.000", priceVal: 20000, durationVal: 35, warranty: true, icon: "cut", desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] }
                 ]
             },
             {
                 id: 'am', name: 'Alight Motion', image: 'https://files.catbox.moe/3v9hsy.jpg', type: 'app',
                 packages: [
-                    { name: "Alight Motion Sharing 1 Tahun", price: "Rp 3.000", priceVal: 3000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only Backfree, bukan disable/hack)", "Sharing 3U", "Support android & IOS"] },
-                    { name: "Alight Motion Private 1 Tahun", price: "Rp 6.000", priceVal: 6000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only Backfree, bukan disable/hack)", "Akun private", "Bisa dijual ulang"] },
-                    { name: "10x Alight Motion Private 1 Tahun", price: "Rp 30.000", priceVal: 30000, durationVal: 365, tag: "bulk", tagName: "HEMAT 50%", warranty: true, desc: ["Garansi 6 bulan (Only Backfree, bukan disable/hack)", "Akun private", "Support Android & IOS", "Cocok untuk reseller"] },
-                    { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", priceVal: 40000, durationVal: 365, tag: "bulk", tagName: "HEMAT 67%", warranty: true, desc: ["Garansi 6 bulan (Only Backfree, bukan disable/hack)", "Akun private", "Support Android & IOS", "Cocok untuk reseller"] }
+                    { name: "Alight Motion Sharing 1 Tahun", price: "Rp 3.000", priceVal: 3000, durationVal: 365, warranty: true, icon: "video", desc: ["Garansi 6 bulan (Backfree)", "Sharing 3U", "Support android & IOS", "Dilarang sebar data"] },
+                    { name: "Alight Motion Private 1 Tahun", price: "Rp 6.000", priceVal: 6000, durationVal: 365, warranty: true, icon: "video", desc: ["Garansi 6 bulan (Backfree)", "Akun private", "Bisa dijual ulang"] },
+                    { name: "10x Alight Motion Private 1 Tahun", price: "Rp 30.000", priceVal: 30000, durationVal: 365, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 30.000 (Rate: Rp 3.000/akun)", warranty: true, icon: "box-open", desc: ["Garansi 6 bulan (Backfree)", "Akun private", "Cocok untuk reseller"] },
+                    { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", priceVal: 40000, durationVal: 365, tag: "bulk", tagName: "HEMAT 67%", saveText: "Hemat Rp 80.000 (Rate: Rp 2.000/akun)", warranty: true, icon: "box-open", desc: ["Garansi 6 bulan (Backfree)", "Akun private", "Cocok untuk reseller"] }
+                ]
+            },
+            {
+                id: 'gpt', name: 'ChatGPT', image: 'https://files.catbox.moe/erh790.jpg', type: 'app',
+                packages: [
+                    { name: "ChatGPT GO 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, icon: "robot", desc: ["Garansi 1x login", "Private Account", "Akses GPT-5 (Limited)", "Limit 10x lebih banyak dr gratis"] },
+                    { name: "ChatGPT+ 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, tag: "rec", tagName: "POPULAR", warranty: true, icon: "bolt", desc: ["Garansi 1x login", "Private Account", "Respon Cepat & Prioritas", "Akses GPT-5 & GPT-4o", "Fitur Eksperimental"] },
+                    { name: "ChatGPT+ Head", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, icon: "users", desc: ["Garansi 1x login", "Private Account", "Bisa invite 4-5 orang"] }
+                ]
+            },
+            {
+                id: 'zoom', name: 'Zoom', image: 'https://files.catbox.moe/l96nbs.jpg', type: 'app',
+                packages: [
+                    { name: "Zoom 100 Peserta 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, warranty: true, icon: "video", desc: ["Support all device", "Garansi 3 Hari"] },
+                    { name: "Zoom 100 Peserta 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, warranty: true, icon: "video", desc: ["Support all device", "Garansi 7 Hari"] }
+                ]
+            },
+            {
+                id: 'lr', name: 'Lightroom', image: 'https://files.catbox.moe/8t1r1l.jpg', type: 'app',
+                packages: [
+                    { name: "Lightroom Sharing 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, icon: "image", desc: ["Sharing Account", "Garansi 15 Hari (Backfree)", "Support All Device", "Paham resiko sharing"] },
+                    { name: "Lightroom Sharing 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, icon: "image", desc: ["Sharing Account", "Garansi 6 Bulan (Backfree)", "Support All Device", "Paham resiko sharing"] }
+                ]
+            },
+            {
+                id: 'viu', name: 'VIU', image: 'https://files.catbox.moe/jpe826.jpg', type: 'app',
+                packages: [
+                    { name: "VIU Lifetime", price: "Rp 5.000", priceVal: 5000, durationVal: 999, warranty: true, icon: "play-circle", desc: ["Garansi 6 Bulan", "Private Account"] },
+                    { name: "5x VIU Lifetime", price: "Rp 15.000", priceVal: 15000, durationVal: 999, tag: "bulk", tagName: "HEMAT 40%", saveText: "Hemat Rp 10.000 (Rate: Rp 3.000/akun)", warranty: true, icon: "box", desc: ["Garansi 6 Bulan", "Private Account", "Cocok untuk reseller"] },
+                    { name: "10x VIU Lifetime", price: "Rp 20.000", priceVal: 20000, durationVal: 999, tag: "bulk", tagName: "RECOMMENDED", saveText: "Hemat Rp 30.000 (Rate: Rp 2.000/akun)", warranty: true, icon: "box", desc: ["Garansi 6 Bulan", "Private Account", "Cocok untuk reseller"] }
                 ]
             }
         ];
 
         // --- FILTER & SORT LOGIC ---
-        let currentSort = 'abjad'; // Default sort
-        let activeFilters = {
-            cat: ['all'], // 'all', 'app', 'sosmed'
-            price: [], // 'low', 'mid', 'high'
-            tag: [], // 'best', 'bulk'
-            warranty: [] // 'yes', 'no'
-        };
+        let currentSort = 'abjad';
+        let activeFilters = { cat: ['all'], price: [], tag: [], warranty: [] };
 
-        function setSort(type, btn) {
+        function toggleSortMenu() {
+            playClick();
+            const menu = document.getElementById('sortMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+        function toggleFilterDrawer() {
+            playClick();
+            const drawer = document.getElementById('filterDrawer');
+            drawer.classList.toggle('open');
+            if(drawer.classList.contains('open')) {
+                drawer.style.maxHeight = drawer.scrollHeight + "px";
+            } else {
+                drawer.style.maxHeight = "0";
+            }
+        }
+        function setSort(type) {
             playClick();
             currentSort = type;
-            document.querySelectorAll('.sort-chip').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            document.getElementById('sortMenu').style.display = 'none';
             filterAndSortProducts();
         }
 
         function toggleFilter(btn, type, value) {
             playClick();
-            // Handle single select for 'cat' if 'all' is clicked, else multi
             if (type === 'cat') {
                 if (value === 'all') {
                     activeFilters.cat = ['all'];
-                    // Reset styling for other cat buttons
                     const container = btn.parentElement;
                     container.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
                     btn.classList.add('active');
                 } else {
-                    // If clicking app/sosmed, remove 'all'
                     activeFilters.cat = activeFilters.cat.filter(v => v !== 'all');
-                    
                     if (activeFilters.cat.includes(value)) {
                         activeFilters.cat = activeFilters.cat.filter(v => v !== value);
                         btn.classList.remove('active');
@@ -406,18 +478,14 @@
                         activeFilters.cat.push(value);
                         btn.classList.add('active');
                     }
-                    // If empty, auto select all
                     if(activeFilters.cat.length === 0) {
                          activeFilters.cat = ['all'];
-                         container.querySelector('[onclick*="all"]').classList.add('active');
+                         btn.parentElement.querySelector('[onclick*="all"]').classList.add('active');
                     } else {
-                        // Ensure 'all' visually deselected
-                         const container = btn.parentElement;
-                         container.querySelector('[onclick*="all"]').classList.remove('active');
+                         btn.parentElement.querySelector('[onclick*="all"]').classList.remove('active');
                     }
                 }
             } else {
-                // Generic Multi Select
                 if (activeFilters[type].includes(value)) {
                     activeFilters[type] = activeFilters[type].filter(v => v !== value);
                     btn.classList.remove('active');
@@ -434,7 +502,6 @@
             const listContainer = document.getElementById('allProductsList');
             listContainer.innerHTML = '';
 
-            // 1. Flatten Data
             let allItems = [];
             appsData.forEach(app => {
                 app.packages.forEach(pkg => {
@@ -442,16 +509,10 @@
                 });
             });
 
-            // 2. Filter Logic
             let filtered = allItems.filter(item => {
-                // Search
                 const matchesSearch = item.name.toLowerCase().includes(query) || item.appName.toLowerCase().includes(query);
                 if (!matchesSearch) return false;
-
-                // Category
                 if (!activeFilters.cat.includes('all') && !activeFilters.cat.includes(item.type)) return false;
-
-                // Price Range
                 if (activeFilters.price.length > 0) {
                     let priceMatch = false;
                     if (activeFilters.price.includes('low') && item.priceVal < 10000) priceMatch = true;
@@ -459,36 +520,27 @@
                     if (activeFilters.price.includes('high') && item.priceVal > 25000) priceMatch = true;
                     if (!priceMatch) return false;
                 }
-
-                // Tags
                 if (activeFilters.tag.length > 0) {
                      let tagMatch = false;
                      if (activeFilters.tag.includes('best') && item.tag === 'best') tagMatch = true;
                      if (activeFilters.tag.includes('bulk') && item.tag === 'bulk') tagMatch = true;
                      if (!tagMatch) return false;
                 }
-
-                // Warranty
                 if (activeFilters.warranty.length > 0) {
                     let wMatch = false;
                     if (activeFilters.warranty.includes('yes') && item.warranty === true) wMatch = true;
-                    if (activeFilters.warranty.includes('no') && item.warranty === false) wMatch = true;
                     if (!wMatch) return false;
                 }
-
                 return true;
             });
 
-            // 3. Sort Logic
             if (currentSort === 'abjad') filtered.sort((a, b) => a.name.localeCompare(b.name));
             else if (currentSort === 'murah') filtered.sort((a, b) => a.priceVal - b.priceVal);
             else if (currentSort === 'mahal') filtered.sort((a, b) => b.priceVal - a.priceVal);
-            else if (currentSort === 'layanan') filtered.sort((a, b) => a.appName.localeCompare(b.appName));
-            else if (currentSort === 'durasi') filtered.sort((a, b) => a.durationVal - b.durationVal);
+            else if (currentSort === 'durasi') filtered.sort((a, b) => b.durationVal - a.durationVal);
 
-            // 4. Render
             if(filtered.length === 0) {
-                listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-sec);">Tidak ada produk sesuai filter.</div>';
+                listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-sec);">Tidak ada produk.</div>';
                 return;
             }
 
@@ -496,33 +548,23 @@
                 let tagLabel = "";
                 if(item.tagName) {
                      let colorClass = item.tag === 'best' ? 'tag-gold' : (item.tag === 'rec' ? 'tag-blue' : 'tag-green');
-                     tagLabel = `<span class="tag-base ${colorClass}" style="font-size:0.6rem; padding:2px 6px;">${item.tagName}</span>`;
+                     tagLabel = `<span class="tag-base ${colorClass}" style="font-size:0.6rem;">${item.tagName}</span>`;
                 }
-                let warrantyLabel = item.warranty ? '<span style="color:#00ff7f; font-size:0.7rem;">✔ Garansi</span>' : '<span style="color:#ff4444; font-size:0.7rem;">✕ No Garansi</span>';
-
                 const html = `
-                    <div class="all-prod-item">
+                    <div class="all-prod-item btn-animated" onclick="orderNow('${item.name}')">
                         <img src="${item.appImage}" alt="${item.appName}" class="all-prod-img">
                         <div class="all-prod-info">
                             <div class="all-prod-name">${item.name} ${tagLabel}</div>
-                            <div class="all-prod-meta">${item.appName} • ${warrantyLabel}</div>
                             <div class="all-prod-price">${item.price}</div>
                         </div>
-                        <button class="all-prod-btn" style="padding:8px 15px; background:var(--primary); color:white; border-radius:6px; border:none; font-weight:bold; cursor:pointer;" onclick="orderNow('${item.name}')">ORDER</button>
+                        <i class="fas fa-chevron-right" style="color:var(--primary)"></i>
                     </div>
                 `;
                 listContainer.innerHTML += html;
             });
         }
 
-
-        // --- BASIC FUNCTIONS ---
-        function showPage(pageId) {
-            playClick();
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0,0);
-        }
+        // --- RENDER HELPERS ---
         function showAppGrid() { renderAppGrid(); showPage('appGridPage'); }
         function showAllProducts() { showPage('allProductsPage'); filterAndSortProducts(); }
 
@@ -547,24 +589,21 @@
             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        function toggleMode() { document.body.classList.toggle('light-mode'); }
+        function toggleMode() { playClick(); document.body.classList.toggle('light-mode'); }
 
-        // --- RENDER HELPERS ---
         function renderAppGrid() {
             const gridContainer = document.getElementById('appList');
             gridContainer.innerHTML = '';
             const sortedApps = [...appsData].sort((a, b) => a.name.localeCompare(b.name));
 
             sortedApps.forEach(app => {
-                let cardClass = "app-card";
+                let cardClass = "app-card btn-animated";
                 let badge = "";
-                let specialMark = "";
                 if(app.id === 'capcut') {
                     cardClass += " featured-app";
                     badge = `<div class="featured-badge">BEST SELLER 🔥</div>`;
-                    specialMark = '<span style="color:gold;">★</span>';
                 }
-                const card = `<div class="${cardClass}" onclick="showAppDetails('${app.id}'); playClick();">${badge}<img src="${app.image}" alt="${app.name}"><h3>${app.name} ${specialMark}</h3></div>`;
+                const card = `<div class="${cardClass}" onclick="showAppDetails('${app.id}'); playClick();">${badge}<img src="${app.image}" alt="${app.name}"><h3>${app.name}</h3></div>`;
                 gridContainer.innerHTML += card;
             });
         }
@@ -578,17 +617,27 @@
 
             app.packages.forEach(pkg => {
                 let tagHtml = '';
-                if (pkg.tag === 'best') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-gold">${pkg.tagName}</span></div>`;
-                else if (pkg.tag === 'rec') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-blue">${pkg.tagName}</span></div>`;
-                else if (pkg.tag === 'bulk') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-green">${pkg.tagName}</span></div>`;
-                const descList = pkg.desc.map(item => `<li>${item}</li>`).join('');
-                const html = `<div class="product-card"><div class="product-header" onclick="toggleAccordion(this)"><div style="flex:1;">${pkg.name} ${tagHtml}</div><i class="fas fa-chevron-down"></i></div><div class="product-details"><div class="details-content"><span class="price-tag">${pkg.price}</span><ul style="list-style:inside; margin: 10px 0;">${descList}</ul><button class="order-btn" onclick="orderNow('${pkg.name}')">ORDER SEKARANG 🔥</button></div></div></div>`;
+                if (pkg.tag === 'best') tagHtml = `<span class="tag-base tag-gold">${pkg.tagName}</span>`;
+                else if (pkg.tag === 'rec') tagHtml = `<span class="tag-base tag-blue">${pkg.tagName}</span>`;
+                else if (pkg.tag === 'bulk') tagHtml = `<span class="tag-base tag-green">${pkg.tagName}</span>`;
+                
+                // BULK INFO DISPLAY
+                let saveInfoHtml = '';
+                if(pkg.saveText) saveInfoHtml = `<span class="save-info"><i class="fas fa-coins"></i> ${pkg.saveText}</span>`;
+
+                // ICON LOGIC
+                const iconMap = { "palette": "fa-palette", "pen-nib": "fa-pen-nib", "user-tie": "fa-user-tie", "cut": "fa-cut", "video": "fa-video", "box-open": "fa-box-open", "robot": "fa-robot", "bolt": "fa-bolt", "users": "fa-users", "image": "fa-image", "play-circle": "fa-play-circle", "box": "fa-box" };
+                const iconClass = iconMap[pkg.icon] || "fa-check";
+
+                const descList = pkg.desc.map(item => `<li><i class="fas ${iconClass}"></i> ${item}</li>`).join('');
+                
+                const html = `<div class="product-card"><div class="product-header btn-animated" onclick="toggleAccordion(this)"><div style="flex:1;">${pkg.name} ${tagHtml}</div><i class="fas fa-chevron-down"></i></div><div class="product-details"><div class="details-content">${saveInfoHtml}<span class="price-tag">${pkg.price}</span><ul class="detail-list">${descList}</ul><button class="menu-btn btn-animated" style="margin-top:15px; background:var(--primary); color:white; border:none;" onclick="orderNow('${pkg.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button></div></div></div>`;
                 listContainer.innerHTML += html;
             });
             showPage('appDetailsPage');
         }
 
-        // Testimonials
+        // Testimonial Data
         const rawTestimonials = [
             { u: "@kokoroaja", c: "aman wak", d: "26 Mei 2025", r: 5 }, { u: "@arry_sat", c: "atmin nya sabar, aman kali wir🔥", d: "19 Mei 2025", r: 5 }, { u: "@ethaniy", c: "aman bet🙌🙌", d: "6 Okt 2025", r: 5 }, { u: "@m_wildann1809", c: "AMAN+amanah👏", d: "4 Des 2025", r: 5 }, { u: "@zzakyd_", c: "Amaan👏", d: "23 Jun 2025", r: 5 }, { u: "@v1nnn_ib", c: "Aman", d: "3 Nov 2025", r: 5 }, { u: "@ricditzz_design", c: "Aman", d: "8 Sep 2025", r: 5 }, { u: "@mhmmdfamii", c: "BUY PANEL MURAH AMAN CUMAN DSINI GILA DAPET BONUS 1Gb ❤️❤️😍", d: "10 Nov 2025", r: 5 }, { u: "@mr.barr_", c: "Amanyoooo😂", d: "30 Jun 2025", r: 5 }, { u: "@vqmakk", c: "AMAN", d: "15 Sep 2025", r: 5 }, { u: "@adhipele", c: "aman X", d: "7 Jul 2025", r: 5 }, { u: "@azelonyth", c: "Aman", d: "17 Nov 2025", r: 5 }, { u: "@szenorthlenz", c: "aman min", d: "23 Jun 2025", r: 5 }, { u: "@kinggmielz", c: "amann🔥", d: "26 Mei 2025", r: 5 }, { u: "@availa6le_", c: "aman cuy🔥", d: "6 Okt 2025", r: 5 }, { u: "@gyuutaro_", c: "AMAN MIN", d: "16 Jun 2025", r: 5 }, { u: "@jusz.ordinary", c: "aman🔥", d: "6 Okt 2025", r: 5 }, { u: "@raka_budi_s", c: "❤️", d: "12 Mei 2025", r: 5 }, { u: "@mraiseffendy59", c: "Aman bgt 🔥🔥", d: "27 Okt 2025", r: 5 }, { u: "@fahri26429", c: "hm", d: "10 Nov 2025", r: 3 }, { u: "@ptra.valenn", c: "aman pol josjis🔥", d: "29 Sep 2025", r: 5 }, { u: "@vigsjsns", c: "Aman", d: "29 Sep 2025", r: 5 }, { u: "@cylla12025", c: "Amanah", d: "17 Nov 2025", r: 5 }, { u: "@madz.std", c: "aman dan aman🗿 real aman ya guys 👍", d: "11 Ags 2025", r: 5 }, { u: "@ardiizxx", c: "Aman👍", d: "6 Okt 2025", r: 5 }, { u: "@zenn_non", c: "AMAN WAK", d: "26 Mei 2025", r: 5 }, { u: "@by4ann_", c: "AMAN WOK", d: "22 Sep 2025", r: 5 }, { u: "@venerable_fanzx", c: "aman si jawir", d: "3 Nov 2025", r: 5 }, { u: "@febgt_1yt", c: "Aman wir", d: "6 Des 2025", r: 5 }, { u: "@aboyypeacefully", c: "Saya baru beli Akun sharing Capcut Aman Bgt Wakk", d: "13 Okt 2025", r: 5 }, { u: "@rivaldyaj", c: "AMAN", d: "28 Jul 2025", r: 5 }, { u: "@aldocukurukuk", c: "Aman", d: "9 Jun 2025", r: 5 }, { u: "@mpawsukayepink", c: "amann bangett suntiknya", d: "25 Ags 2025", r: 5 }, { u: "@azrilervandr", c: "aman cik", d: "28 Jul 2025", r: 5 }, { u: "@vall9.18", c: "AMAN", d: "29 Sep 2025", r: 5 }, { u: "@vicky.mra", c: "Aman ges", d: "9 Jun 2025", r: 5 }, { u: "@mad.armanda", c: "aman", d: "7 Jul 2025", r: 5 }, { u: "@alviskhairullah", c: "aman, apalagi kalo ada diskon😹", d: "5 Des 2025", r: 5 }, { u: "@conutx4_", c: "bagi kalian yang mauuu beli suntik all sosmed ataupun design² yang lain bisa langsung kesini aja yaa dijamin amanah + fast respon", d: "12 Mei 2025", r: 5 }, { u: "@mirfanpann", c: "Aman", d: "12 Mei 2025", r: 5 }, { u: "@tarow_design", c: "aman kali ini wak😍", d: "12 Mei 2025", r: 5 }, { u: "@peqwougt", c: "AMAN", d: "12 Mei 2025", r: 5 }
         ];
@@ -600,7 +649,7 @@
             combinedList.forEach(t => {
                 let starsHtml = '';
                 for(let i=1; i<=5; i++) { if(i <= t.r) starsHtml += '<i class="fas fa-star"></i>'; else starsHtml += '<i class="far fa-star" style="opacity:0.3"></i>'; }
-                const card = `<div class="testi-card"><i class="fab fa-instagram testi-source"></i><div class="testi-user"><div class="user-avatar"><i class="fas fa-user"></i></div><div class="user-info"><h4>${t.u}</h4><span>${t.d}</span></div></div><div class="stars">${starsHtml}</div><div class="testi-text">"${t.c}"</div></div>`;
+                const card = `<div class="testi-card"><div class="testi-user"><div class="user-avatar"><i class="fas fa-user"></i></div><div class="user-info"><h4>${t.u}</h4><span>${t.d}</span></div></div><div class="stars">${starsHtml}</div><div class="testi-text">"${t.c}"</div></div>`;
                 track.innerHTML += card;
             });
         }
@@ -618,10 +667,6 @@
                 container.appendChild(particle);
             }
         }
-
-        createFire();
-        renderTestimonials();
-        renderAppGrid();
     </script>
 </body>
-                            </html>
+</html>
