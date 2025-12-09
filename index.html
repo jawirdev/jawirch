@@ -12,18 +12,15 @@
             --accent-blue: #00bcd4;
             --accent-green: #00ff7f;
             --dark: #050505;
-            --light: #ffffff;
             --card-bg: #121212;
             --border-color: #2a2a2a;
             --text-main: #ffffff;
             --text-sec: #cccccc;
             --glow: 0 0 15px rgba(255, 0, 0, 0.6);
-            --glow-gold: 0 0 20px rgba(255, 215, 0, 0.5);
         }
 
         body.light-mode {
             --dark: #f5f5f5;
-            --light: #0a0a0a;
             --card-bg: #ffffff;
             --border-color: #e0e0e0;
             --text-main: #000000;
@@ -41,230 +38,160 @@
             padding-bottom: 100px;
         }
 
+        /* --- INTRO OVERLAY --- */
+        #introOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
+        }
+        .intro-logo {
+            width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary);
+            margin-bottom: 20px; animation: pulseLogo 2s infinite; object-fit: cover;
+        }
+        .enter-btn {
+            background: transparent; border: 2px solid var(--primary); color: var(--primary);
+            padding: 10px 30px; font-size: 1.2rem; font-weight: bold; letter-spacing: 2px;
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .enter-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); }
+        @keyframes pulseLogo { 0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.7); transform: scale(1); } 70% { box-shadow: 0 0 0 20px rgba(255,0,0,0); transform: scale(1.1); } 100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); transform: scale(1); } }
+
         /* --- Header --- */
         header {
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid var(--primary);
-            box-shadow: var(--glow);
-            position: sticky; top: 0;
-            background: var(--card-bg);
-            z-index: 100;
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 3px solid var(--primary); box-shadow: var(--glow);
+            position: sticky; top: 0; background: var(--card-bg); z-index: 100;
         }
-
         .logo-container { display: flex; align-items: center; gap: 10px; }
         .logo-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
         .logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
         .logo-text span { color: var(--primary); }
         .mode-toggle { background: transparent; border: 2px solid var(--primary); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
+        /* --- Container & Animations --- */
         .container { max-width: 850px; margin: 0 auto; padding: 25px 20px; z-index: 10; position: relative; }
-        .section { display: none; animation: slideUp 0.4s ease-out; }
-        .section.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Page Transition */
+        .section { display: none; opacity: 0; transform: scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease; }
+        .section.active { display: block; opacity: 1; transform: scale(1); animation: pageEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        @keyframes pageEnter { 
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); } 
+            100% { opacity: 1; transform: translateY(0) scale(1); } 
+        }
 
-        /* --- Menu Buttons --- */
+        /* --- Main Menu --- */
         .menu-btn {
-            width: 100%;
-            background: linear-gradient(145deg, var(--card-bg), #1a1a1a);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            font-size: 1.1rem;
-            color: var(--text-main);
-            border-radius: 15px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-weight: 900;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            width: 100%; background: linear-gradient(145deg, var(--card-bg), #1a1a1a); border: 1px solid var(--border-color);
+            padding: 20px; font-size: 1.1rem; color: var(--text-main); border-radius: 15px;
+            cursor: pointer; text-transform: uppercase; font-weight: 900;
+            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; overflow: hidden;
         }
         .menu-btn:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 0 20px rgba(255,0,0,0.2); }
+        .menu-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: 0.5s; }
+        .menu-btn:hover::after { left: 100%; }
 
-        /* --- Testimonial Infinite Scroll (Marquee) --- */
+        /* --- Testimonial Infinite Scroll --- */
         .testi-section { margin-top: 40px; margin-bottom: 30px; overflow: hidden; position: relative; }
         .testi-header { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; border-left: 5px solid var(--primary); padding-left: 15px; }
-        
-        .testi-track-container {
-            width: 100%;
-            overflow: hidden;
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); /* Fade edges */
-        }
-
-        .testi-track {
-            display: flex;
-            gap: 15px;
-            width: max-content;
-            animation: scroll 60s linear infinite; /* Adjust speed here */
-        }
-        
-        /* Pause animation on hover if desired, currently user said "kita gabisa geser" so continuous is better */
-        /* .testi-track:hover { animation-play-state: paused; } */
-
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Moves half way because list is duplicated */
-        }
-
-        .testi-card {
-            width: 280px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            flex-shrink: 0;
-            position: relative;
-        }
-
+        .testi-track-container { width: 100%; overflow: hidden; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+        .testi-track { display: flex; gap: 15px; width: max-content; animation: scroll 60s linear infinite; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .testi-card { width: 280px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; flex-shrink: 0; position: relative; }
         .testi-user { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
         .user-avatar { width: 40px; height: 40px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; }
         .user-info h4 { font-size: 0.9rem; margin: 0; }
         .user-info span { font-size: 0.7rem; color: var(--text-sec); }
         .testi-source { position: absolute; top: 15px; right: 15px; font-size: 1.2rem; color: #E1306C; }
-        .stars { color: var(--accent-gold); font-size: 0.8rem; margin-bottom: 8px; }
-        
-        .testi-text { 
-            font-size: 0.9rem; color: var(--text-sec); font-style: italic; line-height: 1.4; 
-            border-top: 1px dashed var(--border-color); padding-top: 8px;
-            /* Limit to 3 lines */
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
+        .testi-text { font-size: 0.9rem; color: var(--text-sec); font-style: italic; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* --- App Grid & Featured --- */
+        /* --- App Grid --- */
         .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; margin-top: 20px; }
-        .app-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-            position: relative;
-        }
+        .app-card { background: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; cursor: pointer; border: 1px solid var(--border-color); position: relative; }
         .app-card:hover { border-color: var(--primary); box-shadow: var(--glow); transform: translateY(-5px); }
         .app-card img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; }
+        .featured-app { border: 2px solid var(--accent-gold); background: linear-gradient(160deg, var(--card-bg), #2a2200); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); animation: borderPulse 3s infinite; }
+        .featured-badge { position: absolute; top: -10px; right: -10px; background: var(--primary); color: white; font-size: 0.7rem; padding: 5px 10px; border-radius: 20px; font-weight: bold; border: 2px solid white; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+        @keyframes borderPulse { 0% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: var(--accent-gold); } 50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.5); border-color: var(--primary); } 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: var(--accent-gold); } }
 
-        /* Featured App Card (CapCut) - GAHAR MODE */
-        .app-card.featured-app {
-            border: 2px solid var(--accent-gold);
-            background: linear-gradient(160deg, var(--card-bg), #2a2200);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            animation: borderPulse 3s infinite;
-        }
-        @keyframes borderPulse {
-            0% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: var(--accent-gold); }
-            50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.5); border-color: var(--primary); }
-            100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: var(--accent-gold); }
-        }
-        .featured-badge {
-            position: absolute; top: -10px; right: -10px;
-            background: var(--primary); color: white;
-            font-size: 0.7rem; padding: 5px 10px; border-radius: 20px;
-            font-weight: bold; border: 2px solid white;
-            z-index: 2; box-shadow: 0 5px 10px rgba(0,0,0,0.5);
-        }
-
-        /* --- Shiny Tag Logic (Universal) --- */
-        .tag-shiny-container { display: inline-block; vertical-align: middle; margin-left: 8px;}
-        .tag-base {
-            position: relative; overflow: hidden;
-            font-size: 0.7rem; padding: 3px 10px; border-radius: 4px;
-            text-transform: uppercase; font-weight: 900; color: #000;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
-            display: inline-block;
-        }
-        /* Tag Colors */
-        .tag-gold { background: linear-gradient(135deg, #d4af37, #f7ef8a, #d4af37); } /* Best Seller */
-        .tag-blue { background: linear-gradient(135deg, #00bcd4, #8affff, #00bcd4); } /* Recommended */
-        .tag-green { background: linear-gradient(135deg, #00ff7f, #adffc9, #00ff7f); } /* Bulk/Hemat */
-        
-        /* Shiny Animation */
-        .tag-base::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent);
-            animation: glassSweep 2.5s infinite linear;
-        }
+        /* --- Shiny Tags --- */
+        .tag-shiny-container { display: inline-block; vertical-align: middle; margin-left: 8px; }
+        .tag-base { position: relative; overflow: hidden; font-size: 0.7rem; padding: 3px 10px; border-radius: 4px; text-transform: uppercase; font-weight: 900; color: #000; box-shadow: 0 0 5px rgba(0,0,0,0.5); display: inline-block; }
+        .tag-gold { background: linear-gradient(135deg, #d4af37, #f7ef8a, #d4af37); }
+        .tag-blue { background: linear-gradient(135deg, #00bcd4, #8affff, #00bcd4); }
+        .tag-green { background: linear-gradient(135deg, #00ff7f, #adffc9, #00ff7f); }
+        .tag-base::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent); animation: glassSweep 2.5s infinite linear; }
         @keyframes glassSweep { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
 
-        /* --- Product List --- */
-        .product-card {
-            background: var(--card-bg);
-            margin-bottom: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-        .product-header {
-            padding: 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1rem;
-            background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent);
-        }
+        /* --- Product Details --- */
+        .product-card { background: var(--card-bg); margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; }
+        .product-header { padding: 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1rem; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
         .product-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-color); }
         .details-content { padding: 20px; color: var(--text-sec); font-size: 0.9rem; line-height: 1.6; }
         .price-tag { color: var(--primary); font-size: 1.3rem; font-weight: 900; display: block; margin-bottom: 5px; }
-        .order-btn {
-            display: block; width: 100%; padding: 12px;
-            background: linear-gradient(45deg, var(--primary), #b30000);
-            color: white; text-align: center; text-decoration: none; font-weight: 900;
-            border-radius: 8px; border: none; cursor: pointer; box-shadow: var(--glow); margin-top: 15px;
-        }
+        .order-btn { display: block; width: 100%; padding: 12px; background: linear-gradient(45deg, var(--primary), #b30000); color: white; text-align: center; text-decoration: none; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; box-shadow: var(--glow); margin-top: 15px; }
 
-        /* --- SEARCH & ALL PRODUCTS PAGE --- */
-        .search-bar { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid var(--border-color); background: var(--card-bg); color: white; font-size: 1rem; margin-bottom: 15px; }
-        .search-bar:focus { outline: none; border-color: var(--primary); }
+        /* --- ADVANCED FILTER & SORT STYLES --- */
+        .filter-section-wrapper { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        .filter-group { margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .filter-group:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .filter-title { font-weight: bold; margin-bottom: 10px; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; }
         
-        .filter-container { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .filter-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-sec); cursor: pointer; white-space: nowrap; font-size: 0.9rem;}
-        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .all-prod-item {
-            background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);
-            display: flex; align-items: center; gap: 15px; margin-bottom: 10px;
+        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .filter-chip { 
+            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-sec); 
+            cursor: pointer; font-size: 0.8rem; user-select: none; transition: 0.2s;
         }
+        .filter-chip input { display: none; }
+        .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 10px rgba(255,0,0,0.4); }
+        
+        /* Sort Radio Style */
+        .sort-chip { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-sec); cursor: pointer; font-size: 0.8rem; text-align: center; flex: 1; }
+        .sort-chip.active { background: var(--accent-blue); color: black; border-color: var(--accent-blue); font-weight: bold; }
+
+        .search-bar { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--border-color); background: black; color: white; margin-bottom: 10px; }
+        .search-bar:focus { border-color: var(--primary); outline: none; }
+
+        .all-prod-item { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
         .all-prod-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
         .all-prod-info { flex: 1; }
         .all-prod-name { font-weight: bold; font-size: 0.95rem; margin-bottom: 3px; }
         .all-prod-price { color: var(--primary); font-weight: 900; font-size: 1rem; }
-        .all-prod-btn { padding: 8px 15px; background: var(--primary); color: white; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
-
-
-        /* --- Socials & Back Btn --- */
-        .socials { margin-top: 40px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;}
-        .social-link {
-            padding: 10px 15px; border-radius: 8px;
-            background: var(--card-bg); color: var(--text-main); text-decoration: none; font-weight: bold;
-            border: 1px solid var(--border-color); font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
-        }
-        .social-link:hover { border-color: var(--primary); color: var(--primary); }
-        .back-btn { margin-bottom: 20px; padding: 10px 25px; background: transparent; border: 2px solid var(--primary); color: var(--text-main); cursor: pointer; border-radius: 30px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .all-prod-meta { font-size: 0.7rem; color: var(--text-sec); margin-top: 2px; }
 
         /* --- FIRE EFFECT --- */
         .fire-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 120px; z-index: 0; pointer-events: none; overflow: hidden; }
-        .fire-particle {
-            position: absolute; bottom: -30px;
-            background: radial-gradient(circle, rgba(255,100,0,1) 0%, rgba(255,0,0,0.5) 40%, rgba(255,0,0,0) 70%);
-            border-radius: 50% 50% 30% 30%; opacity: 0.7;
-            animation: rise 3s infinite ease-in; filter: blur(5px); mix-blend-mode: screen;
-        }
-        @keyframes rise {
-            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; }
-            50% { opacity: 0.6; transform: translateY(-60px) scale(1.2) rotate(20deg); }
-            100% { transform: translateY(-150px) scale(0.5) rotate(-20deg); opacity: 0; }
-        }
+        .fire-particle { position: absolute; bottom: -30px; background: radial-gradient(circle, rgba(255,100,0,1) 0%, rgba(255,0,0,0.5) 40%, rgba(255,0,0,0) 70%); border-radius: 50% 50% 30% 30%; opacity: 0.7; animation: rise 3s infinite ease-in; filter: blur(5px); mix-blend-mode: screen; }
+        @keyframes rise { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; } 50% { opacity: 0.6; transform: translateY(-60px) scale(1.2) rotate(20deg); } 100% { transform: translateY(-150px) scale(0.5) rotate(-20deg); opacity: 0; } }
+        
+        /* Audio Control Hidden */
+        audio { display: none; }
+        .back-btn { margin-bottom: 20px; padding: 10px 25px; background: transparent; border: 2px solid var(--primary); color: var(--text-main); cursor: pointer; border-radius: 30px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
 <body>
+
+    <audio id="bgMusic" loop>
+        <source src="https://files.catbox.moe/hgp3m6.mpeg" type="audio/mpeg">
+    </audio>
+    <audio id="sfxClick">
+        <source src="data:audio/wav;base64,UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav"> </audio>
+
+    <div id="introOverlay">
+        <img src="https://files.catbox.moe/t4gguw.jpg" class="intro-logo" alt="Logo">
+        <h2 style="margin-bottom: 20px; font-weight: 900; letter-spacing: 3px;">JAWIR STORE</h2>
+        <button class="enter-btn" onclick="enterSite()">ENTER STORE</button>
+        <p style="margin-top: 15px; font-size: 0.8rem; color: gray;">Tap to experience</p>
+    </div>
 
     <header>
         <div class="logo-container">
             <img src="https://files.catbox.moe/t4gguw.jpg" alt="Jawir Logo" class="logo-img">
             <div class="logo-text">JAWIR <span>STORE</span></div>
         </div>
-        <button class="mode-toggle" onclick="toggleMode()"><i class="fas fa-adjust"></i></button>
+        <button class="mode-toggle" onclick="toggleMode(); playClick()"><i class="fas fa-adjust"></i></button>
     </header>
 
     <div class="container">
@@ -283,23 +210,20 @@
                     <i class="fas fa-rocket fa-lg" style="color: var(--primary);"></i> Pricelist Suntik Sosmed
                 </button>
                 <button class="menu-btn" onclick="showAllProducts()">
-                    <i class="fas fa-list fa-lg" style="color: var(--accent-blue);"></i> Cari Semua Produk
+                    <i class="fas fa-search fa-lg" style="color: var(--accent-blue);"></i> Cari & Filter Produk (Lengkap)
                 </button>
             </div>
 
             <div class="testi-section">
                 <div class="testi-header">Apa Kata Mereka?</div>
                 <div class="testi-track-container">
-                    <div class="testi-track" id="testiTrack">
-                        </div>
+                    <div class="testi-track" id="testiTrack"></div>
                 </div>
             </div>
 
-            <div class="socials">
-                <a href="https://wa.me/6282131032770" target="_blank" class="social-link"><i class="fab fa-whatsapp"></i> Order WA</a>
-                <a href="https://tiktok.com/@jawirdesign" target="_blank" class="social-link"><i class="fab fa-tiktok"></i> @jawirdesign</a>
-                <a href="https://instagram.com/jawirdesigner" target="_blank" class="social-link"><i class="fab fa-instagram"></i> @jawirdesigner</a>
-                <a href="https://instagram.com/jawir.store" target="_blank" class="social-link"><i class="fab fa-instagram"></i> @jawir.store</a>
+            <div class="socials" style="display:flex; justify-content:center; gap:10px; margin-top:40px; flex-wrap:wrap;">
+                 <a href="https://wa.me/6282131032770" target="_blank" onclick="playClick()" class="social-link" style="padding:10px; border:1px solid #333; border-radius:8px; text-decoration:none; color:inherit;"><i class="fab fa-whatsapp"></i> Order WA</a>
+                 <a href="#" class="social-link" style="padding:10px; border:1px solid #333; border-radius:8px; text-decoration:none; color:inherit;">@jawirdesign</a>
             </div>
         </div>
 
@@ -317,18 +241,54 @@
 
         <div id="allProductsPage" class="section">
             <button class="back-btn" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <h2 style="margin-bottom: 15px;">Cari Semua Produk</h2>
+            <h2 style="margin-bottom: 15px;">Cari & Filter</h2>
             
-            <input type="text" id="searchInput" class="search-bar" placeholder="Cari nama paket..." onkeyup="filterAllProducts()">
-            
-            <div class="filter-container">
-                <button class="filter-btn active" onclick="setFilter('all', this)">Semua</button>
-                <button class="filter-btn" onclick="setFilter('app', this)">App Premium</button>
-                <button class="filter-btn" onclick="setFilter('sosmed', this)">Suntik Sosmed</button>
+            <input type="text" id="searchInput" class="search-bar" placeholder="Cari nama paket..." onkeyup="filterAndSortProducts()">
+
+            <div class="filter-section-wrapper">
+                
+                <div class="filter-group">
+                    <div class="filter-title"><i class="fas fa-sort"></i> Urutkan Berdasarkan</div>
+                    <div class="chip-container">
+                        <div class="sort-chip active" onclick="setSort('abjad', this)">Abjad</div>
+                        <div class="sort-chip" onclick="setSort('murah', this)">Termurah</div>
+                        <div class="sort-chip" onclick="setSort('mahal', this)">Termahal</div>
+                        <div class="sort-chip" onclick="setSort('layanan', this)">Aplikasi</div>
+                        <div class="sort-chip" onclick="setSort('durasi', this)">Durasi</div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">Kategori</div>
+                    <div class="chip-container">
+                        <label class="filter-chip active" onclick="toggleFilter(this, 'cat', 'all')">Semua</label>
+                        <label class="filter-chip" onclick="toggleFilter(this, 'cat', 'app')">App Premium</label>
+                        <label class="filter-chip" onclick="toggleFilter(this, 'cat', 'sosmed')">Suntik Sosmed</label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">Range Harga</div>
+                    <div class="chip-container">
+                        <label class="filter-chip" onclick="toggleFilter(this, 'price', 'low')">< 10k</label>
+                        <label class="filter-chip" onclick="toggleFilter(this, 'price', 'mid')">10k - 25k</label>
+                        <label class="filter-chip" onclick="toggleFilter(this, 'price', 'high')">> 25k</label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-title">Filter Spesial</div>
+                    <div class="chip-container">
+                        <label class="filter-chip" onclick="toggleFilter(this, 'tag', 'best')">Best Seller 🔥</label>
+                        <label class="filter-chip" onclick="toggleFilter(this, 'tag', 'bulk')">Hemat/Bulk 💰</label>
+                        <label class="filter-chip" onclick="toggleFilter(this, 'warranty', 'yes')">Bergaransi</label>
+                        <label class="filter-chip" onclick="toggleFilter(this, 'warranty', 'no')">No Garansi</label>
+                    </div>
+                </div>
+
             </div>
 
-            <div id="allProductsList">
-                </div>
+            <div id="allProductsList"></div>
         </div>
 
         <div id="sosmed" class="section">
@@ -345,247 +305,190 @@
     <div class="fire-container" id="fireContainer"></div>
 
     <script>
-        // --- DATA PRODUK ---
+        // --- AUDIO & SFX LOGIC ---
+        function enterSite() {
+            // Hide intro
+            document.getElementById('introOverlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('introOverlay').style.display = 'none';
+            }, 800);
+            
+            // Play Audio
+            const bgm = document.getElementById('bgMusic');
+            bgm.volume = 0.5;
+            bgm.play().catch(e => console.log("Audio play blocked need interaction"));
+            playClick(); // Play SFX once
+        }
+
+        function playClick() {
+            // Simple synthesized beep/click to avoid external dependencies lagging
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = 800;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.1);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
+        }
+
+        // --- DATA PRODUK UPDATED ---
         const appsData = [
             {
-                id: 'canva',
-                name: 'Canva',
-                image: 'https://files.catbox.moe/4omm5s.jpg',
-                type: 'app',
+                id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', type: 'app',
                 packages: [
-                    { name: "Canva Member 1 Bulan", price: "Rp 3.000", desc: ["Full garansi", "Canva pro via invite", "Support All Device", "Membuka semua fitur pro, kecuali brand kit", "tidak bisa upload font (tersedia di paket designer)"] },
-                    { name: "Canva Member 1 Tahun", price: "Rp 25.000", tag: "bulk", tagName: "HEMAT 30%", desc: ["Full garansi", "Renew/ganti team tiap bulan", "Canva pro via invite", "Support All Device"] },
-                    { name: "Canva Designer 1 Bulan", price: "Rp 5.000", desc: ["Full garansi", "Canva pro via invite", "Support All Device", "Membuka semua fitur pro", "Bisa menggunakan fitur brandkit & upload font"] },
-                    { name: "Canva Designer 1 Tahun", price: "Rp 27.000", tag: "bulk", tagName: "HEMAT 55%", desc: ["Full garansi", "Renew/ganti team tiap bulan", "Canva pro via invite", "Support All Device", "Membuka semua fitur pro", "Bisa brandkit & upload font"] },
-                    { name: "Canva Owner 1 Bulan", price: "Rp 8.000", desc: ["Garansi 25 Hari", "Akun dari seller / admin", "Membuka semua fitur pro", "Bisa invite hingga ±100 Member"] }
+                    { name: "Canva Member 1 Bulan", price: "Rp 3.000", priceVal: 3000, durationVal: 30, warranty: true, desc: ["Full garansi", "Canva pro via invite", "Support All Device", "Membuka semua fitur pro, kecuali brand kit"] },
+                    { name: "Canva Member 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "bulk", tagName: "HEMAT 30%", warranty: true, desc: ["Full garansi", "Renew/ganti team tiap bulan", "Canva pro via invite"] },
+                    { name: "Canva Designer 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Full garansi", "Canva pro via invite", "Bisa brandkit & upload font"] },
+                    { name: "Canva Designer 1 Tahun", price: "Rp 27.000", priceVal: 27000, durationVal: 365, tag: "bulk", tagName: "HEMAT 55%", warranty: true, desc: ["Full garansi", "Renew/ganti team tiap bulan", "Bisa brandkit & upload font"] },
+                    { name: "Canva Owner 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 25 Hari", "Akun dari seller / admin", "Invite ±100 Member"] }
                 ]
             },
             {
-                id: 'capcut',
-                name: 'Capcut',
-                isSpecial: true,
-                image: 'https://files.catbox.moe/qblbkz.jpg', 
-                type: 'app',
+                id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://files.catbox.moe/qblbkz.jpg', type: 'app',
                 packages: [
-                    { name: "Capcut Private 7 Hari", price: "Rp 5.000", tag: "best", tagName: "BEST SELLER 🔥", desc: ["No garansi", "Support all device", "Capcut pro team", "Semua fitur pro terbuka", "Login pc/laptop pakai qr"] },
-                    { name: "Capcut Private 14 Hari", price: "Rp 8.000", tag: "rec", tagName: "RECOMMENDED 👍", desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] },
-                    { name: "Capcut Private 21 Hari", price: "Rp 12.000", desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] },
-                    { name: "Capcut Private 28 Hari", price: "Rp 15.000", desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] },
-                    { name: "Capcut Private 35 Hari", price: "Rp 20.000", desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] }
+                    { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, desc: ["No garansi", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] },
+                    { name: "Capcut Private 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, tag: "rec", tagName: "RECOMMENDED", warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] },
+                    { name: "Capcut Private 21 Hari", price: "Rp 12.000", priceVal: 12000, durationVal: 21, warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] },
+                    { name: "Capcut Private 28 Hari", price: "Rp 15.000", priceVal: 15000, durationVal: 28, warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] },
+                    { name: "Capcut Private 35 Hari", price: "Rp 20.000", priceVal: 20000, durationVal: 35, warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] }
                 ]
             },
             {
-                id: 'am',
-                name: 'Alight Motion',
-                image: 'https://files.catbox.moe/3v9hsy.jpg',
-                type: 'app',
+                id: 'am', name: 'Alight Motion', image: 'https://files.catbox.moe/3v9hsy.jpg', type: 'app',
                 packages: [
-                    { name: "Alight Motion Sharing 1 Tahun", price: "Rp 3.000", desc: ["Garansi 6 bulan (Backfree)", "Sharing 3U (3 user)", "Support android & IOS", "All fitur premium"] },
-                    { name: "Alight Motion Private 1 Tahun", price: "Rp 6.000", desc: ["Garansi 6 bulan (Backfree)", "Akun private", "Bisa dijual ulang", "Support android & IOS"] },
-                    { name: "10x Alight Motion Private 1 Tahun", price: "Rp 30.000", tag: "bulk", tagName: "HEMAT 50%", desc: ["Garansi 6 bulan", "Akun private", "Cocok untuk reseller"] },
-                    { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", tag: "bulk", tagName: "HEMAT 67%", desc: ["Garansi 6 bulan", "Akun private", "Cocok untuk reseller"] }
+                    { name: "Alight Motion Sharing 1 Tahun", price: "Rp 3.000", priceVal: 3000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only Backfree, bukan disable/hack)", "Sharing 3U", "Support android & IOS"] },
+                    { name: "Alight Motion Private 1 Tahun", price: "Rp 6.000", priceVal: 6000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only Backfree, bukan disable/hack)", "Akun private", "Bisa dijual ulang"] },
+                    { name: "10x Alight Motion Private 1 Tahun", price: "Rp 30.000", priceVal: 30000, durationVal: 365, tag: "bulk", tagName: "HEMAT 50%", warranty: true, desc: ["Garansi 6 bulan (Only Backfree, bukan disable/hack)", "Akun private", "Support Android & IOS", "Cocok untuk reseller"] },
+                    { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", priceVal: 40000, durationVal: 365, tag: "bulk", tagName: "HEMAT 67%", warranty: true, desc: ["Garansi 6 bulan (Only Backfree, bukan disable/hack)", "Akun private", "Support Android & IOS", "Cocok untuk reseller"] }
                 ]
             }
         ];
 
-        // --- DATA TESTIMONI (All Included) ---
-        const rawTestimonials = [
-            { u: "@kokoroaja", c: "aman wak", d: "26 Mei 2025", r: 5 },
-            { u: "@arry_sat", c: "atmin nya sabar, aman kali wir🔥", d: "19 Mei 2025", r: 5 },
-            { u: "@ethaniy", c: "aman bet🙌🙌", d: "6 Oktober 2025", r: 5 },
-            { u: "@m_wildann1809", c: "AMAN+amanah👏", d: "4 Desember 2025", r: 5 },
-            { u: "@zzakyd_", c: "Amaan👏", d: "23 Juni 2025", r: 5 },
-            { u: "@v1nnn_ib", c: "Aman", d: "3 November 2025", r: 5 },
-            { u: "@ricditzz_design", c: "Aman", d: "8 September 2025", r: 5 },
-            { u: "@mhmmdfamii", c: "BUY PANEL MURAH AMAN CUMAN DSINI GILA DAPET BONUS 1Gb ❤️❤️😍", d: "10 November 2025", r: 5 },
-            { u: "@mr.barr_", c: "Amanyoooo😂", d: "30 Juni 2025", r: 5 },
-            { u: "@vqmakk", c: "AMAN", d: "15 September 2025", r: 5 },
-            { u: "@adhipele", c: "aman X", d: "7 Juli 2025", r: 5 },
-            { u: "@azelonyth", c: "Aman", d: "17 November 2025", r: 5 },
-            { u: "@szenorthlenz", c: "aman min", d: "23 Juni 2025", r: 5 },
-            { u: "@kinggmielz", c: "amann🔥", d: "26 Mei 2025", r: 5 },
-            { u: "@availa6le_", c: "aman cuy🔥", d: "6 Oktober 2025", r: 5 },
-            { u: "@gyuutaro_", c: "AMAN MIN", d: "16 Juni 2025", r: 5 },
-            { u: "@jusz.ordinary", c: "aman🔥", d: "6 Oktober 2025", r: 5 },
-            { u: "@raka_budi_s", c: "❤️", d: "12 Mei 2025", r: 5 },
-            { u: "@mraiseffendy59", c: "Aman bgt 🔥🔥", d: "27 Oktober 2025", r: 5 },
-            { u: "@fahri26429", c: "hm", d: "10 November 2025", r: 3 },
-            { u: "@ptra.valenn", c: "aman pol josjis🔥", d: "29 September 2025", r: 5 },
-            { u: "@vigsjsns", c: "Aman", d: "29 September 2025", r: 5 },
-            { u: "@cylla12025", c: "Amanah", d: "17 November 2025", r: 5 },
-            { u: "@madz.std", c: "aman dan aman🗿 real aman ya guys 👍", d: "11 Agustus 2025", r: 5 },
-            { u: "@ardiizxx", c: "Aman👍", d: "6 Oktober 2025", r: 5 },
-            { u: "@zenn_non", c: "AMAN WAK", d: "26 Mei 2025", r: 5 },
-            { u: "@by4ann_", c: "AMAN WOK", d: "22 September 2025", r: 5 },
-            { u: "@venerable_fanzx", c: "aman si jawir", d: "3 November 2025", r: 5 },
-            { u: "@febgt_1yt", c: "Aman wir", d: "6 Desember 2025", r: 5 },
-            { u: "@aboyypeacefully", c: "Saya baru beli Akun sharing Capcut Aman Bgt Wakk", d: "13 Oktober 2025", r: 5 },
-            { u: "@rivaldyaj", c: "AMAN", d: "28 Juli 2025", r: 5 },
-            { u: "@aldocukurukuk", c: "Aman", d: "9 Juni 2025", r: 5 },
-            { u: "@mpawsukayepink", c: "amann bangett suntiknya", d: "25 Agustus 2025", r: 5 },
-            { u: "@azrilervandr", c: "aman cik", d: "28 Juli 2025", r: 5 },
-            { u: "@vall9.18", c: "AMAN", d: "29 September 2025", r: 5 },
-            { u: "@vicky.mra", c: "Aman ges", d: "9 Juni 2025", r: 5 },
-            { u: "@mad.armanda", c: "aman", d: "7 Juli 2025", r: 5 },
-            { u: "@alviskhairullah", c: "aman, apalagi kalo ada diskon😹", d: "5 Desember 2025", r: 5 },
-            { u: "@conutx4_", c: "bagi kalian yang mauuu beli suntik all sosmed ataupun design² yang lain bisa langsung kesini aja yaa dijamin amanah + fast respon", d: "12 Mei 2025", r: 5 },
-            { u: "@mirfanpann", c: "Aman", d: "12 Mei 2025", r: 5 },
-            { u: "@tarow_design", c: "aman kali ini wak😍", d: "12 Mei 2025", r: 5 },
-            { u: "@peqwougt", c: "AMAN", d: "12 Mei 2025", r: 5 }
-        ];
+        // --- FILTER & SORT LOGIC ---
+        let currentSort = 'abjad'; // Default sort
+        let activeFilters = {
+            cat: ['all'], // 'all', 'app', 'sosmed'
+            price: [], // 'low', 'mid', 'high'
+            tag: [], // 'best', 'bulk'
+            warranty: [] // 'yes', 'no'
+        };
 
-        // --- RENDER TESTIMONIALS (INFINITE SCROLL) ---
-        function renderTestimonials() {
-            const track = document.getElementById('testiTrack');
-            // Duplicate the list to create seamless infinite scroll effect
-            const combinedList = [...rawTestimonials, ...rawTestimonials]; 
-            
-            track.innerHTML = '';
-            
-            combinedList.forEach(t => {
-                let starsHtml = '';
-                for(let i=1; i<=5; i++) {
-                    if(i <= t.r) starsHtml += '<i class="fas fa-star"></i>';
-                    else starsHtml += '<i class="far fa-star" style="opacity:0.3"></i>';
-                }
-
-                const card = `
-                    <div class="testi-card">
-                        <i class="fab fa-instagram testi-source"></i>
-                        <div class="testi-user">
-                            <div class="user-avatar"><i class="fas fa-user"></i></div>
-                            <div class="user-info">
-                                <h4>${t.u}</h4>
-                                <span>${t.d}</span>
-                            </div>
-                        </div>
-                        <div class="stars">${starsHtml}</div>
-                        <div class="testi-text">"${t.c}"</div>
-                    </div>
-                `;
-                track.innerHTML += card;
-            });
-        }
-
-        // --- RENDER APP GRID (MENU) ---
-        function renderAppGrid() {
-            const gridContainer = document.getElementById('appList');
-            gridContainer.innerHTML = '';
-            const sortedApps = [...appsData].sort((a, b) => a.name.localeCompare(b.name));
-
-            sortedApps.forEach(app => {
-                let cardClass = "app-card";
-                let badge = "";
-                let specialMark = "";
-                
-                // GAHAR MODE UNTUK CAPCUT
-                if(app.id === 'capcut') {
-                    cardClass += " featured-app";
-                    badge = `<div class="featured-badge">BEST SELLER 🔥</div>`;
-                    specialMark = '<span class="crown-icon"></span>';
-                }
-
-                const card = `
-                    <div class="${cardClass}" onclick="showAppDetails('${app.id}')">
-                        ${badge}
-                        <img src="${app.image}" alt="${app.name}">
-                        <h3>${app.name} ${specialMark}</h3>
-                        </div>
-                `;
-                gridContainer.innerHTML += card;
-            });
-        }
-
-        // --- RENDER APP DETAILS ---
-        function showAppDetails(appId) {
-            const app = appsData.find(a => a.id === appId);
-            if (!app) return;
-
-            // Header Logo
-            document.getElementById('selectedAppHeader').innerHTML = `
-                <img src="${app.image}" style="width:60px;height:60px;border-radius:10px;border:2px solid var(--primary);" alt="${app.name}">
-                <h2 style="font-size:1.8rem;">${app.name}</h2>
-            `;
-
-            const listContainer = document.getElementById('packageList');
-            listContainer.innerHTML = '';
-
-            app.packages.forEach(pkg => {
-                let tagHtml = '';
-                // Logic Tag Shiny untuk semua label
-                if (pkg.tag === 'best') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-gold">${pkg.tagName}</span></div>`;
-                else if (pkg.tag === 'rec') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-blue">${pkg.tagName}</span></div>`;
-                else if (pkg.tag === 'bulk') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-green">${pkg.tagName}</span></div>`;
-                
-                const descList = pkg.desc.map(item => `<li>${item}</li>`).join('');
-
-                const html = `
-                    <div class="product-card">
-                        <div class="product-header" onclick="toggleAccordion(this)">
-                            <div style="flex:1;">${pkg.name} ${tagHtml}</div>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="product-details">
-                            <div class="details-content">
-                                <span class="price-tag">${pkg.price}</span>
-                                <ul style="list-style:inside; margin: 10px 0;">${descList}</ul>
-                                <button class="order-btn" onclick="orderNow('${pkg.name}')">ORDER SEKARANG 🔥</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                listContainer.innerHTML += html;
-            });
-            showPage('appDetailsPage');
-        }
-
-        // --- NEW FEATURE: ALL PRODUCTS & SEARCH ---
-        let currentFilter = 'all';
-
-        function showAllProducts() {
-            showPage('allProductsPage');
-            filterAllProducts();
-        }
-
-        function setFilter(type, btn) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        function setSort(type, btn) {
+            playClick();
+            currentSort = type;
+            document.querySelectorAll('.sort-chip').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            filterAllProducts();
+            filterAndSortProducts();
         }
 
-        function filterAllProducts() {
+        function toggleFilter(btn, type, value) {
+            playClick();
+            // Handle single select for 'cat' if 'all' is clicked, else multi
+            if (type === 'cat') {
+                if (value === 'all') {
+                    activeFilters.cat = ['all'];
+                    // Reset styling for other cat buttons
+                    const container = btn.parentElement;
+                    container.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    btn.classList.add('active');
+                } else {
+                    // If clicking app/sosmed, remove 'all'
+                    activeFilters.cat = activeFilters.cat.filter(v => v !== 'all');
+                    
+                    if (activeFilters.cat.includes(value)) {
+                        activeFilters.cat = activeFilters.cat.filter(v => v !== value);
+                        btn.classList.remove('active');
+                    } else {
+                        activeFilters.cat.push(value);
+                        btn.classList.add('active');
+                    }
+                    // If empty, auto select all
+                    if(activeFilters.cat.length === 0) {
+                         activeFilters.cat = ['all'];
+                         container.querySelector('[onclick*="all"]').classList.add('active');
+                    } else {
+                        // Ensure 'all' visually deselected
+                         const container = btn.parentElement;
+                         container.querySelector('[onclick*="all"]').classList.remove('active');
+                    }
+                }
+            } else {
+                // Generic Multi Select
+                if (activeFilters[type].includes(value)) {
+                    activeFilters[type] = activeFilters[type].filter(v => v !== value);
+                    btn.classList.remove('active');
+                } else {
+                    activeFilters[type].push(value);
+                    btn.classList.add('active');
+                }
+            }
+            filterAndSortProducts();
+        }
+
+        function filterAndSortProducts() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const listContainer = document.getElementById('allProductsList');
             listContainer.innerHTML = '';
 
-            // Flatten data
-            let allProducts = [];
+            // 1. Flatten Data
+            let allItems = [];
             appsData.forEach(app => {
                 app.packages.forEach(pkg => {
-                    allProducts.push({
-                        ...pkg,
-                        appName: app.name,
-                        appImage: app.image,
-                        type: app.type,
-                        // Convert price to number for sorting
-                        priceVal: parseInt(pkg.price.replace(/[^0-9]/g, '')) 
-                    });
+                    allItems.push({ ...pkg, appName: app.name, appImage: app.image, type: app.type });
                 });
             });
 
-            // Sort by Price (Low to High)
-            allProducts.sort((a, b) => a.priceVal - b.priceVal);
-
-            // Filter
-            const filtered = allProducts.filter(item => {
-                const matchesType = currentFilter === 'all' || item.type === currentFilter;
+            // 2. Filter Logic
+            let filtered = allItems.filter(item => {
+                // Search
                 const matchesSearch = item.name.toLowerCase().includes(query) || item.appName.toLowerCase().includes(query);
-                return matchesType && matchesSearch;
+                if (!matchesSearch) return false;
+
+                // Category
+                if (!activeFilters.cat.includes('all') && !activeFilters.cat.includes(item.type)) return false;
+
+                // Price Range
+                if (activeFilters.price.length > 0) {
+                    let priceMatch = false;
+                    if (activeFilters.price.includes('low') && item.priceVal < 10000) priceMatch = true;
+                    if (activeFilters.price.includes('mid') && item.priceVal >= 10000 && item.priceVal <= 25000) priceMatch = true;
+                    if (activeFilters.price.includes('high') && item.priceVal > 25000) priceMatch = true;
+                    if (!priceMatch) return false;
+                }
+
+                // Tags
+                if (activeFilters.tag.length > 0) {
+                     let tagMatch = false;
+                     if (activeFilters.tag.includes('best') && item.tag === 'best') tagMatch = true;
+                     if (activeFilters.tag.includes('bulk') && item.tag === 'bulk') tagMatch = true;
+                     if (!tagMatch) return false;
+                }
+
+                // Warranty
+                if (activeFilters.warranty.length > 0) {
+                    let wMatch = false;
+                    if (activeFilters.warranty.includes('yes') && item.warranty === true) wMatch = true;
+                    if (activeFilters.warranty.includes('no') && item.warranty === false) wMatch = true;
+                    if (!wMatch) return false;
+                }
+
+                return true;
             });
 
+            // 3. Sort Logic
+            if (currentSort === 'abjad') filtered.sort((a, b) => a.name.localeCompare(b.name));
+            else if (currentSort === 'murah') filtered.sort((a, b) => a.priceVal - b.priceVal);
+            else if (currentSort === 'mahal') filtered.sort((a, b) => b.priceVal - a.priceVal);
+            else if (currentSort === 'layanan') filtered.sort((a, b) => a.appName.localeCompare(b.appName));
+            else if (currentSort === 'durasi') filtered.sort((a, b) => a.durationVal - b.durationVal);
+
+            // 4. Render
             if(filtered.length === 0) {
-                listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-sec);">Tidak ada produk ditemukan.</div>';
+                listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-sec);">Tidak ada produk sesuai filter.</div>';
                 return;
             }
 
@@ -595,15 +498,17 @@
                      let colorClass = item.tag === 'best' ? 'tag-gold' : (item.tag === 'rec' ? 'tag-blue' : 'tag-green');
                      tagLabel = `<span class="tag-base ${colorClass}" style="font-size:0.6rem; padding:2px 6px;">${item.tagName}</span>`;
                 }
+                let warrantyLabel = item.warranty ? '<span style="color:#00ff7f; font-size:0.7rem;">✔ Garansi</span>' : '<span style="color:#ff4444; font-size:0.7rem;">✕ No Garansi</span>';
 
                 const html = `
                     <div class="all-prod-item">
                         <img src="${item.appImage}" alt="${item.appName}" class="all-prod-img">
                         <div class="all-prod-info">
                             <div class="all-prod-name">${item.name} ${tagLabel}</div>
+                            <div class="all-prod-meta">${item.appName} • ${warrantyLabel}</div>
                             <div class="all-prod-price">${item.price}</div>
                         </div>
-                        <button class="all-prod-btn" onclick="orderNow('${item.name}')">ORDER</button>
+                        <button class="all-prod-btn" style="padding:8px 15px; background:var(--primary); color:white; border-radius:6px; border:none; font-weight:bold; cursor:pointer;" onclick="orderNow('${item.name}')">ORDER</button>
                     </div>
                 `;
                 listContainer.innerHTML += html;
@@ -611,15 +516,18 @@
         }
 
 
-        // --- UTILS ---
+        // --- BASIC FUNCTIONS ---
         function showPage(pageId) {
+            playClick();
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0,0);
         }
         function showAppGrid() { renderAppGrid(); showPage('appGridPage'); }
-        
+        function showAllProducts() { showPage('allProductsPage'); filterAndSortProducts(); }
+
         function toggleAccordion(header) {
+            playClick();
             const content = header.nextElementSibling;
             const icon = header.querySelector('i');
             document.querySelectorAll('.product-details').forEach(item => {
@@ -628,22 +536,74 @@
                     item.previousElementSibling.querySelector('i').style.transform = 'rotate(0deg)';
                 }
             });
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-                icon.style.transform = 'rotate(0deg)';
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                icon.style.transform = 'rotate(180deg)';
-            }
+            if (content.style.maxHeight) { content.style.maxHeight = null; icon.style.transform = 'rotate(0deg)'; } 
+            else { content.style.maxHeight = content.scrollHeight + "px"; icon.style.transform = 'rotate(180deg)'; }
         }
 
         function orderNow(productName) {
+            playClick();
             const phone = "6282131032770";
             const text = `Bang, mau order ${productName}. Apa masih ada ya?`;
             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
         function toggleMode() { document.body.classList.toggle('light-mode'); }
+
+        // --- RENDER HELPERS ---
+        function renderAppGrid() {
+            const gridContainer = document.getElementById('appList');
+            gridContainer.innerHTML = '';
+            const sortedApps = [...appsData].sort((a, b) => a.name.localeCompare(b.name));
+
+            sortedApps.forEach(app => {
+                let cardClass = "app-card";
+                let badge = "";
+                let specialMark = "";
+                if(app.id === 'capcut') {
+                    cardClass += " featured-app";
+                    badge = `<div class="featured-badge">BEST SELLER 🔥</div>`;
+                    specialMark = '<span style="color:gold;">★</span>';
+                }
+                const card = `<div class="${cardClass}" onclick="showAppDetails('${app.id}'); playClick();">${badge}<img src="${app.image}" alt="${app.name}"><h3>${app.name} ${specialMark}</h3></div>`;
+                gridContainer.innerHTML += card;
+            });
+        }
+
+        function showAppDetails(appId) {
+            const app = appsData.find(a => a.id === appId);
+            if (!app) return;
+            document.getElementById('selectedAppHeader').innerHTML = `<img src="${app.image}" style="width:60px;height:60px;border-radius:10px;border:2px solid var(--primary);" alt="${app.name}"><h2 style="font-size:1.8rem;">${app.name}</h2>`;
+            const listContainer = document.getElementById('packageList');
+            listContainer.innerHTML = '';
+
+            app.packages.forEach(pkg => {
+                let tagHtml = '';
+                if (pkg.tag === 'best') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-gold">${pkg.tagName}</span></div>`;
+                else if (pkg.tag === 'rec') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-blue">${pkg.tagName}</span></div>`;
+                else if (pkg.tag === 'bulk') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-green">${pkg.tagName}</span></div>`;
+                const descList = pkg.desc.map(item => `<li>${item}</li>`).join('');
+                const html = `<div class="product-card"><div class="product-header" onclick="toggleAccordion(this)"><div style="flex:1;">${pkg.name} ${tagHtml}</div><i class="fas fa-chevron-down"></i></div><div class="product-details"><div class="details-content"><span class="price-tag">${pkg.price}</span><ul style="list-style:inside; margin: 10px 0;">${descList}</ul><button class="order-btn" onclick="orderNow('${pkg.name}')">ORDER SEKARANG 🔥</button></div></div></div>`;
+                listContainer.innerHTML += html;
+            });
+            showPage('appDetailsPage');
+        }
+
+        // Testimonials
+        const rawTestimonials = [
+            { u: "@kokoroaja", c: "aman wak", d: "26 Mei 2025", r: 5 }, { u: "@arry_sat", c: "atmin nya sabar, aman kali wir🔥", d: "19 Mei 2025", r: 5 }, { u: "@ethaniy", c: "aman bet🙌🙌", d: "6 Okt 2025", r: 5 }, { u: "@m_wildann1809", c: "AMAN+amanah👏", d: "4 Des 2025", r: 5 }, { u: "@zzakyd_", c: "Amaan👏", d: "23 Jun 2025", r: 5 }, { u: "@v1nnn_ib", c: "Aman", d: "3 Nov 2025", r: 5 }, { u: "@ricditzz_design", c: "Aman", d: "8 Sep 2025", r: 5 }, { u: "@mhmmdfamii", c: "BUY PANEL MURAH AMAN CUMAN DSINI GILA DAPET BONUS 1Gb ❤️❤️😍", d: "10 Nov 2025", r: 5 }, { u: "@mr.barr_", c: "Amanyoooo😂", d: "30 Jun 2025", r: 5 }, { u: "@vqmakk", c: "AMAN", d: "15 Sep 2025", r: 5 }, { u: "@adhipele", c: "aman X", d: "7 Jul 2025", r: 5 }, { u: "@azelonyth", c: "Aman", d: "17 Nov 2025", r: 5 }, { u: "@szenorthlenz", c: "aman min", d: "23 Jun 2025", r: 5 }, { u: "@kinggmielz", c: "amann🔥", d: "26 Mei 2025", r: 5 }, { u: "@availa6le_", c: "aman cuy🔥", d: "6 Okt 2025", r: 5 }, { u: "@gyuutaro_", c: "AMAN MIN", d: "16 Jun 2025", r: 5 }, { u: "@jusz.ordinary", c: "aman🔥", d: "6 Okt 2025", r: 5 }, { u: "@raka_budi_s", c: "❤️", d: "12 Mei 2025", r: 5 }, { u: "@mraiseffendy59", c: "Aman bgt 🔥🔥", d: "27 Okt 2025", r: 5 }, { u: "@fahri26429", c: "hm", d: "10 Nov 2025", r: 3 }, { u: "@ptra.valenn", c: "aman pol josjis🔥", d: "29 Sep 2025", r: 5 }, { u: "@vigsjsns", c: "Aman", d: "29 Sep 2025", r: 5 }, { u: "@cylla12025", c: "Amanah", d: "17 Nov 2025", r: 5 }, { u: "@madz.std", c: "aman dan aman🗿 real aman ya guys 👍", d: "11 Ags 2025", r: 5 }, { u: "@ardiizxx", c: "Aman👍", d: "6 Okt 2025", r: 5 }, { u: "@zenn_non", c: "AMAN WAK", d: "26 Mei 2025", r: 5 }, { u: "@by4ann_", c: "AMAN WOK", d: "22 Sep 2025", r: 5 }, { u: "@venerable_fanzx", c: "aman si jawir", d: "3 Nov 2025", r: 5 }, { u: "@febgt_1yt", c: "Aman wir", d: "6 Des 2025", r: 5 }, { u: "@aboyypeacefully", c: "Saya baru beli Akun sharing Capcut Aman Bgt Wakk", d: "13 Okt 2025", r: 5 }, { u: "@rivaldyaj", c: "AMAN", d: "28 Jul 2025", r: 5 }, { u: "@aldocukurukuk", c: "Aman", d: "9 Jun 2025", r: 5 }, { u: "@mpawsukayepink", c: "amann bangett suntiknya", d: "25 Ags 2025", r: 5 }, { u: "@azrilervandr", c: "aman cik", d: "28 Jul 2025", r: 5 }, { u: "@vall9.18", c: "AMAN", d: "29 Sep 2025", r: 5 }, { u: "@vicky.mra", c: "Aman ges", d: "9 Jun 2025", r: 5 }, { u: "@mad.armanda", c: "aman", d: "7 Jul 2025", r: 5 }, { u: "@alviskhairullah", c: "aman, apalagi kalo ada diskon😹", d: "5 Des 2025", r: 5 }, { u: "@conutx4_", c: "bagi kalian yang mauuu beli suntik all sosmed ataupun design² yang lain bisa langsung kesini aja yaa dijamin amanah + fast respon", d: "12 Mei 2025", r: 5 }, { u: "@mirfanpann", c: "Aman", d: "12 Mei 2025", r: 5 }, { u: "@tarow_design", c: "aman kali ini wak😍", d: "12 Mei 2025", r: 5 }, { u: "@peqwougt", c: "AMAN", d: "12 Mei 2025", r: 5 }
+        ];
+
+        function renderTestimonials() {
+            const track = document.getElementById('testiTrack');
+            const combinedList = [...rawTestimonials, ...rawTestimonials];
+            track.innerHTML = '';
+            combinedList.forEach(t => {
+                let starsHtml = '';
+                for(let i=1; i<=5; i++) { if(i <= t.r) starsHtml += '<i class="fas fa-star"></i>'; else starsHtml += '<i class="far fa-star" style="opacity:0.3"></i>'; }
+                const card = `<div class="testi-card"><i class="fab fa-instagram testi-source"></i><div class="testi-user"><div class="user-avatar"><i class="fas fa-user"></i></div><div class="user-info"><h4>${t.u}</h4><span>${t.d}</span></div></div><div class="stars">${starsHtml}</div><div class="testi-text">"${t.c}"</div></div>`;
+                track.innerHTML += card;
+            });
+        }
 
         function createFire() {
             const container = document.getElementById('fireContainer');
@@ -659,10 +619,9 @@
             }
         }
 
-        // Init
         createFire();
         renderTestimonials();
         renderAppGrid();
     </script>
 </body>
-</html>
+                            </html>
