@@ -74,7 +74,7 @@
 
         .container { max-width: 850px; margin: 0 auto; padding: 25px 20px; z-index: 10; position: relative; min-height: 80vh;}
         
-        /* --- Simple Visibility Transition (No Wipe) --- */
+        /* --- Simple Visibility Transition --- */
         .section { display: none; opacity: 0; transition: opacity 0.3s ease; }
         .section.active { display: block; opacity: 1; }
 
@@ -192,13 +192,13 @@
 <body>
 
     <div id="introOverlay">
-        <img src="https://bashify.io/i/LjR4JI" class="intro-logo" alt="Logo">
+        <img src="https://iili.io/fR1nzml.jpg" class="intro-logo" alt="Logo">
         <div class="intro-text">JAWIR STORE</div>
     </div>
 
     <header>
         <div class="logo-container" onclick="openLink('https://instagram.com/jawir.store')">
-            <img src="https://bashify.io/i/LjR4JI" alt="Jawir Logo" class="logo-img">
+            <img src="https://iili.io/fR1nzml.jpg" alt="Jawir Logo" class="logo-img">
             <div class="logo-text">JAWIR <span>STORE</span></div>
         </div>
         <button class="mode-toggle btn-animated" onclick="toggleMode()"><i class="fas fa-adjust"></i></button>
@@ -376,7 +376,7 @@
             return "fa-check"; 
         }
 
-        // --- DATA PRODUK LENGKAP (V10 - BASHIFY LINKS) ---
+        // --- DATA PRODUK LENGKAP (V11 - IILI.IO LINKS) ---
         const appsData = [
             {
                 id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', type: 'app',
@@ -389,7 +389,7 @@
                 ]
             },
             {
-                id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://bashify.io/i/qWAP2W', type: 'app',
+                id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://iili.io/fR1n5B9.png', type: 'app',
                 packages: [
                     { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, desc: ["No garansi", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
                     { name: "Capcut Private 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, tag: "rec", tagName: "RECOMMENDED", warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
@@ -408,7 +408,7 @@
                 ]
             },
             {
-                id: 'gpt', name: 'ChatGPT', image: 'https://bashify.io/i/a2UoEh', type: 'app',
+                id: 'gpt', name: 'ChatGPT', image: 'https://iili.io/fR1nAL7.png', type: 'app',
                 packages: [
                     { name: "ChatGPT GO 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Akses GPT-5 (Limited)", "Limit 10x lebih banyak dr gratis"] },
                     { name: "ChatGPT+ 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, tag: "rec", tagName: "POPULAR", warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Respon Cepat & Prioritas", "Akses GPT-5 & GPT-4o", "Fitur Eksperimental"] },
@@ -416,21 +416,21 @@
                 ]
             },
             {
-                id: 'zoom', name: 'Zoom', image: 'https://bashify.io/i/ZgAgzS', type: 'app',
+                id: 'zoom', name: 'Zoom', image: 'https://iili.io/fR1nxe4.jpg', type: 'app',
                 packages: [
                     { name: "Zoom 100 Peserta 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, warranty: true, desc: ["Support all device", "Garansi 3 Hari (Only BackFree, bukan disable/hack)"] },
                     { name: "Zoom 100 Peserta 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, warranty: true, desc: ["Support all device", "Garansi 7 Hari (Only BackFree, bukan disable/hack)"] }
                 ]
             },
             {
-                id: 'lr', name: 'Lightroom', image: 'https://bashify.io/i/WUiOcT', type: 'app',
+                id: 'lr', name: 'Lightroom', image: 'https://iili.io/fR1nuXS.png', type: 'app',
                 packages: [
                     { name: "Lightroom Sharing 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Sharing Account", "Garansi 15 Hari (Only BackFree, bukan disable/hack)", "Support All Device", "Paham resiko sharing"] },
                     { name: "Lightroom Sharing 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Sharing Account", "Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Support All Device", "Paham resiko sharing"] }
                 ]
             },
             {
-                id: 'viu', name: 'VIU', image: 'https://bashify.io/i/dfryvg', type: 'app',
+                id: 'viu', name: 'VIU', image: 'https://iili.io/fR1nTI2.png', type: 'app',
                 packages: [
                     { name: "VIU Lifetime", price: "Rp 5.000", priceVal: 5000, durationVal: 999, warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Private Account"] },
                     { name: "5x VIU Lifetime", price: "Rp 15.000", priceVal: 15000, durationVal: 999, tag: "bulk", tagName: "HEMAT 40%", saveText: "Hemat Rp 10.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Private Account", "Cocok untuk reseller"] },
@@ -438,14 +438,14 @@
                 ]
             },
             {
-                id: 'prime', name: 'Prime Video', image: 'https://bashify.io/i/GpdpVd', type: 'app',
+                id: 'prime', name: 'Prime Video', image: 'https://iili.io/fR1nBgs.png', type: 'app',
                 packages: [
                     { name: "Prime Video Sharing 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account (4 User)", "Support All device", "Tidak termasuk rental film & ada iklan awal", "Paham resiko akun sharing"] },
                     { name: "Prime Video Private 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, warranty: true, desc: ["Garansi 20 Hari (Only BackFree, bukan hack/disable)", "Private Account", "Support All device", "Tidak termasuk rental film & ada iklan awal"] }
                 ]
             },
             {
-                id: 'iqiyi', name: 'iQIYI', image: 'https://bashify.io/i/l6lFQW', type: 'app',
+                id: 'iqiyi', name: 'iQIYI', image: 'https://iili.io/fR1no7f.webp', type: 'app',
                 packages: [
                     { name: "Iqiyi Sharing Standar 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 1080p", "Paham resiko sharing"] },
                     { name: "Iqiyi Private Standar 1 Bulan", price: "Rp 30.000", priceVal: 30000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Private Account", "Bebas Iklan", "Kualitas 1080p"] },
@@ -689,4 +689,4 @@
         }
     </script>
 </body>
-    </html>
+                            </html>
