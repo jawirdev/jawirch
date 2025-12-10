@@ -69,7 +69,7 @@
 
         .container { max-width: 850px; margin: 0 auto; padding: 25px 20px; z-index: 10; position: relative; min-height: 80vh;}
         
-        /* --- Simple Visibility Transition (No Wipe) --- */
+        /* --- Simple Visibility Transition --- */
         .section { display: none; opacity: 0; transition: opacity 0.3s ease; }
         .section.active { display: block; opacity: 1; }
 
@@ -115,7 +115,6 @@
         .app-card img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; }
         .featured-app { border: 2px solid var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); animation: borderPulse 3s infinite; }
         
-        /* Fix Badge Position */
         .featured-badge { 
             position: absolute; top: -12px; right: -8px; 
             background: var(--primary); color: white; font-size: 0.6rem; 
@@ -188,13 +187,13 @@
 <body>
 
     <div id="introOverlay">
-        <img src="https://h.uguu.se/HLNbivrv.jpg" class="intro-logo" alt="Logo">
+        <img src="https://ibb.co/ns8r0cmK" class="intro-logo" alt="Logo">
         <div class="intro-text">JAWIR STORE</div>
     </div>
 
     <header>
         <div class="logo-container" onclick="openLink('https://instagram.com/jawir.store')">
-            <img src="https://h.uguu.se/HLNbivrv.jpg" alt="Jawir Logo" class="logo-img">
+            <img src="https://ibb.co/ns8r0cmK" alt="Jawir Logo" class="logo-img">
             <div class="logo-text">JAWIR <span>STORE</span></div>
         </div>
         <button class="mode-toggle btn-animated" onclick="toggleMode()"><i class="fas fa-adjust"></i></button>
@@ -367,67 +366,87 @@
             if (text.includes("cepat") || text.includes("fast") || text.includes("kilat")) return "fa-bolt";
             if (text.includes("update") || text.includes("terbaru")) return "fa-sync-alt";
             if (text.includes("fitur") || text.includes("akses")) return "fa-star";
+            if (text.includes("4k") || text.includes("1080p") || text.includes("hd")) return "fa-tv";
+            if (text.includes("iklan")) return "fa-ad";
             return "fa-check"; 
         }
 
-        // --- DATA PRODUK LENGKAP (UPDATED LINKS) ---
+        // --- DATA PRODUK LENGKAP (V9) ---
         const appsData = [
             {
                 id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', type: 'app',
                 packages: [
-                    { name: "Canva Member 1 Bulan", price: "Rp 3.000", priceVal: 3000, durationVal: 30, warranty: true, desc: ["Full garansi", "Canva pro via invite", "Support All Device", "Fitur pro open (kecuali brand kit)", "Tidak bisa upload font"] },
-                    { name: "Canva Member 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "bulk", tagName: "HEMAT 30%", saveText: "Hemat Rp 11.000 (Rate: Rp 2.080/bln)", warranty: true, desc: ["Full garansi", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur pro open (kecuali brand kit)"] },
-                    { name: "Canva Designer 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Full garansi", "Canva pro via invite", "Support All Device", "Fitur brandkit & upload font ON"] },
-                    { name: "Canva Designer 1 Tahun", price: "Rp 27.000", priceVal: 27000, durationVal: 365, tag: "bulk", tagName: "HEMAT 55%", saveText: "Hemat Rp 33.000 (Rate: Rp 2.250/bln)", warranty: true, desc: ["Full garansi", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur brandkit & upload font ON"] },
-                    { name: "Canva Owner 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 25 Hari", "Akun dari seller / admin", "Bisa invite ±100 Member"] }
+                    { name: "Canva Member 1 Bulan", price: "Rp 3.000", priceVal: 3000, durationVal: 30, warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Canva pro via invite", "Support All Device", "Fitur pro open (kecuali brand kit)", "Tidak bisa upload font"] },
+                    { name: "Canva Member 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "bulk", tagName: "HEMAT 30%", saveText: "Hemat Rp 11.000 (Rate: Rp 2.080/bln)", warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur pro open (kecuali brand kit)"] },
+                    { name: "Canva Designer 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Canva pro via invite", "Support All Device", "Fitur brandkit & upload font ON"] },
+                    { name: "Canva Designer 1 Tahun", price: "Rp 27.000", priceVal: 27000, durationVal: 365, tag: "bulk", tagName: "HEMAT 55%", saveText: "Hemat Rp 33.000 (Rate: Rp 2.250/bln)", warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur brandkit & upload font ON"] },
+                    { name: "Canva Owner 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 25 Hari (Only BackFree, bukan disable/hack)", "Akun dari seller / admin", "Bisa invite ±100 Member"] }
                 ]
             },
             {
-                id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://d.uguu.se/cXibLTLa.jpg', type: 'app',
+                id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://ibb.co/DPc0mQJm', type: 'app',
                 packages: [
-                    { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, desc: ["No garansi", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
-                    { name: "Capcut Private 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, tag: "rec", tagName: "RECOMMENDED", warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr"] },
-                    { name: "Capcut Private 21 Hari", price: "Rp 12.000", priceVal: 12000, durationVal: 21, warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] },
-                    { name: "Capcut Private 35 Hari", price: "Rp 20.000", priceVal: 20000, durationVal: 35, warranty: true, desc: ["Garansi 7 hari (Only Backfree)", "Support all device", "Capcut pro team"] }
+                    { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, desc: ["No garansi", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
+                    { name: "Capcut Private 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, tag: "rec", tagName: "RECOMMENDED", warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
+                    { name: "Capcut Private 21 Hari", price: "Rp 12.000", priceVal: 12000, durationVal: 21, warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
+                    { name: "Capcut Private 28 Hari", price: "Rp 15.000", priceVal: 15000, durationVal: 28, warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
+                    { name: "Capcut Private 35 Hari", price: "Rp 20.000", priceVal: 20000, durationVal: 35, warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] }
                 ]
             },
             {
                 id: 'am', name: 'Alight Motion', image: 'https://files.catbox.moe/3v9hsy.jpg', type: 'app',
                 packages: [
-                    { name: "Alight Motion Sharing 1 Tahun", price: "Rp 3.000", priceVal: 3000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Backfree)", "Sharing 3U", "Support android & IOS", "Dilarang sebar data"] },
-                    { name: "Alight Motion Private 1 Tahun", price: "Rp 6.000", priceVal: 6000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Backfree)", "Akun private", "Bisa dijual ulang"] },
-                    { name: "10x Alight Motion Private 1 Tahun", price: "Rp 30.000", priceVal: 30000, durationVal: 365, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 30.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Backfree)", "Akun private", "Cocok untuk reseller"] },
-                    { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", priceVal: 40000, durationVal: 365, tag: "bulk", tagName: "HEMAT 67%", saveText: "Hemat Rp 80.000 (Rate: Rp 2.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Backfree)", "Akun private", "Cocok untuk reseller"] }
+                    { name: "Alight Motion Sharing 1 Tahun", price: "Rp 3.000", priceVal: 3000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Sharing 3U", "Support android & IOS", "Dilarang sebar data"] },
+                    { name: "Alight Motion Private 1 Tahun", price: "Rp 6.000", priceVal: 6000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Bisa dijual ulang"] },
+                    { name: "10x Alight Motion Private 1 Tahun", price: "Rp 30.000", priceVal: 30000, durationVal: 365, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 30.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Cocok untuk reseller"] },
+                    { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", priceVal: 40000, durationVal: 365, tag: "bulk", tagName: "HEMAT 67%", saveText: "Hemat Rp 80.000 (Rate: Rp 2.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Cocok untuk reseller"] }
                 ]
             },
             {
-                id: 'gpt', name: 'ChatGPT', image: 'https://o.uguu.se/iDhRZgsa.jpg', type: 'app',
+                id: 'gpt', name: 'ChatGPT', image: 'https://ibb.co/jjRtkmw', type: 'app',
                 packages: [
-                    { name: "ChatGPT GO 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Garansi 1x login", "Private Account", "Akses GPT-5 (Limited)", "Limit 10x lebih banyak dr gratis"] },
-                    { name: "ChatGPT+ 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, tag: "rec", tagName: "POPULAR", warranty: true, desc: ["Garansi 1x login", "Private Account", "Respon Cepat & Prioritas", "Akses GPT-5 & GPT-4o", "Fitur Eksperimental"] },
-                    { name: "ChatGPT+ Head", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, desc: ["Garansi 1x login", "Private Account", "Bisa invite 4-5 orang"] }
+                    { name: "ChatGPT GO 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Akses GPT-5 (Limited)", "Limit 10x lebih banyak dr gratis"] },
+                    { name: "ChatGPT+ 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, tag: "rec", tagName: "POPULAR", warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Respon Cepat & Prioritas", "Akses GPT-5 & GPT-4o", "Fitur Eksperimental"] },
+                    { name: "ChatGPT+ Head", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Bisa invite 4-5 orang"] }
                 ]
             },
             {
-                id: 'zoom', name: 'Zoom', image: 'https://h.uguu.se/yWGPqWPF.jpg', type: 'app',
+                id: 'zoom', name: 'Zoom', image: 'https://ibb.co.com/Q1MQJp8', type: 'app',
                 packages: [
-                    { name: "Zoom 100 Peserta 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, warranty: true, desc: ["Support all device", "Garansi 3 Hari"] },
-                    { name: "Zoom 100 Peserta 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, warranty: true, desc: ["Support all device", "Garansi 7 Hari"] }
+                    { name: "Zoom 100 Peserta 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, warranty: true, desc: ["Support all device", "Garansi 3 Hari (Only BackFree, bukan disable/hack)"] },
+                    { name: "Zoom 100 Peserta 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, warranty: true, desc: ["Support all device", "Garansi 7 Hari (Only BackFree, bukan disable/hack)"] }
                 ]
             },
             {
-                id: 'lr', name: 'Lightroom', image: 'https://d.uguu.se/CJYBSBqn.jpg', type: 'app',
+                id: 'lr', name: 'Lightroom', image: 'https://ibb.co/TDMGtKqR', type: 'app',
                 packages: [
-                    { name: "Lightroom Sharing 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Sharing Account", "Garansi 15 Hari (Backfree)", "Support All Device", "Paham resiko sharing"] },
-                    { name: "Lightroom Sharing 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Sharing Account", "Garansi 6 Bulan (Backfree)", "Support All Device", "Paham resiko sharing"] }
+                    { name: "Lightroom Sharing 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Sharing Account", "Garansi 15 Hari (Only BackFree, bukan disable/hack)", "Support All Device", "Paham resiko sharing"] },
+                    { name: "Lightroom Sharing 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Sharing Account", "Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Support All Device", "Paham resiko sharing"] }
                 ]
             },
             {
-                id: 'viu', name: 'VIU', image: 'https://o.uguu.se/kRkdRorG.jpg', type: 'app',
+                id: 'viu', name: 'VIU', image: 'https://ibb.co/jvDqzY5s', type: 'app',
                 packages: [
-                    { name: "VIU Lifetime", price: "Rp 5.000", priceVal: 5000, durationVal: 999, warranty: true, desc: ["Garansi 6 Bulan", "Private Account"] },
-                    { name: "5x VIU Lifetime", price: "Rp 15.000", priceVal: 15000, durationVal: 999, tag: "bulk", tagName: "HEMAT 40%", saveText: "Hemat Rp 10.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 Bulan", "Private Account", "Cocok untuk reseller"] },
-                    { name: "10x VIU Lifetime", price: "Rp 20.000", priceVal: 20000, durationVal: 999, tag: "bulk", tagName: "RECOMMENDED", saveText: "Hemat Rp 30.000 (Rate: Rp 2.000/akun)", warranty: true, desc: ["Garansi 6 Bulan", "Private Account", "Cocok untuk reseller"] }
+                    { name: "VIU Lifetime", price: "Rp 5.000", priceVal: 5000, durationVal: 999, warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Private Account"] },
+                    { name: "5x VIU Lifetime", price: "Rp 15.000", priceVal: 15000, durationVal: 999, tag: "bulk", tagName: "HEMAT 40%", saveText: "Hemat Rp 10.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Private Account", "Cocok untuk reseller"] },
+                    { name: "10x VIU Lifetime", price: "Rp 20.000", priceVal: 20000, durationVal: 999, tag: "bulk", tagName: "RECOMMENDED", saveText: "Hemat Rp 30.000 (Rate: Rp 2.000/akun)", warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Private Account", "Cocok untuk reseller"] }
+                ]
+            },
+            {
+                id: 'prime', name: 'Prime Video', image: 'https://ibb.co.com/ccrW1yHY', type: 'app',
+                packages: [
+                    { name: "Prime Video Sharing 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account (4 User)", "Support All device", "Tidak termasuk rental film & ada iklan awal", "Paham resiko akun sharing"] },
+                    { name: "Prime Video Private 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, warranty: true, desc: ["Garansi 20 Hari (Only BackFree, bukan hack/disable)", "Private Account", "Support All device", "Tidak termasuk rental film & ada iklan awal"] }
+                ]
+            },
+            {
+                id: 'iqiyi', name: 'iQIYI', image: 'https://ibb.co.com/352ydxp6', type: 'app',
+                packages: [
+                    { name: "Iqiyi Sharing Standar 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 1080p", "Paham resiko sharing"] },
+                    { name: "Iqiyi Private Standar 1 Bulan", price: "Rp 30.000", priceVal: 30000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Private Account", "Bebas Iklan", "Kualitas 1080p"] },
+                    { name: "Iqiyi Sharing Standar 1 Tahun", price: "Rp 20.000", priceVal: 20000, durationVal: 365, tag: "rec", tagName: "RECOMMENDED", saveText: "Hemat Rp 100.000 (Jatuhnya Rp 1.600/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 1080p", "Paham resiko sharing"] },
+                    { name: "Iqiyi Sharing Premium 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 4K (UltraHD)", "Paham resiko sharing"] },
+                    { name: "Iqiyi Sharing Premium 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "rec", tagName: "RECOMMENDED", saveText: "Hemat Rp 155.000 (Jatuhnya Rp 2.000/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 4K (UltraHD)", "Paham resiko sharing"] }
                 ]
             }
         ];
@@ -665,4 +684,4 @@
         }
     </script>
 </body>
-</html>
+                            </html>
