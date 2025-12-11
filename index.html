@@ -8,39 +8,42 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 
-    <title>JAWIR STORE - Premium Apps & Design</title>
+    <title>JAWIR STORE - Marketplace V1.3</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #ff0000;
             --accent-gold: #ffd700;
             --accent-blue: #00bcd4;
-            --accent-green: #00ff7f;
-            --dark: #050505;
-            --card-bg: #121212;
-            --border-color: #2a2a2a;
+            --bg-body: #050505;
+            --bg-card: #121212;
+            --bg-sec: #1a1a1a;
             --text-main: #ffffff;
-            --text-sec: #cccccc;
-            --glow: 0 0 15px rgba(255, 0, 0, 0.6);
+            --text-sec: #aaaaaa;
+            --border: #2a2a2a;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --blur-bg: rgba(0, 0, 0, 0.8);
         }
 
         body.light-mode {
-            --dark: #f5f5f5;
-            --card-bg: #ffffff;
-            --border-color: #e0e0e0;
+            --bg-body: #f4f4f4;
+            --bg-card: #ffffff;
+            --bg-sec: #ffffff;
             --text-main: #000000;
-            --text-sec: #333333;
-            --glow: 0 0 10px rgba(255, 0, 0, 0.3);
+            --text-sec: #555555;
+            --border: #e0e0e0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --blur-bg: rgba(255, 255, 255, 0.8);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--dark);
+            background-color: var(--bg-body);
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
-            padding-bottom: 100px;
+            padding-bottom: 80px; /* Space for footer */
         }
 
         /* --- INTRO ANIMATION --- */
@@ -48,719 +51,562 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 1s ease, visibility 1s;
+            transition: opacity 0.8s ease, visibility 0.8s;
         }
-        .intro-logo {
-            width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--primary);
-            margin-bottom: 20px; animation: breathing 2s infinite ease-in-out; object-fit: cover;
-        }
-        .intro-text { font-size: 1.5rem; font-weight: 900; letter-spacing: 4px; opacity: 0; animation: fadeText 2s forwards 0.5s; }
-        
-        @keyframes breathing { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0.5); } 50% { transform: scale(1.1); box-shadow: 0 0 20px 10px rgba(255,0,0,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
-        @keyframes fadeText { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .intro-logo { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 20px; animation: pulse 2s infinite; object-fit: cover;}
+        .intro-text { font-weight: 900; letter-spacing: 2px; color: white; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255,0,0,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
 
-        /* --- Header --- */
+        /* --- HEADER --- */
         header {
-            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 3px solid var(--primary); box-shadow: var(--glow);
-            position: sticky; top: 0; background: var(--card-bg); z-index: 100;
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--bg-card);
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 10px var(--shadow);
+            border-bottom: 2px solid var(--primary);
         }
-        .logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .logo-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
-        .logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
-        .logo-text span { color: var(--primary); }
-        .mode-toggle { background: transparent; border: 2px solid var(--primary); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .mode-toggle:active { transform: scale(0.9); background: var(--primary); color: white; }
-
-        .container { max-width: 850px; margin: 0 auto; padding: 25px 20px; z-index: 10; position: relative; min-height: 80vh;}
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .burger-btn { font-size: 1.5rem; cursor: pointer; color: var(--text-main); }
+        .header-title h1 { font-size: 1.2rem; font-weight: 900; line-height: 1; letter-spacing: 1px; }
+        .header-title span { color: var(--primary); }
+        .header-subtitle { font-size: 0.65rem; color: var(--text-sec); letter-spacing: 2px; font-weight: bold; margin-top: 2px; display: block;}
         
-        /* --- Simple Visibility Transition --- */
-        .section { display: none; opacity: 0; transition: opacity 0.3s ease; }
-        .section.active { display: block; opacity: 1; }
+        .header-logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; cursor: pointer; }
 
-        /* --- Buttons (Shiny & Pop Effect) --- */
-        .btn-animated { position: relative; overflow: hidden; transition: all 0.2s; cursor: pointer; user-select: none; }
-        .btn-animated:active { transform: scale(0.95); box-shadow: 0 0 15px var(--primary); border-color: var(--primary) !important; }
-        .btn-animated::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
-            transition: none;
+        /* --- SIDEBAR MENU --- */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            z-index: 998; opacity: 0; visibility: hidden; transition: 0.3s;
         }
-        .btn-animated:active::after { animation: glassSweep 0.4s linear; }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+        
+        .sidebar {
+            position: fixed; top: 0; left: -280px; width: 260px; height: 100%;
+            background: var(--bg-card); z-index: 999;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+        }
+        .sidebar.active { left: 0; }
+        
+        .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-title { font-weight: bold; font-size: 1.2rem; }
+        .sidebar-close { font-size: 1.2rem; cursor: pointer; }
+        
+        .sidebar-menu { padding: 20px 10px; flex: 1; overflow-y: auto; }
+        .sidebar-item {
+            display: flex; align-items: center; gap: 15px;
+            padding: 15px; margin-bottom: 5px;
+            border-radius: 10px; cursor: pointer;
+            color: var(--text-main); font-weight: 600;
+            transition: 0.2s;
+        }
+        .sidebar-item:hover, .sidebar-item.active { background: var(--primary); color: white; }
+        .sidebar-item i { width: 25px; text-align: center; }
 
-        /* --- Main Menu --- */
-        .menu-btn {
-            width: 100%; background: linear-gradient(145deg, var(--card-bg), #1a1a1a); border: 1px solid var(--border-color);
-            padding: 20px; font-size: 1.1rem; color: var(--text-main); border-radius: 15px;
-            font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-transform: uppercase;
+        /* --- BANNER AREA --- */
+        .banner-container {
+            width: 100%; height: 160px;
+            background: linear-gradient(45deg, #111, #333);
+            margin-bottom: 20px;
+            display: flex; justify-content: center; align-items: center;
+            color: #555; font-weight: bold; text-transform: uppercase;
+            overflow: hidden; position: relative;
+        }
+        /* Placeholder Banner Pattern */
+        .banner-container::after {
+            content: "JAWIR STORE PROMO";
+            color: rgba(255,255,255,0.1);
+            font-size: 2rem; transform: rotate(-15deg);
+        }
+        .banner-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; }
+
+        /* --- FILTER BUTTONS --- */
+        .filter-scroll {
+            display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 15px 20px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .filter-scroll::-webkit-scrollbar { display: none; }
+        
+        .filter-btn {
+            padding: 8px 16px; border-radius: 20px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text-sec); font-size: 0.85rem; font-weight: bold;
+            white-space: nowrap; cursor: pointer; transition: 0.2s;
+        }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(255,0,0,0.3); }
+
+        /* --- CONTENT AREA --- */
+        .section-title { padding: 0 20px; margin-bottom: 15px; font-size: 1.1rem; font-weight: 800; border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 10px; }
+        
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px; padding: 0 20px 20px 20px;
         }
         
-        /* --- Testimonials --- */
-        .testi-section { margin-top: 40px; margin-bottom: 30px; overflow: hidden; position: relative; }
-        .testi-header { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; border-left: 5px solid var(--primary); padding-left: 15px; }
-        .testi-track-container { width: 100%; overflow: hidden; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
-        .testi-track { display: flex; gap: 15px; width: max-content; animation: scroll 80s linear infinite; }
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        
-        .testi-card { width: 300px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; flex-shrink: 0; position: relative; }
-        .testi-user-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .user-avatar { width: 35px; height: 35px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem; flex-shrink: 0;}
-        .user-info { display: flex; flex-direction: row; align-items: baseline; gap: 8px; flex: 1; overflow: hidden;}
-        .user-info h4 { font-size: 0.9rem; margin: 0; white-space: nowrap; }
-        .user-info span { font-size: 0.7rem; color: var(--text-sec); white-space: nowrap; }
-        .stars { color: #ffd700; font-size: 0.8rem; margin-bottom: 8px; }
-        .testi-text { font-size: 0.9rem; color: var(--text-sec); font-style: italic; line-height: 1.4; border-top: 1px dashed var(--border-color); padding-top: 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .testi-link-btn { display: inline-block; margin-top: 10px; font-size: 0.75rem; color: var(--primary); text-decoration: none; border: 1px solid var(--primary); padding: 4px 10px; border-radius: 15px; transition:0.3s; }
-        .testi-link-btn:hover { background: var(--primary); color: white; }
-
-        /* --- App Grid --- */
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
-        .app-card { background: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); position: relative; }
-        .app-card img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; }
-        .featured-app { border: 2px solid var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); animation: borderPulse 3s infinite; }
-        
-        .featured-badge { 
-            position: absolute; top: 0; right: 0; 
-            background: var(--primary); color: white; font-size: 0.6rem; 
-            padding: 4px 10px; border-bottom-left-radius: 10px; border-top-right-radius: 14px; /* Corner shape */
-            font-weight: bold; border-left: 1px solid white; border-bottom: 1px solid white; 
-            z-index: 5; white-space: nowrap; 
-            box-shadow: -2px 2px 5px rgba(0,0,0,0.5); 
+        .item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            position: relative; overflow: hidden; transition: 0.2s;
+            height: 100%; cursor: pointer;
         }
-        @keyframes borderPulse { 0% { border-color: var(--accent-gold); } 50% { border-color: var(--primary); } 100% { border-color: var(--accent-gold); } }
-
-        /* --- Product Details & Warranty Labels --- */
-        .product-card { background: var(--card-bg); margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; }
-        .product-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1rem; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
-        .product-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-color); }
-        .details-content { padding: 20px; color: var(--text-sec); font-size: 0.9rem; line-height: 1.6; }
+        .item-card:active { transform: scale(0.96); }
+        .item-card img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .item-title { font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--text-main); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
-        /* Warranty Label Badge */
-        .warranty-label { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; font-weight: bold; }
-        .w-yes { background: rgba(0, 255, 127, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
-        .w-no { background: rgba(255, 68, 68, 0.15); color: #ff4444; border: 1px solid #ff4444; }
+        /* Badges */
+        .badge-ribbon {
+            position: absolute; top: 0; right: 0;
+            background: var(--accent-gold); color: black;
+            font-size: 0.55rem; font-weight: 900;
+            padding: 3px 8px;
+            border-bottom-left-radius: 8px;
+            z-index: 2;
+        }
+        .badge-populer { background: var(--primary); color: white; }
 
-        .price-tag { color: var(--primary); font-size: 1.3rem; font-weight: 900; display: block; margin-bottom: 5px; }
-        .detail-list { list-style: none; padding: 0; margin: 10px 0; }
-        .detail-list li { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
-        .detail-list li i { color: var(--accent-green); margin-top: 4px; font-size: 0.9rem; width: 20px; text-align: center;}
-        .save-info { display: block; font-size: 0.85rem; color: var(--accent-green); margin-bottom: 5px; font-weight: bold; background: rgba(0,255,127,0.1); padding: 5px 10px; border-radius: 5px; border-left: 3px solid var(--accent-green); }
+        /* --- ALL PRODUCTS LIST (Search Page) --- */
+        .list-item {
+            display: flex; align-items: center; gap: 15px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            padding: 15px; margin: 0 20px 10px 20px; border-radius: 12px;
+        }
+        .list-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
+        .list-info { flex: 1; }
+        .list-name { font-weight: bold; font-size: 0.9rem; color: var(--text-main); }
+        .list-price { color: var(--primary); font-weight: 900; font-size: 1rem; }
+        .list-btn {
+            background: var(--primary); color: white;
+            border: none; padding: 8px 15px; border-radius: 8px;
+            font-weight: bold; font-size: 0.8rem; cursor: pointer;
+        }
 
-        /* --- CONTROLS --- */
-        .controls-row { display: flex; gap: 10px; margin-bottom: 15px; position: relative; z-index: 20;}
-        .control-btn { flex: 1; padding: 15px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
+        /* --- PRODUCT DETAILS MODAL (FULL PAGE) --- */
+        .modal-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-body); z-index: 2000;
+            overflow-y: auto; display: none;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        .filter-drawer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 10px; }
-        .filter-drawer.open { border: 1px solid var(--border-color); padding: 15px; }
+        .modal-header {
+            position: sticky; top: 0; background: var(--bg-card);
+            padding: 15px 20px; display: flex; align-items: center; gap: 15px;
+            border-bottom: 1px solid var(--border); z-index: 10;
+        }
+        .back-icon { font-size: 1.2rem; cursor: pointer; }
+        .modal-content { padding: 20px; max-width: 800px; margin: 0 auto; }
         
-        .sort-dropdown { display: none; width: 100%; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 8px; margin-top: 5px; position: absolute; top: 100%; left: 0; z-index: 50; padding: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); }
-        .sort-option { padding: 15px; cursor: pointer; border-bottom: 1px solid var(--border-color); font-weight: bold; }
-        .sort-option:last-child { border-bottom: none; }
-        .sort-option:hover { background: var(--primary); color: white; }
-
-        .filter-group-title { font-size: 0.85rem; color: var(--text-sec); margin-bottom: 8px; margin-top: 10px; text-transform: uppercase; font-weight: bold; }
-        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
-        .filter-chip { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); font-size: 0.85rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
-        .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .search-bar { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); background: black; color: white; font-size: 1rem; margin-bottom: 15px; transition:0.3s; }
-        .search-bar:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(255,0,0,0.3); }
-
-        /* All Products List Item */
-        .all-prod-item { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
-        .all-prod-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-        .all-prod-info { flex: 1; }
-        .all-prod-name { font-weight: bold; font-size: 0.95rem; margin-bottom: 3px; }
-        .all-prod-price { color: var(--primary); font-weight: 900; font-size: 1rem; }
-        .all-prod-btn { padding: 8px 15px; background: var(--primary); color: white; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; z-index: 2; }
+        .package-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 15px; margin-bottom: 15px;
+        }
+        .pkg-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer;}
+        .pkg-name { font-weight: bold; font-size: 1rem; }
+        .pkg-price { color: var(--primary); font-weight: 900; font-size: 1.1rem; }
+        .pkg-body { display: none; margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 10px; }
+        .pkg-body.show { display: block; }
         
-        /* Shiny Tags */
-        .tag-shiny-container { display: inline-block; margin-left: 5px; }
-        .tag-base { font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 900; color: #000; display: inline-block; vertical-align: middle; position: relative; overflow: hidden; }
-        .tag-base::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(120deg, transparent, rgba(255,255,255,0.8), transparent); animation: glassSweep 2.5s infinite linear; }
-        .tag-gold { background: linear-gradient(135deg, #d4af37, #f7ef8a); box-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
-        .tag-blue { background: linear-gradient(135deg, #00bcd4, #8affff); box-shadow: 0 0 5px rgba(0, 188, 212, 0.5); }
-        .tag-green { background: linear-gradient(135deg, #00ff7f, #adffc9); box-shadow: 0 0 5px rgba(0, 255, 127, 0.5); }
-        @keyframes glassSweep { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+        .pkg-list li { list-style: none; font-size: 0.85rem; color: var(--text-sec); margin-bottom: 5px; display: flex; gap: 8px; }
+        .pkg-list li i { color: var(--accent-green); width: 15px; }
+        
+        /* --- FOOTER & FLOATING --- */
+        .floating-home {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--bg-card); border: 2px solid var(--primary);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-size: 1.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 900; cursor: pointer; transition: 0.3s;
+        }
+        .floating-home:active { transform: translateX(-50%) scale(0.9); }
 
-        /* --- Footer Fire & Socials --- */
-        .socials-footer { display: flex; justify-content: center; gap: 15px; margin-top: 40px; flex-wrap: wrap; z-index: 5; position: relative; }
-        .social-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 1.2rem; text-decoration: none; transition: 0.3s; }
-        .social-btn:hover { background: var(--primary); color: white; transform: translateY(-5px); box-shadow: 0 0 15px var(--primary); }
+        footer { text-align: center; padding: 30px 20px 100px 20px; background: var(--bg-sec); margin-top: 30px; }
+        .socials { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .soc-btn { width: 40px; height: 40px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-main); font-size: 1.2rem; text-decoration: none; }
 
-        .fire-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 100px; z-index: 0; pointer-events: none; }
-        .fire-particle { position: absolute; bottom: -20px; background: radial-gradient(circle, rgba(255,80,0,1) 0%, rgba(255,0,0,0) 70%); border-radius: 50%; animation: rise 2s infinite ease-in; filter: blur(5px); opacity: 0.6; }
-        @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-100px) scale(0.2); opacity: 0; } }
+        /* Search Bar */
+        .search-container { padding: 0 20px 15px 20px; }
+        .search-input { width: 100%; padding: 12px 15px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); }
 
-        .back-btn { margin-bottom: 20px; padding: 10px 25px; background: transparent; border: 2px solid var(--primary); color: var(--text-main); border-radius: 30px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        /* --- COMING SOON --- */
+        .coming-soon { text-align: center; padding: 50px 20px; border: 2px dashed var(--border); border-radius: 15px; margin: 20px; }
+
     </style>
 </head>
 <body>
 
     <div id="introOverlay">
-        <img src="https://iili.io/fR1nzml.jpg" class="intro-logo" alt="Logo">
+        <img src="https://iili.io/fR1nzml.jpg" class="intro-logo">
         <div class="intro-text">JAWIR STORE</div>
     </div>
 
-    <header>
-        <div class="logo-container" onclick="openLink('https://instagram.com/jawir.store')">
-            <img src="https://iili.io/fR1nzml.jpg" alt="Jawir Logo" class="logo-img">
-            <div class="logo-text">JAWIR <span>STORE</span></div>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">MENU</div>
+            <div class="sidebar-close" onclick="toggleSidebar()"><i class="fas fa-times"></i></div>
         </div>
-        <button class="mode-toggle btn-animated" onclick="toggleMode()"><i class="fas fa-adjust"></i></button>
+        <div class="sidebar-menu">
+            <div class="sidebar-item active" onclick="navTo('home', 'populer')"><i class="fas fa-home"></i> Home</div>
+            <div class="sidebar-item" onclick="navTo('home', 'app')"><i class="fas fa-crown"></i> App Premium</div>
+            <div class="sidebar-item" onclick="navTo('home', 'sosmed')"><i class="fas fa-rocket"></i> Suntik Sosmed</div>
+            <div class="sidebar-item" onclick="navTo('all-products')"><i class="fas fa-search"></i> Semua Produk</div>
+            <div class="sidebar-item" onclick="toggleMode()"><i class="fas fa-adjust"></i> Dark/Light Mode</div>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-left">
+            <div class="burger-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+            <div class="header-title">
+                <h1>JAWIR <span>STORE</span></h1>
+                <span class="header-subtitle">MARKETPLACE V1.3</span>
+            </div>
+        </div>
+        <img src="https://iili.io/fR1nzml.jpg" class="header-logo" onclick="window.open('https://instagram.com/jawir.store')">
     </header>
 
-    <div class="container">
+    <div class="container" id="mainContainer">
         
-        <div id="home" class="section active">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h2 style="font-size: 2rem; margin-bottom: 10px;">Welcome Partner! 🔥</h2>
-                <p style="color: var(--text-sec);">Premium Apps & Design Services</p>
+        <div id="page-home">
+            <div class="banner-container">
+                </div>
+
+            <div class="filter-scroll">
+                <div class="filter-btn active" onclick="setFilter('populer', this)">🔥 Populer</div>
+                <div class="filter-btn" onclick="setFilter('app', this)">💎 App Premium</div>
+                <div class="filter-btn" onclick="setFilter('editing', this)">🎬 Editing</div>
+                <div class="filter-btn" onclick="setFilter('music', this)">🎵 Music</div>
+                <div class="filter-btn" onclick="setFilter('movie', this)">🍿 Movie</div>
+                <div class="filter-btn" onclick="setFilter('sosmed', this)">🚀 Suntik Sosmed</div>
             </div>
 
-            <div class="main-menu">
-                <button class="menu-btn btn-animated" onclick="showAppGrid()">
-                    <i class="fas fa-crown" style="color: var(--accent-gold);"></i> Pricelist App Premium
-                </button>
-                <button class="menu-btn btn-animated" onclick="showPage('sosmed')">
-                    <i class="fas fa-rocket" style="color: var(--primary);"></i> Pricelist Suntik Sosmed
-                </button>
-                <button class="menu-btn btn-animated" onclick="showAllProducts()">
-                    <i class="fas fa-search" style="color: var(--accent-blue);"></i> Cari & Filter Produk
-                </button>
-            </div>
+            <div id="homeContent">
+                </div>
+        </div>
 
+        <div id="page-all-products" style="display:none;">
+            <div class="section-title" style="margin-top: 20px;">Cari Semua Produk</div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Cari nama aplikasi..." onkeyup="searchProduct(this.value)">
+            </div>
+            <div id="allProductList">
+                </div>
+        </div>
+
+        <footer>
+            <h3>Apa Kata Mereka?</h3>
             <div class="testi-section">
-                <div class="testi-header">Apa Kata Mereka?</div>
                 <div class="testi-track-container">
                     <div class="testi-track" id="testiTrack"></div>
                 </div>
-                <div style="text-align: center; margin-top: 15px;">
-                    <a href="https://www.instagram.com/p/DJgmx4oRlNR/?igsh=MTk2eXFheTh6cXc3Nw==" target="_blank" class="testi-link-btn btn-animated">Lihat Bukti di Instagram <i class="fas fa-external-link-alt"></i></a>
-                </div>
             </div>
-
-            <div class="socials-footer">
-                <a href="https://wa.me/6282131032770" target="_blank" class="social-btn btn-animated"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://tiktok.com/@jawirdesign" target="_blank" class="social-btn btn-animated"><i class="fab fa-tiktok"></i></a>
-                <a href="https://instagram.com/jawirdesigner" target="_blank" class="social-btn btn-animated"><i class="fab fa-instagram"></i></a>
-                <a href="https://instagram.com/jawir.store" target="_blank" class="social-btn btn-animated"><i class="fas fa-store"></i></a>
+            <div class="socials">
+                <a href="https://wa.me/6282131032770" target="_blank" class="soc-btn"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://tiktok.com/@jawirdesign" target="_blank" class="soc-btn"><i class="fab fa-tiktok"></i></a>
+                <a href="https://instagram.com/jawir.store" target="_blank" class="soc-btn"><i class="fab fa-instagram"></i></a>
             </div>
-        </div>
+            <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text-sec);">© 2025 Jawir Store V1.3</p>
+        </footer>
 
-        <div id="appGridPage" class="section">
-             <button class="back-btn btn-animated" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
-             <h2 style="text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; display: inline-block; margin-bottom: 20px;">Pilih Aplikasi</h2>
-             <div id="appList" class="app-grid"></div>
-        </div>
+    </div>
 
-        <div id="appDetailsPage" class="section">
-            <button class="back-btn btn-animated" onclick="showAppGrid()"><i class="fas fa-arrow-left"></i> Pilih App Lain</button>
-            <div id="selectedAppHeader" style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;"></div>
-            <div id="packageList"></div>
-        </div>
+    <div class="floating-home" onclick="navTo('home', 'populer')">
+        <i class="fas fa-home"></i>
+    </div>
 
-        <div id="allProductsPage" class="section">
-            <button class="back-btn btn-animated" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <h2 style="margin-bottom: 15px;">Cari Produk</h2>
-            
-            <div class="controls-row">
-                <div style="flex:1; position:relative;">
-                    <div class="control-btn btn-animated" onclick="toggleSortMenu()">
-                        <i class="fas fa-sort-amount-down"></i> Urutkan
-                    </div>
-                    <div id="sortMenu" class="sort-dropdown">
-                        <div class="sort-option" onclick="setSort('abjad')">Abjad (A-Z)</div>
-                        <div class="sort-option" onclick="setSort('murah')">Termurah</div>
-                        <div class="sort-option" onclick="setSort('mahal')">Termahal</div>
-                        <div class="sort-option" onclick="setSort('durasi')">Durasi Panjang</div>
-                    </div>
-                </div>
-                
-                <div class="control-btn btn-animated" onclick="toggleFilterDrawer()">
-                    <i class="fas fa-filter"></i> Filter
-                </div>
+    <div id="detailModal" class="modal-page">
+        <div class="modal-header">
+            <div class="back-icon" onclick="closeModal()"><i class="fas fa-arrow-left"></i></div>
+            <h2 id="modalTitle" style="font-size: 1.1rem;">Detail Produk</h2>
+        </div>
+        <div class="modal-content" id="modalBody">
             </div>
-
-            <div id="filterDrawer" class="filter-drawer">
-                <div class="filter-group-title"><i class="fas fa-layer-group"></i> Kategori</div>
-                <div class="chip-container">
-                    <div class="filter-chip active" onclick="toggleFilter(this, 'cat', 'all')">Semua</div>
-                    <div class="filter-chip" onclick="toggleFilter(this, 'cat', 'app')">App Premium</div>
-                    <div class="filter-chip" onclick="toggleFilter(this, 'cat', 'sosmed')">Suntik Sosmed</div>
-                </div>
-
-                <div class="filter-group-title"><i class="fas fa-money-bill-wave"></i> Harga</div>
-                <div class="chip-container">
-                    <div class="filter-chip" onclick="toggleFilter(this, 'price', 'low')">< 10k</div>
-                    <div class="filter-chip" onclick="toggleFilter(this, 'price', 'mid')">10k - 25k</div>
-                    <div class="filter-chip" onclick="toggleFilter(this, 'price', 'high')">> 25k</div>
-                </div>
-
-                <div class="filter-group-title"><i class="fas fa-star"></i> Spesial</div>
-                <div class="chip-container">
-                    <div class="filter-chip" onclick="toggleFilter(this, 'tag', 'best')">Best Seller</div>
-                    <div class="filter-chip" onclick="toggleFilter(this, 'tag', 'bulk')">Hemat/Bulk</div>
-                    <div class="filter-chip" onclick="toggleFilter(this, 'warranty', 'yes')">Garansi</div>
-                </div>
-            </div>
-
-            <input type="text" id="searchInput" class="search-bar" placeholder="Ketik nama paket..." onkeyup="filterAndSortProducts()">
-            <div id="allProductsList"></div>
-        </div>
-
-        <div id="sosmed" class="section">
-            <button class="back-btn btn-animated" onclick="showPage('home')"><i class="fas fa-arrow-left"></i> Kembali</button>
-            <div style="margin-top: 50px; padding: 40px; border: 3px dashed var(--primary); border-radius: 20px; text-align: center; background: rgba(255,0,0,0.05);">
-                <i class="fas fa-tools fa-4x" style="color: var(--primary); margin-bottom: 20px;"></i>
-                <h2 style="font-size: 2.5rem;">COMING SOON</h2>
-                <p>Layanan Suntik Sosmed sedang diracik...</p>
-            </div>
-        </div>
-
     </div>
 
     <audio id="sfxClick" src="data:audio/wav;base64,UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA="></audio>
 
-    <div class="fire-container" id="fireContainer"></div>
-
     <script>
-        // --- SOUND SYSTEM ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playClick() {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
-            osc.type = 'sine';
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.05);
-        }
+        // --- DATA PRODUK V1.3 ---
+        const appsData = [
+            { id: 'capcut', name: 'CapCut Pro', cat: ['app', 'populer', 'editing'], img: 'https://iili.io/fR1n5B9.png', packages: [
+                { name: "Capcut Private 7 Hari", price: "Rp 5.000", desc: ["No garansi", "Private Account", "Max 3 Device", "Resiko sharing ditanggung sendiri", "Wajib update app"] },
+                { name: "Capcut Private 14 Hari", price: "Rp 8.000", desc: ["Garansi 7 hari (Only BackFree)", "Private Account", "Max 3 Device", "Resiko sharing ditanggung sendiri"] },
+                { name: "Capcut Private 35 Hari", price: "Rp 20.000", desc: ["Garansi 7 hari (Only BackFree)", "Private Account", "Max 3 Device"] }
+            ]},
+            { id: 'canva', name: 'Canva Pro', cat: ['app', 'populer', 'editing'], img: 'https://files.catbox.moe/4omm5s.jpg', packages: [
+                { name: "Canva Member 1 Bulan", price: "Rp 3.000", desc: ["Full garansi (BackFree)", "Invite Team", "All Device", "Fitur Pro ON (No Brandkit)"] },
+                { name: "Canva Designer 1 Tahun", price: "Rp 27.000", desc: ["Full garansi (BackFree)", "Invite Team", "Fitur Pro ON + Brandkit"] }
+            ]},
+            { id: 'am', name: 'Alight Motion', cat: ['app', 'populer', 'editing'], img: 'https://files.catbox.moe/3v9hsy.jpg', packages: [
+                { name: "AM Sharing 1 Tahun", price: "Rp 3.000", desc: ["Garansi 6 Bulan (BackFree)", "Sharing 3U", "Android & iOS"] },
+                { name: "AM Private 1 Tahun", price: "Rp 6.000", desc: ["Garansi 6 Bulan (BackFree)", "Private Account"] }
+            ]},
+            { id: 'spotify', name: 'Spotify', cat: ['app', 'music'], img: 'https://iili.io/f5n4Szx.png', packages: [
+                { name: "Indplan 1 Bulan", price: "Rp 10.000", desc: ["Garansi 15 Hari", "Private Account", "Full Song & Offline"] },
+                { name: "Indplan 3 Bulan", price: "Rp 15.000", desc: ["Garansi 15 Hari", "Private Account", "Hemat Rp 15rb"] },
+                { name: "Indplan 4 Bulan", price: "Rp 20.000", desc: ["Garansi 15 Hari", "Private Account", "Hemat Rp 20rb (Super Murah)"] },
+                { name: "Famplan 1 Bulan", price: "Rp 20.000", desc: ["Garansi 15 Hari", "Private Account"] }
+            ]},
+            { id: 'bstation', name: 'Bstation', cat: ['app', 'movie'], img: 'https://iili.io/f5n4UWQ.jpg', packages: [
+                { name: "Sharing 1 Bulan", price: "Rp 10.000", desc: ["Garansi 15 Hari", "Sharing Account", "Bebas Iklan", "HD"] },
+                { name: "Sharing 1 Tahun", price: "Rp 20.000", desc: ["Garansi 90 Hari", "Sharing Account", "Hemat Rp 100rb"] }
+            ]},
+            { id: 'scribd', name: 'Scribd', cat: ['app'], img: 'https://iili.io/f5n4gsV.png', packages: [
+                { name: "Sharing 1 Bulan", price: "Rp 10.000", desc: ["Garansi 15 Hari", "Sharing Account", "Jutaan E-Book"] },
+                { name: "Private 1 Bulan", price: "Rp 15.000", desc: ["Garansi 15 Hari", "Private Account"] }
+            ]},
+            { id: 'iqiyi', name: 'iQIYI', cat: ['app', 'movie'], img: 'https://iili.io/fR1no7f.webp', packages: [
+                { name: "Sharing Standar 1 Bln", price: "Rp 10.000", desc: ["Garansi 15 Hari", "Sharing", "1080p"] },
+                { name: "Sharing Standar 1 Thn", price: "Rp 20.000", desc: ["Garansi 30 Hari", "Sharing", "Hemat Rp 100rb"] }
+            ]},
+            { id: 'viu', name: 'VIU Premium', cat: ['app', 'movie'], img: 'https://iili.io/fR1nTI2.png', packages: [
+                { name: "VIU Lifetime", price: "Rp 5.000", desc: ["Garansi 6 Bulan", "Private Account"] },
+                { name: "5x VIU Lifetime", price: "Rp 15.000", desc: ["Bulk/Reseller", "Hemat 40%"] }
+            ]},
+            { id: 'prime', name: 'Prime Video', cat: ['app', 'movie'], img: 'https://iili.io/fR1nBgs.png', packages: [
+                { name: "Sharing 1 Bulan", price: "Rp 8.000", desc: ["Garansi 15 Hari", "Sharing 4 User"] },
+                { name: "Private 1 Bulan", price: "Rp 15.000", desc: ["Garansi 20 Hari", "Private Account"] }
+            ]},
+            { id: 'zoom', name: 'Zoom Pro', cat: ['app'], img: 'https://iili.io/fR1nxe4.jpg', packages: [
+                { name: "100 Peserta 7 Hari", price: "Rp 5.000", desc: ["Garansi 3 Hari", "Support All Device"] }
+            ]},
+            { id: 'gpt', name: 'ChatGPT', cat: ['app'], img: 'https://iili.io/fR1nAL7.png', packages: [
+                { name: "ChatGPT GO 1 Thn", price: "Rp 10.000", desc: ["Garansi 1x Login", "Akses GPT-5 Limit"] }
+            ]},
+            { id: 'lr', name: 'Lightroom', cat: ['app', 'editing'], img: 'https://iili.io/fR1nuXS.png', packages: [
+                { name: "Sharing 1 Bulan", price: "Rp 5.000", desc: ["Garansi 15 Hari", "Sharing Account"] }
+            ]}
+        ];
 
         // --- INIT ---
         window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('introOverlay').style.opacity = '0';
-                setTimeout(() => { document.getElementById('introOverlay').style.visibility = 'hidden'; }, 1000);
-            }, 2000);
-            createFire();
+            setTimeout(() => { document.getElementById('introOverlay').style.opacity = '0'; setTimeout(() => { document.getElementById('introOverlay').style.visibility = 'hidden'; }, 800); }, 2000);
+            renderHome('populer');
             renderTestimonials();
-            renderAppGrid();
         };
 
-        // --- NAVIGATION ---
-        function showPage(pageId) {
+        function playClick() { 
+            const audio = document.getElementById('sfxClick');
+            audio.currentTime = 0; audio.play().catch(e=>{});
+        }
+
+        // --- NAVIGATION & UI ---
+        function toggleSidebar() {
             playClick();
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
+            document.getElementById('sidebar').classList.toggle('active');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+
+        function toggleMode() {
+            playClick(); document.body.classList.toggle('light-mode');
+        }
+
+        function navTo(page, filter) {
+            playClick();
+            // Close Sidebar
+            document.getElementById('sidebar').classList.remove('active');
+            document.querySelector('.sidebar-overlay').classList.remove('active');
+
+            if(page === 'home') {
+                document.getElementById('page-home').style.display = 'block';
+                document.getElementById('page-all-products').style.display = 'none';
+                if(filter) {
+                    // Find button
+                    const btns = document.querySelectorAll('.filter-btn');
+                    btns.forEach(b => {
+                        if(b.innerText.toLowerCase().includes(filter) || (filter==='app' && b.innerText.includes('App'))) b.click();
+                    });
+                }
+            } else if (page === 'all-products') {
+                document.getElementById('page-home').style.display = 'none';
+                document.getElementById('page-all-products').style.display = 'block';
+                renderAllProducts();
+            }
             window.scrollTo(0,0);
         }
 
-        function openLink(url) {
+        // --- HOME RENDER ---
+        function setFilter(category, btn) {
             playClick();
-            window.open(url, '_blank');
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderHome(category);
         }
 
-        // --- SMART ICON LOGIC ---
-        function getIconForDesc(text) {
-            text = text.toLowerCase();
-            if (text.includes("garansi")) return "fa-shield-alt";
-            if (text.includes("device") || text.includes("support")) return "fa-mobile-alt";
-            if (text.includes("login") || text.includes("akun") || text.includes("private")) return "fa-lock";
-            if (text.includes("sharing") || text.includes("invite") || text.includes("member")) return "fa-users";
-            if (text.includes("reseller") || text.includes("jual")) return "fa-money-bill-wave";
-            if (text.includes("murah") || text.includes("hemat") || text.includes("diskon")) return "fa-tags";
-            if (text.includes("cepat") || text.includes("fast") || text.includes("kilat")) return "fa-bolt";
-            if (text.includes("update") || text.includes("terbaru")) return "fa-sync-alt";
-            if (text.includes("fitur") || text.includes("akses")) return "fa-star";
-            if (text.includes("4k") || text.includes("1080p") || text.includes("hd") || text.includes("audio")) return "fa-tv";
-            if (text.includes("iklan")) return "fa-ad";
-            if (text.includes("lagu") || text.includes("offline") || text.includes("unduh") || text.includes("ebook")) return "fa-download";
-            return "fa-check"; 
-        }
+        function renderHome(category) {
+            const container = document.getElementById('homeContent');
+            container.innerHTML = '';
 
-        // --- WARRANTY PARSER ---
-        function getWarrantyLabel(descArray) {
-            const warrantyLine = descArray.find(d => d.toLowerCase().includes("garansi"));
-            if(!warrantyLine || warrantyLine.toLowerCase().includes("no garansi")) {
-                return '<span class="warranty-label w-no"><i class="fas fa-times"></i> No Garansi</span>';
-            }
-            return `<span class="warranty-label w-yes"><i class="fas fa-shield-alt"></i> ${warrantyLine.split('(')[0].trim()}</span>`;
-        }
+            let title = '';
+            let contentHtml = '';
 
-        // --- DATA PRODUK LENGKAP (V13) ---
-        const appsData = [
-            {
-                id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', type: 'app',
-                packages: [
-                    { name: "Canva Member 1 Bulan", price: "Rp 3.000", priceVal: 3000, durationVal: 30, warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Canva pro via invite", "Support All Device", "Fitur pro open (kecuali brand kit)", "Tidak bisa upload font"] },
-                    { name: "Canva Member 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "bulk", tagName: "HEMAT 30%", saveText: "Hemat Rp 11.000 (Rate: Rp 2.080/bln)", warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur pro open (kecuali brand kit)"] },
-                    { name: "Canva Designer 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Canva pro via invite", "Support All Device", "Fitur brandkit & upload font ON"] },
-                    { name: "Canva Designer 1 Tahun", price: "Rp 27.000", priceVal: 27000, durationVal: 365, tag: "bulk", tagName: "HEMAT 55%", saveText: "Hemat Rp 33.000 (Rate: Rp 2.250/bln)", warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur brandkit & upload font ON"] },
-                    { name: "Canva Owner 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 25 Hari (Only BackFree, bukan disable/hack)", "Akun dari seller / admin", "Bisa invite ±100 Member"] }
-                ]
-            },
-            {
-                id: 'capcut', name: 'Capcut', isSpecial: true, image: 'https://iili.io/fR1n5B9.png', type: 'app',
-                packages: [
-                    { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, desc: ["No garansi", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
-                    { name: "Capcut Private 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, tag: "rec", tagName: "RECOMMENDED", warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
-                    { name: "Capcut Private 21 Hari", price: "Rp 12.000", priceVal: 12000, durationVal: 21, warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
-                    { name: "Capcut Private 28 Hari", price: "Rp 15.000", priceVal: 15000, durationVal: 28, warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
-                    { name: "Capcut Private 35 Hari", price: "Rp 20.000", priceVal: 20000, durationVal: 35, warranty: true, desc: ["Garansi 7 hari (Only BackFree, bukan disable/hack)", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] }
-                ]
-            },
-            {
-                id: 'am', name: 'Alight Motion', image: 'https://files.catbox.moe/3v9hsy.jpg', type: 'app',
-                packages: [
-                    { name: "Alight Motion Sharing 1 Tahun", price: "Rp 3.000", priceVal: 3000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Sharing 3U", "Support android & IOS", "Dilarang sebar data"] },
-                    { name: "Alight Motion Private 1 Tahun", price: "Rp 6.000", priceVal: 6000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Bisa dijual ulang"] },
-                    { name: "10x Alight Motion Private 1 Tahun", price: "Rp 30.000", priceVal: 30000, durationVal: 365, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 30.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Cocok untuk reseller"] },
-                    { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", priceVal: 40000, durationVal: 365, tag: "bulk", tagName: "HEMAT 67%", saveText: "Hemat Rp 80.000 (Rate: Rp 2.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Cocok untuk reseller"] }
-                ]
-            },
-            {
-                id: 'gpt', name: 'ChatGPT', image: 'https://iili.io/fR1nAL7.png', type: 'app',
-                packages: [
-                    { name: "ChatGPT GO 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Akses GPT-5 (Limited)", "Limit 10x lebih banyak dr gratis"] },
-                    { name: "ChatGPT+ 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, tag: "rec", tagName: "POPULAR", warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Respon Cepat & Prioritas", "Akses GPT-5 & GPT-4o", "Fitur Eksperimental"] },
-                    { name: "ChatGPT+ Head", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Bisa invite 4-5 orang"] }
-                ]
-            },
-            {
-                id: 'spotify', name: 'Spotify', image: 'https://iili.io/f5n4Szx.png', type: 'app',
-                packages: [
-                    { name: "Spotify Famplan 1 Bulan", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Kualitas Audio Tinggi", "Bisa Perpanjang"] },
-                    { name: "Spotify Famplan 2 Bulan", price: "Rp 30.000", priceVal: 30000, durationVal: 60, tag: "bulk", tagName: "HEMAT 25%", saveText: "Hemat Rp 10.000 (Rate: Rp 15.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Kualitas Audio Tinggi", "Bisa Perpanjang"] },
-                    { name: "Spotify Indplan 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
-                    { name: "Spotify Indplan 3 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 90, tag: "bulk", tagName: "SUPER HEMAT", saveText: "Hemat Rp 15.000 (Rate: Rp 5.000/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
-                    { name: "Spotify Indplan 4 Bulan", price: "Rp 20.000", priceVal: 20000, durationVal: 120, tag: "bulk", tagName: "SUPER HEMAT", saveText: "Hemat Rp 20.000 (Rate: Rp 5.000/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
-                    { name: "Spotify Student 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 1x24jam", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] }
-                ]
-            },
-            {
-                id: 'scribd', name: 'Scribd', image: 'https://iili.io/f5n4gsV.png', type: 'app',
-                packages: [
-                    { name: "Scribd Sharing 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Support All Device", "Akses Jutaan E-Book", "Paham resiko sharing"] },
-                    { name: "Scribd Private 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Support All Device", "Akses Jutaan E-Book", "Bebas Download Offline"] }
-                ]
-            },
-            {
-                id: 'bstation', name: 'Bstation', image: 'https://iili.io/f5n4UWQ.jpg', type: 'app',
-                packages: [
-                    { name: "Bstation Sharing 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Paham resiko sharing"] },
-                    { name: "Bstation Sharing 3 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 90, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 15.000 (Rate: Rp 5.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Paham resiko sharing"] },
-                    { name: "Bstation Sharing 1 Tahun", price: "Rp 20.000", priceVal: 20000, durationVal: 365, tag: "best", tagName: "SUPER HEMAT", saveText: "Hemat Rp 100.000 (Rate: Rp 1.600/bln)", warranty: true, desc: ["Garansi 90 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Paham resiko sharing"] }
-                ]
-            },
-            {
-                id: 'zoom', name: 'Zoom', image: 'https://iili.io/fR1nxe4.jpg', type: 'app',
-                packages: [
-                    { name: "Zoom 100 Peserta 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, warranty: true, desc: ["Support all device", "Garansi 3 Hari (Only BackFree, bukan disable/hack)"] },
-                    { name: "Zoom 100 Peserta 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, warranty: true, desc: ["Support all device", "Garansi 7 Hari (Only BackFree, bukan disable/hack)"] }
-                ]
-            },
-            {
-                id: 'lr', name: 'Lightroom', image: 'https://iili.io/fR1nuXS.png', type: 'app',
-                packages: [
-                    { name: "Lightroom Sharing 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Sharing Account", "Garansi 15 Hari (Only BackFree, bukan disable/hack)", "Support All Device", "Paham resiko sharing"] },
-                    { name: "Lightroom Sharing 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Sharing Account", "Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Support All Device", "Paham resiko sharing"] }
-                ]
-            },
-            {
-                id: 'viu', name: 'VIU', image: 'https://iili.io/fR1nTI2.png', type: 'app',
-                packages: [
-                    { name: "VIU Lifetime", price: "Rp 5.000", priceVal: 5000, durationVal: 999, warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Private Account"] },
-                    { name: "5x VIU Lifetime", price: "Rp 15.000", priceVal: 15000, durationVal: 999, tag: "bulk", tagName: "HEMAT 40%", saveText: "Hemat Rp 10.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Private Account", "Cocok untuk reseller"] },
-                    { name: "10x VIU Lifetime", price: "Rp 20.000", priceVal: 20000, durationVal: 999, tag: "bulk", tagName: "RECOMMENDED", saveText: "Hemat Rp 30.000 (Rate: Rp 2.000/akun)", warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Private Account", "Cocok untuk reseller"] }
-                ]
-            },
-            {
-                id: 'prime', name: 'Prime Video', image: 'https://iili.io/fR1nBgs.png', type: 'app',
-                packages: [
-                    { name: "Prime Video Sharing 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account (4 User)", "Support All device", "Tidak termasuk rental film & ada iklan awal", "Paham resiko akun sharing"] },
-                    { name: "Prime Video Private 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, warranty: true, desc: ["Garansi 20 Hari (Only BackFree, bukan hack/disable)", "Private Account", "Support All device", "Tidak termasuk rental film & ada iklan awal"] }
-                ]
-            },
-            {
-                id: 'iqiyi', name: 'iQIYI', image: 'https://iili.io/fR1no7f.webp', type: 'app',
-                packages: [
-                    { name: "Iqiyi Sharing Standar 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 1080p", "Paham resiko sharing"] },
-                    { name: "Iqiyi Private Standar 1 Bulan", price: "Rp 30.000", priceVal: 30000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Private Account", "Bebas Iklan", "Kualitas 1080p"] },
-                    { name: "Iqiyi Sharing Standar 1 Tahun", price: "Rp 20.000", priceVal: 20000, durationVal: 365, tag: "rec", tagName: "RECOMMENDED", saveText: "Hemat Rp 100.000 (Jatuhnya Rp 1.600/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 1080p", "Paham resiko sharing"] },
-                    { name: "Iqiyi Sharing Premium 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 4K (UltraHD)", "Paham resiko sharing"] },
-                    { name: "Iqiyi Sharing Premium 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "rec", tagName: "RECOMMENDED", saveText: "Hemat Rp 155.000 (Jatuhnya Rp 2.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 4K (UltraHD)", "Paham resiko sharing"] }
-                ]
-            }
-        ];
-
-        // --- FILTER & SORT LOGIC ---
-        let currentSort = 'abjad';
-        let activeFilters = { cat: ['all'], price: [], tag: [], warranty: [] };
-
-        function toggleSortMenu() {
-            playClick();
-            const menu = document.getElementById('sortMenu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-        function toggleFilterDrawer() {
-            playClick();
-            const drawer = document.getElementById('filterDrawer');
-            drawer.classList.toggle('open');
-            if(drawer.classList.contains('open')) {
-                drawer.style.maxHeight = drawer.scrollHeight + "px";
-            } else {
-                drawer.style.maxHeight = "0";
-            }
-        }
-        function setSort(type) {
-            playClick();
-            currentSort = type;
-            document.getElementById('sortMenu').style.display = 'none';
-            filterAndSortProducts();
-        }
-
-        function toggleFilter(btn, type, value) {
-            playClick();
-            if (type === 'cat') {
-                if (value === 'all') {
-                    activeFilters.cat = ['all'];
-                    const container = btn.parentElement;
-                    container.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                    btn.classList.add('active');
-                } else {
-                    activeFilters.cat = activeFilters.cat.filter(v => v !== 'all');
-                    if (activeFilters.cat.includes(value)) {
-                        activeFilters.cat = activeFilters.cat.filter(v => v !== value);
-                        btn.classList.remove('active');
-                    } else {
-                        activeFilters.cat.push(value);
-                        btn.classList.add('active');
-                    }
-                    if(activeFilters.cat.length === 0) {
-                         activeFilters.cat = ['all'];
-                         btn.parentElement.querySelector('[onclick*="all"]').classList.add('active');
-                    } else {
-                         btn.parentElement.querySelector('[onclick*="all"]').classList.remove('active');
-                    }
-                }
-            } else {
-                if (activeFilters[type].includes(value)) {
-                    activeFilters[type] = activeFilters[type].filter(v => v !== value);
-                    btn.classList.remove('active');
-                } else {
-                    activeFilters[type].push(value);
-                    btn.classList.add('active');
-                }
-            }
-            filterAndSortProducts();
-        }
-
-        function filterAndSortProducts() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const listContainer = document.getElementById('allProductsList');
-            listContainer.innerHTML = '';
-
-            let allItems = [];
-            appsData.forEach(app => {
-                app.packages.forEach(pkg => {
-                    allItems.push({ ...pkg, appName: app.name, appImage: app.image, type: app.type });
-                });
-            });
-
-            let filtered = allItems.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(query) || item.appName.toLowerCase().includes(query);
-                if (!matchesSearch) return false;
-                if (!activeFilters.cat.includes('all') && !activeFilters.cat.includes(item.type)) return false;
-                if (activeFilters.price.length > 0) {
-                    let priceMatch = false;
-                    if (activeFilters.price.includes('low') && item.priceVal < 10000) priceMatch = true;
-                    if (activeFilters.price.includes('mid') && item.priceVal >= 10000 && item.priceVal <= 25000) priceMatch = true;
-                    if (activeFilters.price.includes('high') && item.priceVal > 25000) priceMatch = true;
-                    if (!priceMatch) return false;
-                }
-                if (activeFilters.tag.length > 0) {
-                     let tagMatch = false;
-                     if (activeFilters.tag.includes('best') && item.tag === 'best') tagMatch = true;
-                     if (activeFilters.tag.includes('bulk') && item.tag === 'bulk') tagMatch = true;
-                     if (!tagMatch) return false;
-                }
-                if (activeFilters.warranty.length > 0) {
-                    let wMatch = false;
-                    if (activeFilters.warranty.includes('yes') && item.warranty === true) wMatch = true;
-                    if (!wMatch) return false;
-                }
-                return true;
-            });
-
-            if (currentSort === 'abjad') filtered.sort((a, b) => a.name.localeCompare(b.name));
-            else if (currentSort === 'murah') filtered.sort((a, b) => a.priceVal - b.priceVal);
-            else if (currentSort === 'mahal') filtered.sort((a, b) => b.priceVal - a.priceVal);
-            else if (currentSort === 'durasi') filtered.sort((a, b) => b.durationVal - a.durationVal);
-
-            if(filtered.length === 0) {
-                listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-sec);">Tidak ada produk.</div>';
+            if(category === 'sosmed') {
+                container.innerHTML = `<div class="coming-soon"><h3>🚀 Suntik Sosmed</h3><p>Segera Hadir!</p></div>`;
                 return;
             }
 
-            filtered.forEach(item => {
-                let tagLabel = "";
-                if(item.tagName) {
-                     let colorClass = item.tag === 'best' ? 'tag-gold' : (item.tag === 'rec' ? 'tag-blue' : 'tag-green');
-                     tagLabel = `<div class="tag-shiny-container"><span class="tag-base ${colorClass}">${item.tagName}</span></div>`;
-                }
-                
-                let saveInfoHtml = '';
-                if(item.saveText) saveInfoHtml = `<span class="save-info"><i class="fas fa-coins"></i> ${item.saveText}</span>`;
-                
-                const warrantyHtml = getWarrantyLabel(item.desc);
-                const descList = item.desc.map(d => {
-                    const icon = getIconForDesc(d);
-                    return `<li><i class="fas ${icon}"></i> ${d}</li>`;
-                }).join('');
+            // Define Section
+            let filteredItems = [];
+            if(category === 'populer') {
+                title = '🔥 Paling Populer';
+                // Manual Sort: Capcut, Canva, AM
+                const popIds = ['capcut', 'canva', 'am'];
+                filteredItems = popIds.map(id => appsData.find(a => a.id === id)).filter(Boolean);
+            } else {
+                title = category === 'app' ? '💎 Semua Aplikasi' : (category === 'editing' ? '🎬 Editing Apps' : (category === 'movie' ? '🍿 Movie Apps' : '🎵 Music Apps'));
+                filteredItems = appsData.filter(app => app.cat.includes(category));
+            }
 
-                const html = `
-                    <div class="product-card">
-                        <div class="product-header btn-animated" onclick="toggleAccordion(this)">
-                            <div style="flex:1;">
-                                ${item.name} ${tagLabel}
-                                <div style="margin-top:5px; font-size:0.8rem; font-weight:normal;">${warrantyHtml}</div>
-                            </div>
-                            <i class="fas fa-chevron-down"></i>
+            if(filteredItems.length > 0) {
+                let gridHtml = '<div class="app-grid">';
+                filteredItems.forEach(item => {
+                    let badge = '';
+                    if(item.id === 'capcut') badge = '<div class="badge-ribbon badge-populer">BEST SELLER</div>';
+                    else if(category === 'populer') badge = '<div class="badge-ribbon">POPULER</div>';
+                    
+                    gridHtml += `
+                        <div class="item-card" onclick="openDetail('${item.id}')">
+                            ${badge}
+                            <img src="${item.img}" alt="${item.name}">
+                            <div class="item-title">${item.name}</div>
                         </div>
-                        <div class="product-details">
-                            <div class="details-content">
-                                ${saveInfoHtml}
-                                <span class="price-tag">${item.price}</span>
-                                <ul class="detail-list">${descList}</ul>
-                                <button class="menu-btn btn-animated" style="margin-top:15px; background:var(--primary); color:white; border:none;" onclick="orderNow('${item.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button>
-                            </div>
+                    `;
+                });
+                gridHtml += '</div>';
+                
+                contentHtml = `<div class="section-title">${title}</div>${gridHtml}`;
+                // Add "Lihat Semua" button if needed, but side menu handles it.
+            } else {
+                contentHtml = `<div style="text-align:center; padding:20px; color:var(--text-sec);">Belum ada produk di kategori ini.</div>`;
+            }
+
+            container.innerHTML = contentHtml;
+        }
+
+        // --- ALL PRODUCTS (SEARCH) RENDER ---
+        function renderAllProducts(query = '') {
+            const container = document.getElementById('allProductList');
+            container.innerHTML = '';
+            
+            // Flatten Data
+            let allPkgs = [];
+            appsData.forEach(app => {
+                app.packages.forEach(pkg => {
+                    allPkgs.push({...pkg, appName: app.name, appImg: app.img});
+                });
+            });
+
+            // Filter
+            if(query) {
+                allPkgs = allPkgs.filter(p => p.name.toLowerCase().includes(query.toLowerCase()) || p.appName.toLowerCase().includes(query.toLowerCase()));
+            }
+
+            allPkgs.forEach(item => {
+                container.innerHTML += `
+                    <div class="list-item">
+                        <img src="${item.appImg}" class="list-img">
+                        <div class="list-info">
+                            <div class="list-name">${item.name}</div>
+                            <div class="list-price">${item.price}</div>
+                        </div>
+                        <button class="list-btn" onclick="orderNow('${item.name}')">ORDER</button>
+                    </div>
+                `;
+            });
+        }
+
+        function searchProduct(val) {
+            renderAllProducts(val);
+        }
+
+        // --- DETAIL MODAL ---
+        function openDetail(id) {
+            playClick();
+            const app = appsData.find(a => a.id === id);
+            if(!app) return;
+
+            document.getElementById('modalTitle').innerText = app.name;
+            const body = document.getElementById('modalBody');
+            body.innerHTML = '';
+
+            // Header in Modal
+            body.innerHTML += `
+                <div style="text-align:center; margin-bottom:20px;">
+                    <img src="${app.img}" style="width:80px; height:80px; border-radius:15px; border:2px solid var(--primary);">
+                    <h3 style="margin-top:10px;">${app.name}</h3>
+                </div>
+            `;
+
+            app.packages.forEach(pkg => {
+                const descList = pkg.desc.map(d => `<li><i class="fas fa-check-circle"></i> ${d}</li>`).join('');
+                body.innerHTML += `
+                    <div class="package-card">
+                        <div class="pkg-head" onclick="togglePkg(this)">
+                            <div class="pkg-name">${pkg.name}</div>
+                            <div class="pkg-price">${pkg.price} <i class="fas fa-chevron-down" style="font-size:0.8rem; color:var(--text-sec); margin-left:5px;"></i></div>
+                        </div>
+                        <div class="pkg-body">
+                            <ul class="pkg-list">${descList}</ul>
+                            <button class="menu-btn" style="width:100%; margin-top:10px; background:var(--primary); color:white; border:none;" onclick="orderNow('${pkg.name}')">ORDER SEKARANG</button>
                         </div>
                     </div>
                 `;
-                listContainer.innerHTML += html;
             });
+
+            document.getElementById('detailModal').style.display = 'block';
         }
 
-        // --- RENDER HELPERS ---
-        function showAppGrid() { renderAppGrid(); showPage('appGridPage'); }
-        function showAllProducts() { showPage('allProductsPage'); filterAndSortProducts(); }
-
-        function toggleAccordion(header) {
-            playClick();
-            const content = header.nextElementSibling;
-            const icon = header.querySelector('i');
-            document.querySelectorAll('.product-details').forEach(item => {
-                if (item !== content && item.style.maxHeight) {
-                    item.style.maxHeight = null;
-                    item.previousElementSibling.querySelector('i').style.transform = 'rotate(0deg)';
-                }
-            });
-            if (content.style.maxHeight) { content.style.maxHeight = null; icon.style.transform = 'rotate(0deg)'; } 
-            else { content.style.maxHeight = content.scrollHeight + "px"; icon.style.transform = 'rotate(180deg)'; }
+        function togglePkg(head) {
+            const body = head.nextElementSibling;
+            body.classList.toggle('show');
         }
 
-        function orderNow(productName) {
+        function closeModal() {
             playClick();
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function orderNow(name) {
             const phone = "6282131032770";
-            const text = `Bang, mau order ${productName}. Apa masih ada ya?`;
+            const text = `Bang, mau order ${name}. Apa masih ada ya?`;
             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        function toggleMode() { playClick(); document.body.classList.toggle('light-mode'); }
-
-        function renderAppGrid() {
-            const gridContainer = document.getElementById('appList');
-            gridContainer.innerHTML = '';
-            const sortedApps = [...appsData].sort((a, b) => a.name.localeCompare(b.name));
-
-            sortedApps.forEach(app => {
-                let cardClass = "app-card btn-animated";
-                let badge = "";
-                if(app.id === 'capcut') {
-                    cardClass += " featured-app";
-                    badge = `<div class="featured-badge">BEST SELLER 🔥</div>`;
-                }
-                const card = `<div class="${cardClass}" onclick="showAppDetails('${app.id}'); playClick();">${badge}<img src="${app.image}" alt="${app.name}"><h3>${app.name}</h3></div>`;
-                gridContainer.innerHTML += card;
-            });
-        }
-
-        function showAppDetails(appId) {
-            const app = appsData.find(a => a.id === appId);
-            if (!app) return;
-            document.getElementById('selectedAppHeader').innerHTML = `<img src="${app.image}" style="width:60px;height:60px;border-radius:10px;border:2px solid var(--primary);" alt="${app.name}"><h2 style="font-size:1.8rem;">${app.name}</h2>`;
-            const listContainer = document.getElementById('packageList');
-            listContainer.innerHTML = '';
-
-            app.packages.forEach(pkg => {
-                let tagHtml = '';
-                if (pkg.tag === 'best') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-gold">${pkg.tagName}</span></div>`;
-                else if (pkg.tag === 'rec') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-blue">${pkg.tagName}</span></div>`;
-                else if (pkg.tag === 'bulk') tagHtml = `<div class="tag-shiny-container"><span class="tag-base tag-green">${pkg.tagName}</span></div>`;
-                
-                let saveInfoHtml = '';
-                if(pkg.saveText) saveInfoHtml = `<span class="save-info"><i class="fas fa-coins"></i> ${pkg.saveText}</span>`;
-                
-                // New Warranty Label in Details
-                const warrantyHtml = getWarrantyLabel(pkg.desc);
-
-                const descList = pkg.desc.map(item => {
-                    const icon = getIconForDesc(item);
-                    return `<li><i class="fas ${icon}"></i> ${item}</li>`;
-                }).join('');
-                
-                const html = `
-                    <div class="product-card">
-                        <div class="product-header btn-animated" onclick="toggleAccordion(this)">
-                            <div style="flex:1;">
-                                ${pkg.name} ${tagHtml}
-                                <div style="margin-top:5px;">${warrantyHtml}</div>
-                            </div>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="product-details">
-                            <div class="details-content">${saveInfoHtml}<span class="price-tag">${pkg.price}</span><ul class="detail-list">${descList}</ul><button class="menu-btn btn-animated" style="margin-top:15px; background:var(--primary); color:white; border:none;" onclick="orderNow('${pkg.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button></div></div></div>`;
-                listContainer.innerHTML += html;
-            });
-            showPage('appDetailsPage');
-        }
-
-        // Testimonial Data
+        // --- TESTIMONIALS ---
         const rawTestimonials = [
-            { u: "@kokoroaja", c: "aman wak", d: "26 Mei 2025", r: 5 }, { u: "@arry_sat", c: "atmin nya sabar, aman kali wir🔥", d: "19 Mei 2025", r: 5 }, { u: "@ethaniy", c: "aman bet🙌🙌", d: "6 Okt 2025", r: 5 }, { u: "@m_wildann1809", c: "AMAN+amanah👏", d: "4 Des 2025", r: 5 }, { u: "@zzakyd_", c: "Amaan👏", d: "23 Jun 2025", r: 5 }, { u: "@v1nnn_ib", c: "Aman", d: "3 Nov 2025", r: 5 }, { u: "@ricditzz_design", c: "Aman", d: "8 Sep 2025", r: 5 }, { u: "@mhmmdfamii", c: "BUY PANEL MURAH AMAN CUMAN DSINI GILA DAPET BONUS 1Gb ❤️❤️😍", d: "10 Nov 2025", r: 5 }, { u: "@mr.barr_", c: "Amanyoooo😂", d: "30 Jun 2025", r: 5 }, { u: "@vqmakk", c: "AMAN", d: "15 Sep 2025", r: 5 }, { u: "@adhipele", c: "aman X", d: "7 Jul 2025", r: 5 }, { u: "@azelonyth", c: "Aman", d: "17 Nov 2025", r: 5 }, { u: "@szenorthlenz", c: "aman min", d: "23 Jun 2025", r: 5 }, { u: "@kinggmielz", c: "amann🔥", d: "26 Mei 2025", r: 5 }, { u: "@availa6le_", c: "aman cuy🔥", d: "6 Okt 2025", r: 5 }, { u: "@gyuutaro_", c: "AMAN MIN", d: "16 Jun 2025", r: 5 }, { u: "@jusz.ordinary", c: "aman🔥", d: "6 Okt 2025", r: 5 }, { u: "@raka_budi_s", c: "❤️", d: "12 Mei 2025", r: 5 }, { u: "@mraiseffendy59", c: "Aman bgt 🔥🔥", d: "27 Okt 2025", r: 5 }, { u: "@fahri26429", c: "hm", d: "10 Nov 2025", r: 3 }, { u: "@ptra.valenn", c: "aman pol josjis🔥", d: "29 Sep 2025", r: 5 }, { u: "@vigsjsns", c: "Aman", d: "29 Sep 2025", r: 5 }, { u: "@cylla12025", c: "Amanah", d: "17 Nov 2025", r: 5 }, { u: "@madz.std", c: "aman dan aman🗿 real aman ya guys 👍", d: "11 Ags 2025", r: 5 }, { u: "@ardiizxx", c: "Aman👍", d: "6 Okt 2025", r: 5 }, { u: "@zenn_non", c: "AMAN WAK", d: "26 Mei 2025", r: 5 }, { u: "@by4ann_", c: "AMAN WOK", d: "22 Sep 2025", r: 5 }, { u: "@venerable_fanzx", c: "aman si jawir", d: "3 Nov 2025", r: 5 }, { u: "@febgt_1yt", c: "Aman wir", d: "6 Des 2025", r: 5 }, { u: "@aboyypeacefully", c: "Saya baru beli Akun sharing Capcut Aman Bgt Wakk", d: "13 Okt 2025", r: 5 }, { u: "@rivaldyaj", c: "AMAN", d: "28 Jul 2025", r: 5 }, { u: "@aldocukurukuk", c: "Aman", d: "9 Jun 2025", r: 5 }, { u: "@mpawsukayepink", c: "amann bangett suntiknya", d: "25 Ags 2025", r: 5 }, { u: "@azrilervandr", c: "aman cik", d: "28 Jul 2025", r: 5 }, { u: "@vall9.18", c: "AMAN", d: "29 Sep 2025", r: 5 }, { u: "@vicky.mra", c: "Aman ges", d: "9 Jun 2025", r: 5 }, { u: "@mad.armanda", c: "aman", d: "7 Jul 2025", r: 5 }, { u: "@alviskhairullah", c: "aman, apalagi kalo ada diskon😹", d: "5 Des 2025", r: 5 }, { u: "@conutx4_", c: "bagi kalian yang mauuu beli suntik all sosmed ataupun design² yang lain bisa langsung kesini aja yaa dijamin amanah + fast respon", d: "12 Mei 2025", r: 5 }, { u: "@mirfanpann", c: "Aman", d: "12 Mei 2025", r: 5 }, { u: "@tarow_design", c: "aman kali ini wak😍", d: "12 Mei 2025", r: 5 }, { u: "@peqwougt", c: "AMAN", d: "12 Mei 2025", r: 5 }
-        ];
+            { u: "@kokoroaja", c: "aman wak" }, { u: "@arry_sat", c: "aman kali wir🔥" }, 
+            { u: "@ethaniy", c: "aman bet🙌🙌" }, { u: "@m_wildann1809", c: "AMAN+amanah👏" },
+            { u: "@zzakyd_", c: "Amaan👏" }, { u: "@v1nnn_ib", c: "Aman" }
+        ]; // Shortened for V1.3 speed, add more if needed from prev versions
 
         function renderTestimonials() {
             const track = document.getElementById('testiTrack');
-            const combinedList = [...rawTestimonials, ...rawTestimonials];
-            track.innerHTML = '';
-            combinedList.forEach(t => {
-                let starsHtml = '';
-                for(let i=1; i<=5; i++) { if(i <= t.r) starsHtml += '<i class="fas fa-star"></i>'; else starsHtml += '<i class="far fa-star" style="opacity:0.3"></i>'; }
-                const card = `<div class="testi-card"><div class="testi-user-row"><div class="user-avatar"><i class="fas fa-user"></i></div><div class="user-info"><h4>${t.u}</h4><span>${t.d}</span></div></div><div class="stars">${starsHtml}</div><div class="testi-text">"${t.c}"</div></div>`;
-                track.innerHTML += card;
+            // Duplicate for infinite scroll
+            const combined = [...rawTestimonials, ...rawTestimonials, ...rawTestimonials];
+            let html = '';
+            combined.forEach(t => {
+                html += `
+                    <div class="testi-card">
+                        <div class="testi-user-row">
+                            <div class="user-avatar"><i class="fas fa-user"></i></div>
+                            <div class="user-info"><h4>${t.u}</h4></div>
+                        </div>
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <div class="testi-text">"${t.c}"</div>
+                    </div>
+                `;
             });
-        }
-
-        function createFire() {
-            const container = document.getElementById('fireContainer');
-            for (let i = 0; i < 40; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('fire-particle');
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's'; 
-                particle.style.animationDelay = Math.random() * 3 + 's';
-                const size = Math.random() * 30 + 15;
-                particle.style.width = size + 'px'; particle.style.height = size + 'px';
-                container.appendChild(particle);
-            }
+            track.innerHTML = html;
         }
     </script>
 </body>
-    </html>
+</html>
