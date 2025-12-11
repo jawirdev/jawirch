@@ -120,7 +120,6 @@
         .app-card img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; }
         .featured-app { border: 2px solid var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); animation: borderPulse 3s infinite; }
         
-        /* FIX BADGE: Corner Ribbon Style (Inside Box) */
         .featured-badge { 
             position: absolute; top: 0; right: 0; 
             background: var(--primary); color: white; font-size: 0.6rem; 
@@ -168,6 +167,14 @@
         .search-bar { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); background: black; color: white; font-size: 1rem; margin-bottom: 15px; transition:0.3s; }
         .search-bar:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(255,0,0,0.3); }
 
+        /* All Products List Item */
+        .all-prod-item { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+        .all-prod-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+        .all-prod-info { flex: 1; }
+        .all-prod-name { font-weight: bold; font-size: 0.95rem; margin-bottom: 3px; }
+        .all-prod-price { color: var(--primary); font-weight: 900; font-size: 1rem; }
+        .all-prod-btn { padding: 8px 15px; background: var(--primary); color: white; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; z-index: 2; }
+        
         /* Shiny Tags */
         .tag-shiny-container { display: inline-block; margin-left: 5px; }
         .tag-base { font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 900; color: #000; display: inline-block; vertical-align: middle; position: relative; overflow: hidden; }
@@ -379,16 +386,14 @@
 
         // --- WARRANTY PARSER ---
         function getWarrantyLabel(descArray) {
-            // Find string with "Garansi"
             const warrantyLine = descArray.find(d => d.toLowerCase().includes("garansi"));
             if(!warrantyLine || warrantyLine.toLowerCase().includes("no garansi")) {
                 return '<span class="warranty-label w-no"><i class="fas fa-times"></i> No Garansi</span>';
             }
-            // Extract duration usually
             return `<span class="warranty-label w-yes"><i class="fas fa-shield-alt"></i> ${warrantyLine.split('(')[0].trim()}</span>`;
         }
 
-        // --- DATA PRODUK LENGKAP (V12) ---
+        // --- DATA PRODUK LENGKAP (V13) ---
         const appsData = [
             {
                 id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', type: 'app',
@@ -433,8 +438,8 @@
                     { name: "Spotify Famplan 1 Bulan", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Kualitas Audio Tinggi", "Bisa Perpanjang"] },
                     { name: "Spotify Famplan 2 Bulan", price: "Rp 30.000", priceVal: 30000, durationVal: 60, tag: "bulk", tagName: "HEMAT 25%", saveText: "Hemat Rp 10.000 (Rate: Rp 15.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Kualitas Audio Tinggi", "Bisa Perpanjang"] },
                     { name: "Spotify Indplan 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
-                    { name: "Spotify Indplan 2 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 60, tag: "bulk", tagName: "HEMAT 25%", saveText: "Hemat Rp 5.000 (Rate: Rp 7.500/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
-                    { name: "Spotify Indplan 3 Bulan", price: "Rp 20.000", priceVal: 20000, durationVal: 90, tag: "bulk", tagName: "HEMAT 33%", saveText: "Hemat Rp 10.000 (Rate: Rp 6.600/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
+                    { name: "Spotify Indplan 3 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 90, tag: "bulk", tagName: "SUPER HEMAT", saveText: "Hemat Rp 15.000 (Rate: Rp 5.000/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
+                    { name: "Spotify Indplan 4 Bulan", price: "Rp 20.000", priceVal: 20000, durationVal: 120, tag: "bulk", tagName: "SUPER HEMAT", saveText: "Hemat Rp 20.000 (Rate: Rp 5.000/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
                     { name: "Spotify Student 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 1x24jam", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] }
                 ]
             },
@@ -720,10 +725,7 @@
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="product-details">
-                            <div class="details-content">${saveInfoHtml}<span class="price-tag">${pkg.price}</span><ul class="detail-list">${descList}</ul><button class="menu-btn btn-animated" style="margin-top:15px; background:var(--primary); color:white; border:none;" onclick="orderNow('${pkg.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button></div>
-                        </div>
-                    </div>
-                `;
+                            <div class="details-content">${saveInfoHtml}<span class="price-tag">${pkg.price}</span><ul class="detail-list">${descList}</ul><button class="menu-btn btn-animated" style="margin-top:15px; background:var(--primary); color:white; border:none;" onclick="orderNow('${pkg.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button></div></div></div>`;
                 listContainer.innerHTML += html;
             });
             showPage('appDetailsPage');
@@ -761,4 +763,4 @@
         }
     </script>
 </body>
-                                                                                                          </html>
+    </html>
