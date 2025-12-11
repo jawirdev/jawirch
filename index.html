@@ -120,20 +120,28 @@
         .app-card img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; margin-bottom: 10px; }
         .featured-app { border: 2px solid var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); animation: borderPulse 3s infinite; }
         
+        /* FIX BADGE: Corner Ribbon Style (Inside Box) */
         .featured-badge { 
-            position: absolute; top: -12px; right: -8px; 
+            position: absolute; top: 0; right: 0; 
             background: var(--primary); color: white; font-size: 0.6rem; 
-            padding: 4px 8px; border-radius: 20px; font-weight: bold; 
-            border: 1px solid white; z-index: 5; white-space: nowrap; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5); 
+            padding: 4px 10px; border-bottom-left-radius: 10px; border-top-right-radius: 14px; /* Corner shape */
+            font-weight: bold; border-left: 1px solid white; border-bottom: 1px solid white; 
+            z-index: 5; white-space: nowrap; 
+            box-shadow: -2px 2px 5px rgba(0,0,0,0.5); 
         }
         @keyframes borderPulse { 0% { border-color: var(--accent-gold); } 50% { border-color: var(--primary); } 100% { border-color: var(--accent-gold); } }
 
-        /* --- Product Details --- */
+        /* --- Product Details & Warranty Labels --- */
         .product-card { background: var(--card-bg); margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; }
         .product-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1rem; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
         .product-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-color); }
         .details-content { padding: 20px; color: var(--text-sec); font-size: 0.9rem; line-height: 1.6; }
+        
+        /* Warranty Label Badge */
+        .warranty-label { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; font-weight: bold; }
+        .w-yes { background: rgba(0, 255, 127, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .w-no { background: rgba(255, 68, 68, 0.15); color: #ff4444; border: 1px solid #ff4444; }
+
         .price-tag { color: var(--primary); font-size: 1.3rem; font-weight: 900; display: block; margin-bottom: 5px; }
         .detail-list { list-style: none; padding: 0; margin: 10px 0; }
         .detail-list li { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
@@ -160,14 +168,6 @@
         .search-bar { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); background: black; color: white; font-size: 1rem; margin-bottom: 15px; transition:0.3s; }
         .search-bar:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 15px rgba(255,0,0,0.3); }
 
-        /* All Products List Item */
-        .all-prod-item { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
-        .all-prod-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-        .all-prod-info { flex: 1; }
-        .all-prod-name { font-weight: bold; font-size: 0.95rem; margin-bottom: 3px; }
-        .all-prod-price { color: var(--primary); font-weight: 900; font-size: 1rem; }
-        .all-prod-btn { padding: 8px 15px; background: var(--primary); color: white; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; z-index: 2; }
-        
         /* Shiny Tags */
         .tag-shiny-container { display: inline-block; margin-left: 5px; }
         .tag-base { font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 900; color: #000; display: inline-block; vertical-align: middle; position: relative; overflow: hidden; }
@@ -371,12 +371,24 @@
             if (text.includes("cepat") || text.includes("fast") || text.includes("kilat")) return "fa-bolt";
             if (text.includes("update") || text.includes("terbaru")) return "fa-sync-alt";
             if (text.includes("fitur") || text.includes("akses")) return "fa-star";
-            if (text.includes("4k") || text.includes("1080p") || text.includes("hd")) return "fa-tv";
+            if (text.includes("4k") || text.includes("1080p") || text.includes("hd") || text.includes("audio")) return "fa-tv";
             if (text.includes("iklan")) return "fa-ad";
+            if (text.includes("lagu") || text.includes("offline") || text.includes("unduh") || text.includes("ebook")) return "fa-download";
             return "fa-check"; 
         }
 
-        // --- DATA PRODUK LENGKAP (V11 - IILI.IO LINKS) ---
+        // --- WARRANTY PARSER ---
+        function getWarrantyLabel(descArray) {
+            // Find string with "Garansi"
+            const warrantyLine = descArray.find(d => d.toLowerCase().includes("garansi"));
+            if(!warrantyLine || warrantyLine.toLowerCase().includes("no garansi")) {
+                return '<span class="warranty-label w-no"><i class="fas fa-times"></i> No Garansi</span>';
+            }
+            // Extract duration usually
+            return `<span class="warranty-label w-yes"><i class="fas fa-shield-alt"></i> ${warrantyLine.split('(')[0].trim()}</span>`;
+        }
+
+        // --- DATA PRODUK LENGKAP (V12) ---
         const appsData = [
             {
                 id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', type: 'app',
@@ -416,6 +428,32 @@
                 ]
             },
             {
+                id: 'spotify', name: 'Spotify', image: 'https://iili.io/f5n4Szx.png', type: 'app',
+                packages: [
+                    { name: "Spotify Famplan 1 Bulan", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Kualitas Audio Tinggi", "Bisa Perpanjang"] },
+                    { name: "Spotify Famplan 2 Bulan", price: "Rp 30.000", priceVal: 30000, durationVal: 60, tag: "bulk", tagName: "HEMAT 25%", saveText: "Hemat Rp 10.000 (Rate: Rp 15.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Kualitas Audio Tinggi", "Bisa Perpanjang"] },
+                    { name: "Spotify Indplan 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
+                    { name: "Spotify Indplan 2 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 60, tag: "bulk", tagName: "HEMAT 25%", saveText: "Hemat Rp 5.000 (Rate: Rp 7.500/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
+                    { name: "Spotify Indplan 3 Bulan", price: "Rp 20.000", priceVal: 20000, durationVal: 90, tag: "bulk", tagName: "HEMAT 33%", saveText: "Hemat Rp 10.000 (Rate: Rp 6.600/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] },
+                    { name: "Spotify Student 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 1x24jam", "Private Account", "Bebas Iklan", "Download Offline", "Bisa Perpanjang"] }
+                ]
+            },
+            {
+                id: 'scribd', name: 'Scribd', image: 'https://iili.io/f5n4gsV.png', type: 'app',
+                packages: [
+                    { name: "Scribd Sharing 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Support All Device", "Akses Jutaan E-Book", "Paham resiko sharing"] },
+                    { name: "Scribd Private 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Support All Device", "Akses Jutaan E-Book", "Bebas Download Offline"] }
+                ]
+            },
+            {
+                id: 'bstation', name: 'Bstation', image: 'https://iili.io/f5n4UWQ.jpg', type: 'app',
+                packages: [
+                    { name: "Bstation Sharing 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Paham resiko sharing"] },
+                    { name: "Bstation Sharing 3 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 90, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 15.000 (Rate: Rp 5.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Paham resiko sharing"] },
+                    { name: "Bstation Sharing 1 Tahun", price: "Rp 20.000", priceVal: 20000, durationVal: 365, tag: "best", tagName: "SUPER HEMAT", saveText: "Hemat Rp 100.000 (Rate: Rp 1.600/bln)", warranty: true, desc: ["Garansi 90 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Paham resiko sharing"] }
+                ]
+            },
+            {
                 id: 'zoom', name: 'Zoom', image: 'https://iili.io/fR1nxe4.jpg', type: 'app',
                 packages: [
                     { name: "Zoom 100 Peserta 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, warranty: true, desc: ["Support all device", "Garansi 3 Hari (Only BackFree, bukan disable/hack)"] },
@@ -449,9 +487,9 @@
                 packages: [
                     { name: "Iqiyi Sharing Standar 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 1080p", "Paham resiko sharing"] },
                     { name: "Iqiyi Private Standar 1 Bulan", price: "Rp 30.000", priceVal: 30000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Private Account", "Bebas Iklan", "Kualitas 1080p"] },
-                    { name: "Iqiyi Sharing Standar 1 Tahun", price: "Rp 20.000", priceVal: 20000, durationVal: 365, tag: "rec", tagName: "RECOMMENDED", saveText: "Hemat Rp 100.000 (Jatuhnya Rp 1.600/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 1080p", "Paham resiko sharing"] },
+                    { name: "Iqiyi Sharing Standar 1 Tahun", price: "Rp 20.000", priceVal: 20000, durationVal: 365, tag: "rec", tagName: "RECOMMENDED", saveText: "Hemat Rp 100.000 (Jatuhnya Rp 1.600/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 1080p", "Paham resiko sharing"] },
                     { name: "Iqiyi Sharing Premium 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 4K (UltraHD)", "Paham resiko sharing"] },
-                    { name: "Iqiyi Sharing Premium 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "rec", tagName: "RECOMMENDED", saveText: "Hemat Rp 155.000 (Jatuhnya Rp 2.000/bln)", warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 4K (UltraHD)", "Paham resiko sharing"] }
+                    { name: "Iqiyi Sharing Premium 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "rec", tagName: "RECOMMENDED", saveText: "Hemat Rp 155.000 (Jatuhnya Rp 2.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan hack/disable)", "Sharing Account", "Bebas Iklan", "Kualitas 4K (UltraHD)", "Paham resiko sharing"] }
                 ]
             }
         ];
@@ -572,14 +610,32 @@
                      tagLabel = `<div class="tag-shiny-container"><span class="tag-base ${colorClass}">${item.tagName}</span></div>`;
                 }
                 
+                let saveInfoHtml = '';
+                if(item.saveText) saveInfoHtml = `<span class="save-info"><i class="fas fa-coins"></i> ${item.saveText}</span>`;
+                
+                const warrantyHtml = getWarrantyLabel(item.desc);
+                const descList = item.desc.map(d => {
+                    const icon = getIconForDesc(d);
+                    return `<li><i class="fas ${icon}"></i> ${d}</li>`;
+                }).join('');
+
                 const html = `
-                    <div class="all-prod-item btn-animated" onclick="orderNow('${item.name}')">
-                        <img src="${item.appImage}" alt="${item.appName}" class="all-prod-img">
-                        <div class="all-prod-info">
-                            <div class="all-prod-name">${item.name} ${tagLabel}</div>
-                            <div class="all-prod-price">${item.price}</div>
+                    <div class="product-card">
+                        <div class="product-header btn-animated" onclick="toggleAccordion(this)">
+                            <div style="flex:1;">
+                                ${item.name} ${tagLabel}
+                                <div style="margin-top:5px; font-size:0.8rem; font-weight:normal;">${warrantyHtml}</div>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
                         </div>
-                        <button class="all-prod-btn btn-animated">ORDER</button>
+                        <div class="product-details">
+                            <div class="details-content">
+                                ${saveInfoHtml}
+                                <span class="price-tag">${item.price}</span>
+                                <ul class="detail-list">${descList}</ul>
+                                <button class="menu-btn btn-animated" style="margin-top:15px; background:var(--primary); color:white; border:none;" onclick="orderNow('${item.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
                     </div>
                 `;
                 listContainer.innerHTML += html;
@@ -645,13 +701,29 @@
                 
                 let saveInfoHtml = '';
                 if(pkg.saveText) saveInfoHtml = `<span class="save-info"><i class="fas fa-coins"></i> ${pkg.saveText}</span>`;
+                
+                // New Warranty Label in Details
+                const warrantyHtml = getWarrantyLabel(pkg.desc);
 
                 const descList = pkg.desc.map(item => {
                     const icon = getIconForDesc(item);
                     return `<li><i class="fas ${icon}"></i> ${item}</li>`;
                 }).join('');
                 
-                const html = `<div class="product-card"><div class="product-header btn-animated" onclick="toggleAccordion(this)"><div style="flex:1;">${pkg.name} ${tagHtml}</div><i class="fas fa-chevron-down"></i></div><div class="product-details"><div class="details-content">${saveInfoHtml}<span class="price-tag">${pkg.price}</span><ul class="detail-list">${descList}</ul><button class="menu-btn btn-animated" style="margin-top:15px; background:var(--primary); color:white; border:none;" onclick="orderNow('${pkg.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button></div></div></div>`;
+                const html = `
+                    <div class="product-card">
+                        <div class="product-header btn-animated" onclick="toggleAccordion(this)">
+                            <div style="flex:1;">
+                                ${pkg.name} ${tagHtml}
+                                <div style="margin-top:5px;">${warrantyHtml}</div>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="product-details">
+                            <div class="details-content">${saveInfoHtml}<span class="price-tag">${pkg.price}</span><ul class="detail-list">${descList}</ul><button class="menu-btn btn-animated" style="margin-top:15px; background:var(--primary); color:white; border:none;" onclick="orderNow('${pkg.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button></div>
+                        </div>
+                    </div>
+                `;
                 listContainer.innerHTML += html;
             });
             showPage('appDetailsPage');
@@ -689,4 +761,4 @@
         }
     </script>
 </body>
-                            </html>
+                                                                                                          </html>
