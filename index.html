@@ -9,7 +9,7 @@
     <meta http-equiv="Expires" content="0" />
     <meta name="referrer" content="no-referrer">
 
-    <title>JAWIR STORE - Marketplace V2.1</title>
+    <title>JAWIR STORE - Marketplace V2.2</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -57,11 +57,9 @@
         .intro-text { font-weight: 900; letter-spacing: 2px; color: white; }
         @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255,0,0,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
 
-        /* --- SHINY ANIMATION (V12 STYLE + DELAY 4s) --- */
+        /* --- SHINY ANIMATION --- */
         @keyframes glassSweep { 
-            0% { left: -100%; } 
-            20% { left: 200%; } 
-            100% { left: 200%; } 
+            0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } 
         }
         
         .shiny-effect { position: relative; overflow: hidden; cursor: pointer; transition: transform 0.1s; }
@@ -135,6 +133,7 @@
             padding: 3px 8px; border-bottom-left-radius: 8px; z-index: 2;
         }
         .badge-populer { background: var(--primary); color: white; }
+        .badge-new { background: var(--accent-blue); color: white; }
 
         /* --- PRODUCT DETAILS MODAL --- */
         .modal-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 2000; overflow-y: auto; display: none; animation: slideUp 0.3s ease; }
@@ -152,7 +151,7 @@
         .pkg-body { display: none; margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 10px; }
         .pkg-body.show { display: block; }
         
-        /* RESTORED SHINY TAGS (V12 STYLE) */
+        /* Shiny Tags */
         .tag-shiny {
             font-size: 0.6rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 900; color: #000;
             display: inline-block; position: relative; overflow: hidden; vertical-align: middle;
@@ -162,10 +161,6 @@
         .tag-gold { background: linear-gradient(135deg, #d4af37, #f7ef8a); box-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
         .tag-blue { background: linear-gradient(135deg, #00bcd4, #8affff); box-shadow: 0 0 5px rgba(0, 188, 212, 0.5); }
         .tag-green { background: linear-gradient(135deg, #00ff7f, #adffc9); box-shadow: 0 0 5px rgba(0, 255, 127, 0.5); }
-
-        .warranty-label { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 3px; }
-        .w-yes { background: rgba(0, 255, 127, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
-        .w-no { background: rgba(255, 68, 68, 0.15); color: #ff4444; border: 1px solid #ff4444; }
 
         .pkg-list li { list-style: none; font-size: 0.85rem; color: var(--text-sec); margin-bottom: 5px; display: flex; gap: 8px; }
         .pkg-list li i { color: var(--accent-green); width: 15px; text-align: center; }
@@ -252,7 +247,7 @@
             <div class="burger-btn shiny-effect" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
             <div class="header-title">
                 <h1>JAWIR <span>STORE</span></h1>
-                <span class="header-subtitle">MARKETPLACE V2.1</span>
+                <span class="header-subtitle">MARKETPLACE V2.2</span>
             </div>
         </div>
         <img src="https://iili.io/fR1nzml.jpg" class="header-logo shiny-effect" onclick="window.open('https://instagram.com/jawir.store')">
@@ -270,6 +265,7 @@
 
             <div class="filter-scroll">
                 <div class="filter-btn shiny-effect active" onclick="setFilter('populer', this)">🔥 Populer</div>
+                <div class="filter-btn shiny-effect" onclick="setFilter('new', this)">✨ New Product</div>
                 <div class="filter-btn shiny-effect" onclick="setFilter('app', this)">💎 App Premium</div>
                 <div class="filter-btn shiny-effect" onclick="setFilter('editing', this)">🎬 Editing</div>
                 <div class="filter-btn shiny-effect" onclick="setFilter('music', this)">🎵 Music</div>
@@ -383,7 +379,7 @@
                 <a href="https://instagram.com/jawirdesigner" target="_blank" class="soc-btn shiny-effect"><i class="fab fa-instagram"></i></a>
                 <a href="https://instagram.com/jawir.store" target="_blank" class="soc-btn shiny-effect"><i class="fas fa-store"></i></a>
             </div>
-            <p style="margin-top: 30px; font-size: 0.8rem; color: var(--text-sec);">© 2025 Jawir Store V2.1</p>
+            <p style="margin-top: 30px; font-size: 0.8rem; color: var(--text-sec);">© 2025 Jawir Store V2.2</p>
         </footer>
 
     </div>
@@ -418,14 +414,16 @@
     </script>
 
     <script>
-        // --- DATA PRODUK V2.1 ---
+        // --- DATA PRODUK V2.2 (UPDATED 15 APPS) ---
         const appsData = [
             { id: 'canva', name: 'Canva', image: 'https://files.catbox.moe/4omm5s.jpg', cat: ['app', 'populer', 'editing'], packages: [
                 { name: "Canva Member 1 Bulan", price: "Rp 3.000", priceVal: 3000, durationVal: 30, warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Canva pro via invite", "Support All Device", "Fitur pro open (kecuali brand kit)", "Tidak bisa upload font"] },
                 { name: "Canva Member 1 Tahun", price: "Rp 25.000", priceVal: 25000, durationVal: 365, tag: "bulk", tagName: "HEMAT 30%", saveText: "Hemat Rp 11.000 (Rate: Rp 2.080/bln)", warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur pro open (kecuali brand kit)"] },
                 { name: "Canva Designer 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Canva pro via invite", "Support All Device", "Fitur brandkit & upload font ON"] },
                 { name: "Canva Designer 1 Tahun", price: "Rp 27.000", priceVal: 27000, durationVal: 365, tag: "bulk", tagName: "HEMAT 55%", saveText: "Hemat Rp 33.000 (Rate: Rp 2.250/bln)", warranty: true, desc: ["Full garansi (Only BackFree, bukan disable/hack)", "Renew/ganti team tiap bulan", "Canva pro via invite", "Fitur brandkit & upload font ON"] },
-                { name: "Canva Owner 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 25 Hari (Only BackFree, bukan disable/hack)", "Akun dari seller / admin", "Bisa invite ±100 Member"] }
+                { name: "Canva Owner 1 Bulan", price: "Rp 8.000", priceVal: 8000, durationVal: 30, warranty: true, desc: ["Garansi 25 Hari (Only BackFree, bukan disable/hack)", "Akun dari seller / admin", "Bisa invite ±100 Member", "Support All Device"] },
+                { name: "Canva Edu Lifetime", price: "Rp 15.000", priceVal: 15000, warranty: true, desc: ["Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Jarang ganti² team", "Canva pro via invite", "Support All Device"] },
+                { name: "Canva Edu Head", price: "Rp 40.000", priceVal: 40000, warranty: false, desc: ["Akun dari seller/admin", "No garansi (Hanya garansi 1x saat login)", "Support All Device", "Bisa invite ±500 Member"] }
             ]},
             { id: 'capcut', name: 'CapCut', image: 'https://iili.io/fR1n5B9.png', cat: ['app', 'populer', 'editing'], packages: [
                 { name: "Capcut Private 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, tag: "best", tagName: "BEST SELLER 🔥", warranty: false, desc: ["No garansi", "Private Account", "Max login 3 Device", "Bisa dijual secara sharing (resiko sendiri)", "Support all device", "Capcut pro team", "Login pc/laptop pakai qr", "Wajib update app"] },
@@ -438,7 +436,7 @@
                 { name: "Alight Motion Sharing 1 Tahun", price: "Rp 3.000", priceVal: 3000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Sharing 3U", "Support All Device (Andro & IOS)", "Dilarang sebar data", "Membeli = Paham Resiko Akun Sharing"] },
                 { name: "Alight Motion Private 1 Tahun", price: "Rp 6.000", priceVal: 6000, durationVal: 365, warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Support All Device (Andro & IOS)", "Bisa dijual ulang secara sharing, resiko tanggung sendiri"] },
                 { name: "10x Alight Motion Private 1 Tahun", price: "Rp 30.000", priceVal: 30000, durationVal: 365, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 30.000 (Rate: Rp 3.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Support All Device (Andro & IOS)", "Cocok untuk reseller", "Bisa dijual ulang secara sharing, resiko tanggung sendiri"] },
-                { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", priceVal: 40000, durationVal: 365, tag: "bulk", tagName: "HEMAT 67%", saveText: "Hemat Rp 80.000 (Rate: Rp 2.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Akun private", "Support All Device (Andro & IOS)", "Cocok untuk reseller", "Bisa dijual ulang secara sharing, resiko tanggung sendiri"] }
+                { name: "20x Alight Motion Private 1 Tahun", price: "Rp 40.000", priceVal: 40000, durationVal: 365, tag: "bulk", tagName: "HEMAT 67%", saveText: "Hemat Rp 80.000 (Rate: Rp 2.000/akun)", warranty: true, desc: ["Garansi 6 bulan (Only BackFree, bukan disable/hack)", "Support All Device (Andro & IOS)", "Akun private", "Cocok untuk reseller", "Bisa dijual ulang secara sharing, resiko tanggung sendiri"] }
             ]},
             { id: 'spotify', name: 'Spotify', image: 'https://iili.io/f5n4Szx.png', cat: ['app', 'music'], packages: [
                 { name: "Spotify Famplan 1 Bulan", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Private Account", "Bebas Iklan", "Kualitas Audio Tinggi", "Bisa Perpanjang"] },
@@ -450,7 +448,7 @@
             ]},
             { id: 'bstation', name: 'Bstation', image: 'https://iili.io/f5n4UWQ.jpg', cat: ['app', 'movie'], packages: [
                 { name: "Bstation Sharing 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Garansi 15 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Membeli = Paham Resiko Akun Sharing"] },
-                { name: "Bstation Sharing 3 Bulan", price: "Rp 15.000", priceVal: 15000, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 15.000 (Rate: Rp 5.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Membeli = Paham Resiko Akun Sharing"] },
+                { name: "Bstation Sharing 3 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 90, tag: "bulk", tagName: "HEMAT 50%", saveText: "Hemat Rp 15.000 (Rate: Rp 5.000/bln)", warranty: true, desc: ["Garansi 30 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Membeli = Paham Resiko Akun Sharing"] },
                 { name: "Bstation Sharing 1 Tahun", price: "Rp 20.000", priceVal: 20000, durationVal: 365, tag: "best", tagName: "SUPER HEMAT", saveText: "Hemat Rp 100.000 (Rate: Rp 1.600/bln)", warranty: true, desc: ["Garansi 90 Hari (Only BackFree, bukan Hack/Disable)", "Sharing Account", "Bebas Iklan", "Video Kualitas Tinggi", "Membeli = Paham Resiko Akun Sharing"] }
             ]},
             { id: 'scribd', name: 'Scribd', image: 'https://iili.io/f5n4gsV.png', cat: ['app'], packages: [
@@ -477,14 +475,27 @@
                 { name: "Zoom 100 Peserta 7 Hari", price: "Rp 5.000", priceVal: 5000, durationVal: 7, warranty: true, desc: ["Support all device", "Garansi 3 Hari (Only BackFree, bukan disable/hack)"] },
                 { name: "Zoom 100 Peserta 14 Hari", price: "Rp 8.000", priceVal: 8000, durationVal: 14, warranty: true, desc: ["Support all device", "Garansi 7 Hari (Only BackFree, bukan disable/hack)"] }
             ]},
-            { id: 'gpt', name: 'ChatGPT', image: 'https://iili.io/fR1nAL7.png', cat: ['app'], packages: [
+            { id: 'gpt', name: 'ChatGPT', image: 'https://iili.io/fR1nAL7.png', cat: ['app', 'populer'], packages: [
                 { name: "ChatGPT GO 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Akses GPT-5 (Limited)", "Limit 10x lebih banyak dr gratis"] },
-                { name: "ChatGPT+ 1 Bulan", price: "Rp 15.000", priceVal: 15000, tag: "rec", tagName: "POPULAR", warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Respon Cepat & Prioritas", "Akses GPT-5 & GPT-4o", "Fitur Eksperimental"] },
+                { name: "ChatGPT+ 1 Bulan", price: "Rp 15.000", priceVal: 15000, durationVal: 30, tag: "rec", tagName: "POPULAR", warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Respon Cepat & Prioritas", "Akses GPT-5 & GPT-4o", "Fitur Eksperimental"] },
                 { name: "ChatGPT+ Head", price: "Rp 20.000", priceVal: 20000, durationVal: 30, warranty: true, desc: ["Garansi 1x login (Only BackFree, bukan disable/hack)", "Private Account", "Bisa invite 4-5 orang"] }
             ]},
             { id: 'lr', name: 'Lightroom', image: 'https://iili.io/fR1nuXS.png', cat: ['app', 'editing'], packages: [
                 { name: "Lightroom Sharing 1 Bulan", price: "Rp 5.000", priceVal: 5000, durationVal: 30, warranty: true, desc: ["Sharing Account", "Garansi 15 Hari (Only BackFree, bukan disable/hack)", "Support All Device", "Membeli = Paham Resiko Akun Sharing"] },
                 { name: "Lightroom Sharing 1 Tahun", price: "Rp 10.000", priceVal: 10000, durationVal: 365, warranty: true, desc: ["Sharing Account", "Garansi 6 Bulan (Only BackFree, bukan disable/hack)", "Support All Device", "Membeli = Paham Resiko Akun Sharing"] }
+            ]},
+            { id: 'meitu', name: 'Meitu', image: 'https://iili.io/f0ZvMYu.webp', cat: ['app', 'new', 'editing'], packages: [
+                { name: "Meitu Private 7 Hari", price: "Rp 10.000", priceVal: 10000, durationVal: 7, warranty: false, desc: ["Akun dari seller/admin", "Only Android", "Private account", "Max login 1 device", "No garansi (Hanya garansi 1x saat login)"] },
+                { name: "Meitu Private 14 Hari", price: "Rp 20.000", priceVal: 20000, durationVal: 14, warranty: false, desc: ["Akun dari seller/admin", "Only Android", "Private account", "Max login 1 device", "No garansi (Hanya garansi 1x saat login)"] },
+                { name: "Meitu Private 30 Hari", price: "Rp 25.000", priceVal: 25000, durationVal: 30, warranty: false, desc: ["Akun dari seller/admin", "Only Android", "Private account", "Max login 1 device", "No garansi (Hanya garansi 1x saat login)"] }
+            ]},
+            { id: 'crunchyroll', name: 'Crunchyroll', image: 'https://iili.io/f0Zbi5x.jpg', cat: ['app', 'new', 'movie'], packages: [
+                { name: "Plan Megafan Sharing 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Akun dari seller/admin", "Only mobile, tidak boleh pakai laptop/tv", "Garansi 15 Hari (Only BackFree, bukan disable/hack)", "Membeli = Paham Resiko Akun Sharing"] },
+                { name: "Plan Megafan Private 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Akun dari seller/admin", "Private account", "Only mobile, tidak boleh pakai laptop/tv", "Garansi 15 Hari (Only BackFree, bukan disable/hack)"] }
+            ]},
+            { id: 'wetv', name: 'WeTV', image: 'https://iili.io/f0DH11I.jpg', cat: ['app', 'new', 'movie'], packages: [
+                { name: "WETV Sharing 1 Bulan", price: "Rp 10.000", priceVal: 10000, durationVal: 30, warranty: true, desc: ["Akun dari seller/admin", "Sharing 6U (6 User)", "Support All Device", "Garansi 15 Hari (Only BackFree, bukan disable/hack)", "Membeli = Paham Resiko Akun Sharing"] },
+                { name: "WETV Private 1 Bulan", price: "Rp 35.000", priceVal: 35000, durationVal: 30, warranty: true, desc: ["Akun dari seller/admin", "Private Account", "Support All Device", "Garansi 15 Hari (Only BackFree, bukan disable/hack)"] }
             ]}
         ];
 
@@ -521,7 +532,7 @@
                 }
             } else if (page === 'page-app') {
                 document.getElementById('page-app').style.display = 'block';
-                renderFullAppGrid(); // FORCE RE-RENDER
+                renderFullAppGrid(); 
             } else if (page === 'page-sosmed') {
                 document.getElementById('page-sosmed').style.display = 'block';
             } else if (page === 'all-products') {
@@ -565,7 +576,8 @@
             if (query) {
                 items = appsData.filter(a => a.name.toLowerCase().includes(query.toLowerCase()));
             } else if (category === 'populer') {
-                const popIds = ['capcut', 'canva', 'am'];
+                // Manual Populer List: CapCut, Canva, AM, ChatGPT
+                const popIds = ['capcut', 'canva', 'am', 'gpt'];
                 items = popIds.map(id => appsData.find(a => a.id === id)).filter(Boolean);
             } else if (category === 'all') {
                 items = appsData;
@@ -583,6 +595,7 @@
                 let badge = '';
                 if(item.id === 'capcut') badge = '<div class="badge-ribbon badge-populer">BEST SELLER</div>';
                 else if(category === 'populer') badge = '<div class="badge-ribbon">POPULER</div>';
+                else if(item.cat.includes('new')) badge = '<div class="badge-ribbon badge-new">NEW</div>';
                 
                 html += `
                     <div class="item-card shiny-effect" onclick="openDetail('${item.id}')">
@@ -603,6 +616,8 @@
             let html = '';
             sortedApps.forEach(item => {
                 let badge = (item.id === 'capcut') ? '<div class="badge-ribbon badge-populer">BEST SELLER</div>' : '';
+                if(item.cat.includes('new')) badge = '<div class="badge-ribbon badge-new">NEW</div>';
+                
                 html += `
                     <div class="item-card shiny-effect" onclick="openDetail('${item.id}')">
                         ${badge}
@@ -615,7 +630,7 @@
             containers.forEach(c => { if(c) c.innerHTML = html; });
         }
 
-        // --- ALL PRODUCTS LOGIC ---
+        // --- ALL PRODUCTS ---
         let currentSort = 'abjad';
         let activeFilters = { cat: ['all'], price: [], tag: [] };
 
@@ -734,13 +749,13 @@
                         <div class="pkg-head" onclick="togglePkg(this)">
                             <div class="pkg-left">
                                 <div class="pkg-name">${pkg.name} ${tagHtml}</div>
-                                <span class="pkg-price">${pkg.price}</span>
                             </div>
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="pkg-body">
                             <div style="padding: 10px 0;">
                                 ${saveHtml}
+                                <span class="pkg-price">${pkg.price}</span>
                                 <ul class="pkg-list">${descList}</ul>
                                 <button class="btn-animated" onclick="orderNow('${pkg.name}')">ORDER SEKARANG <i class="fas fa-paper-plane"></i></button>
                             </div>
